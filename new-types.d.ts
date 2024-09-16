@@ -1,3 +1,5 @@
+import { Session, User } from "lucia";
+
 interface SessionCookie {
     name: string;
     value: string;
@@ -12,4 +14,9 @@ interface AuthenticatingUserResponse {
     };
     key?:string,
     error?: string;
+  }
+
+interface SessionProviderProps {
+    user: User | null,
+    session: Session | null,
   }
