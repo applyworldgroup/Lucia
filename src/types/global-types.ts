@@ -8,6 +8,7 @@ export interface SessionCookie {
 
 export interface AuthenticatingUserResponse {
     success?: boolean;
+    message?: string;
     error?: string;
     data?: {
         existingUser?: User;

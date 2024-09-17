@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import prisma from '@/lib/db';
 import { lucia } from "@/lib/auth";
 import { cookies } from "next/headers";
+import { SessionCookie } from "@/types/global-types";
 
 export const GET = async (req: NextRequest) => {
     const url = new URL(req.url)

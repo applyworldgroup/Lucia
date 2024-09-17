@@ -28,6 +28,7 @@ model User {
   email_verified        Boolean
   sessions              Session[]
   emailVerificationCode EmailVerificationCode?
+  ResetToken            ResetToken[]
 }
 
 model Session {
@@ -49,4 +50,12 @@ model EmailVerificationCode {
 
   // Relationships
   user User @relation(fields: [userId], references: [id])
+}
+
+model ResetToken {
+  id        String   @id @default(uuid())
+  code      String   @unique
+  expiresAt DateTime
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
 }
