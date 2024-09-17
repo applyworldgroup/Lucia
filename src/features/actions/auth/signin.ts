@@ -5,11 +5,10 @@ import { cookies } from 'next/headers';
 import prisma from '@/lib/db';
 import * as argon from 'argon2';
 import { SignInInput } from '@/app/auth/signin/page';
+import { AuthenticatingUserResponse, SessionCookie } from '@/types/global-types';
 
 const signInUser = async (data: SignInInput): Promise<AuthenticatingUserResponse> => {
   const { email, password } = data;
-  console.log(data);
-
   try {
     const existingUser = await prisma.user.findFirst({
       where: { email }

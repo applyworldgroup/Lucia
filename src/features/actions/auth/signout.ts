@@ -1,6 +1,7 @@
 'use server';
 
 import { lucia, validateRequest } from "@/lib/auth";
+import { AuthenticatingUserResponse, SessionCookie } from "@/types/global-types";
 import { cookies } from "next/headers";
 
 const signOut = async (): Promise<AuthenticatingUserResponse> => {

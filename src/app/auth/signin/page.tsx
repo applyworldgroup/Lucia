@@ -80,6 +80,7 @@ export default function SignIn() {
     } else if (res.success) {
       toast({
         variant: "default",
+        title:`🙏Welcome, ${data.email.split('@')[0].charAt(0).toUpperCase() + data.email.split('@')[0].slice(1)} Boss`,
         description: "Signed in successfully",
       });
       router.push("/dashboard");
@@ -106,7 +107,7 @@ export default function SignIn() {
 
   return (
     <div className="flex items-center justify-center h-[100vh]">
-      <Card className="mx-auto max-w-sm">
+      <Card className="w-full max-w-md">
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl font-bold">Login</CardTitle>
           <CardDescription>

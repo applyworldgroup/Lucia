@@ -1,6 +1,6 @@
 "use client"
 import { createContext, useContext } from "react";
-import { SessionProviderProps } from "../../../new-types";
+import { SessionProviderProps } from "@/types/global-types";
 
 const SessionContext = createContext<SessionProviderProps>(
   {} as SessionProviderProps
