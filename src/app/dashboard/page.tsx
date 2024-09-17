@@ -21,7 +21,7 @@
 import { Button } from "@/components/ui/button";
 import { signOut } from "@/features/actions/auth/signout";
 import React from "react";
-import { useSession } from "../components/session-provider";
+import { useSession } from "@/app/components/session-provider";
 
 export default function Dashboard() {
   const {user} = useSession()
@@ -30,7 +30,7 @@ export default function Dashboard() {
       <b>Dashboard</b>
       <p>Hi, this is client page</p>
       <p>{JSON.stringify(user, null, 2)}</p>
-      <Button type="submit" onClick={signOut}>
+      <Button type="submit" onClick={() => signOut()}>
         Sign out
       </Button>
     </div>
