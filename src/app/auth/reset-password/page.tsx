@@ -14,6 +14,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/hooks/use-toast";
 import { resetPassword } from "@/features/actions/auth/reset-password";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import Link from "next/link";
 
 const resetSchema = z
   .object({
@@ -126,6 +127,11 @@ export default function ResetPassword() {
           <Button type="submit" className="w-full">
             Reset Password
           </Button>
+           <div className="text-center text-sm text-muted-foreground">
+            <Link href="signin" className="underline" prefetch={false}>
+              Back to Login
+            </Link>
+          </div>
         </form>
       </CardContent>
       </Card>
