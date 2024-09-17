@@ -80,6 +80,7 @@ export default function SignIn() {
     } else if (res.success) {
       toast({
         variant: "default",
+        title:`🙏Welcome, ${data.email.split('@')[0].charAt(0).toUpperCase() + data.email.split('@')[0].slice(1)} Boss`,
         description: "Signed in successfully",
       });
       router.push("/dashboard");
