@@ -9,3 +9,12 @@ export const validateClientProtectedRoute = () => {
     }
     return { user, session };
 };
+
+export const validateAdminInClient = () => {
+    const router = useRouter()
+    const { user } = useSession();
+    if (user?.role !== "ADMIN") {
+        router.push('/');
+    }
+    return { user };
+};

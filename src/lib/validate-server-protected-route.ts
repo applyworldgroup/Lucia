@@ -10,3 +10,11 @@ export const validateServerProtectedRoute = async () => {
   return { user, session };
 };
 
+export const validateAdminInServer = async () => {
+  const { user } = await validateRequest();
+  if (user?.role !== "ADMIN") {
+    redirect('/');
+  }
+  return { user };
+};
+

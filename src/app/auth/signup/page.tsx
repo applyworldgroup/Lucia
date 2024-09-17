@@ -26,10 +26,11 @@ enum ROLE {
 }
 
 const signUpSchema = z.object({
-  name: z.string().min(3, "Name should be atleast 3 characters long."),
+  firstName: z.string().min(3, "Name should be atleast 3 characters long."),
+  lastName: z.string(),
   email: z.string().email("Invalid email address"),
   password: z.string().min(6, "Password must be at least 6 characters long"),
-  role: z.nativeEnum(ROLE),
+
 });
 
 export type SignUpInput = z.infer<typeof signUpSchema>;
@@ -45,10 +46,10 @@ export default function SignIn() {
     formState: { errors },
   } = useForm<SignUpInput>({
     defaultValues: {
-      name: "",
+      firstName: "",
+      lastName: "",
       email: "",
       password: "",
-      role: ROLE.USER,
     },
     resolver: zodResolver(signUpSchema),
   });
@@ -87,14 +88,24 @@ async function  onSubmit (data: SignUpInput) {
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="name">Name</Label>
+                <Label htmlFor="name">First Name</Label>
                 <Input
-                  id="name"
+                  id="firstName"
                   placeholder="John Doe"
                   required
-                  {...register("name")}
+                  {...register("firstName")}
                 />
-                {errors.name && <FormError error={errors.name.message} />}
+                {errors.firstName && <FormError error={errors.firstName.message} />}
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="name">Last Name</Label>
+                <Input
+                  id="lastName"
+                  placeholder="John Doe"
+                  required
+                  {...register("lastName")}
+                />
+                {errors.lastName && <FormError error={errors.lastName.message} />}
               </div>
 
               <div className="space-y-2">

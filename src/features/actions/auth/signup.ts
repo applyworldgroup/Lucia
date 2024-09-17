@@ -8,7 +8,7 @@ import { sendEmail } from '@/lib/nodemailer';
 import { AuthenticatingUserResponse } from '@/types/global-types';
 
 const signUpUser = async (data: SignUpInput): Promise<AuthenticatingUserResponse> => {
-  const { email, password, name } = data;
+  const { email, password, firstName, lastName } = data;
   const hashedPassword = await argon.hash(password);
 
   try {
@@ -24,8 +24,9 @@ const signUpUser = async (data: SignUpInput): Promise<AuthenticatingUserResponse
 
     const user = await prisma.user.create({
       data: {
+        firstName,
+        lastName,
         email,
-        name,
         hashedPassword,
         email_verified: false
       }

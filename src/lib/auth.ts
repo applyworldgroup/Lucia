@@ -4,6 +4,7 @@ import { Lucia } from 'lucia';
 import prisma from './db'
 import { cache } from 'react';
 import { cookies } from 'next/headers';
+import { Role } from '@prisma/client';
 
 const adapter = new PrismaAdapter(prisma.session, prisma.user);
 
@@ -19,8 +20,8 @@ export const lucia = new Lucia(adapter, {
   },
   getUserAttributes: (attributes) => {
     return {
-      // attributes has the type of DatabaseUserAttributes
       email: attributes.email,
+      role: attributes.role,
     };
 
   },
@@ -61,4 +62,5 @@ declare module 'lucia' {
 
 interface DatabaseUserAttributes {
   email: string;
+  role: Role
 }
