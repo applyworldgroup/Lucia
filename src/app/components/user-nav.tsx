@@ -1,5 +1,4 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,12 +8,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { validateServerProtectedRoute } from "@/lib/validate-server-protected-route";
+import { ValidateClientProtectedRoute } from "@/lib/validate-client-protected-route";
 
 import Link from "next/link";
 
-export async function UserNav() {
-      const {user} = await validateServerProtectedRoute();
+export function UserNav() {
+  const { user } = ValidateClientProtectedRoute();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -31,18 +30,16 @@ export async function UserNav() {
           <div className="flex flex-col space-y-1">
             <p className="text-sm font-medium leading-none">Amrit Niure</p>
             <p className="text-xs leading-none text-muted-foreground">
-            {user.email}
+              {user?.email}
             </p>
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem>
-            <Link href={`/dashboard/user/${user.id}`}>Profile</Link>
+            <Link href={`/dashboard/user/${user?.id}`}>Profile</Link>
           </DropdownMenuItem>
-          <DropdownMenuItem>
-            Settings
-          </DropdownMenuItem>
+          <DropdownMenuItem>Settings</DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>

@@ -189,11 +189,11 @@ export default function Appointments() {
   ).length;
 
   return (
-    <div className="container mx-auto py-10">
+    <div className="w-full mx-auto py-10">
       <h1 className="text-3xl font-bold mb-6">Appointments</h1>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardHeader className="flex w-full flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
               Today&apos;s Appointments
             </CardTitle>
@@ -357,7 +357,7 @@ export default function Appointments() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Name</TableHead>
+              <TableHead className="py-4">Name</TableHead>
               <TableHead>Email</TableHead>
               <TableHead>Address</TableHead>
               <TableHead>Phone</TableHead>
@@ -375,22 +375,6 @@ export default function Appointments() {
                 <TableCell>{appointment.address}</TableCell>
                 <TableCell>{appointment.phone}</TableCell>
                 <TableCell>
-                  {/* <Badge
-                    variant={
-                      {
-                        Confirmed: "default",
-                        Pending: "secondary",
-                        Cancelled: "destructive",
-                        Appointed: "outline",
-                      }[appointment.status] as //for ts error
-                        | "default"
-                        | "secondary"
-                        | "destructive"
-                        | "outline"
-                    }
-                  >
-                    {appointment.status}
-                  </Badge> */}
                   <Badge variant={"secondary"}>{appointment.status}</Badge>
                 </TableCell>
                 <TableCell>{appointment.date.toLocaleDateString()}</TableCell>
