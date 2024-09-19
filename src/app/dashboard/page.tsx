@@ -1,10 +1,9 @@
-import { Button } from "@/components/ui/button";
-import { signOut } from "@/features/actions/auth/signout";
+import { Button } from "@/components/ui/button";import { signOut } from "@/features/actions/auth/signout";
 import { validateServerProtectedRoute } from "@/lib/validate-server-protected-route";
 import React from "react";
 
 export default async function Dashboard() {
-  const {user} = await validateServerProtectedRoute();
+  const { user } = await validateServerProtectedRoute();
   return (
     <div>
       <b>Dashboard</b>
@@ -21,10 +20,10 @@ export default async function Dashboard() {
 // import { Button } from "@/components/ui/button";
 // import { signOut } from "@/features/actions/auth/signout";
 // import React from "react";
-// import { validateClientProtectedRoute } from "@/lib/validate-client-protected-route";
+// import { ValidateClientProtectedRoute } from "@/lib/validate-client-protected-route";
 
 // export default function Dashboard() {
-//   const {user} = validateClientProtectedRoute()
+//   const {user} = ValidateClientProtectedRoute()
 //   return (
 //     <div>
 //       <b>Dashboard</b>

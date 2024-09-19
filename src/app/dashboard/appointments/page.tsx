@@ -1,4 +1,5 @@
-"use client";import React, { useState } from "react";
+"use client";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -194,7 +195,7 @@ export default function Appointments() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-              Today's Appointments
+              Today&apos;s Appointments
             </CardTitle>
             <Calendar className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
@@ -209,7 +210,7 @@ export default function Appointments() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-              This Week's Appointments
+              This Week&apos;s Appointments
             </CardTitle>
             <Calendar className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
@@ -224,7 +225,7 @@ export default function Appointments() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-              This Month's Appointments
+              This Month&apos;s Appointments
             </CardTitle>
             <Calendar className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
@@ -424,7 +425,8 @@ export default function Appointments() {
               Edit Appointment
             </DialogTitle>
             <DialogDescription>
-              Make changes to the appointment here. Click save when you're done.
+              Make changes to the appointment here. Click save when you&apos;re
+              done.
             </DialogDescription>
           </DialogHeader>
           {editingAppointment && (

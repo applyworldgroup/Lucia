@@ -1,7 +1,7 @@
 import { useRouter } from 'next/navigation';
 import { useSession } from '@/app/components/session-provider';
 
-export const validateClientProtectedRoute = () => {
+export const ValidateClientProtectedRoute = () => {
     const router = useRouter()
     const { user, session } = useSession();
     if (!user) {
@@ -10,7 +10,7 @@ export const validateClientProtectedRoute = () => {
     return { user, session };
 };
 
-export const validateAdminInClient = () => {
+export const ValidateAdminInClient = () => {
     const router = useRouter()
     const { user } = useSession();
     if (user?.role !== "ADMIN") {

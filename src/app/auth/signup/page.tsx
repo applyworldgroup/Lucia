@@ -1,5 +1,4 @@
-"use client";
-import {
+"use client";import {
   Card,
   CardHeader,
   CardTitle,
@@ -20,17 +19,16 @@ import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 import { signUpUser } from "@/features/actions/auth/signup";
 
-enum ROLE {
-  ADMIN = "ADMIN",
-  USER = "USER",
-}
+// enum ROLE {
+//   ADMIN = "ADMIN",
+//   USER = "USER",
+// }
 
 const signUpSchema = z.object({
   firstName: z.string().min(3, "Name should be atleast 3 characters long."),
   lastName: z.string(),
   email: z.string().email("Invalid email address"),
   password: z.string().min(6, "Password must be at least 6 characters long"),
-
 });
 
 export type SignUpInput = z.infer<typeof signUpSchema>;
@@ -54,27 +52,28 @@ export default function SignIn() {
     resolver: zodResolver(signUpSchema),
   });
 
-
-async function  onSubmit (data: SignUpInput) {
-    const res = await signUpUser(data)
-    if(!res) return toast({
-      variant: "destructive",
-      description: "Something went wrong in server."
-    })
+  async function onSubmit(data: SignUpInput) {
+    const res = await signUpUser(data);
+    if (!res)
+      return toast({
+        variant: "destructive",
+        description: "Something went wrong in server.",
+      });
     if (res.error) {
       toast({
         variant: "destructive",
         description: res.error,
-      })
+      });
     } else if (res.success) {
       toast({
         title: "Sign Up Successful",
         variant: "default",
-        description: "We have sent an verification email, please verify your email before signing in.",
-      })
-      router.push("/dashboard")
+        description:
+          "We have sent an verification email, please verify your email before signing in.",
+      });
+      router.push("/dashboard");
     }
-  };
+  }
   return (
     <div className="flex items-center justify-center h-[100vh]">
       <Card className="w-full max-w-md">
@@ -95,7 +94,9 @@ async function  onSubmit (data: SignUpInput) {
                   required
                   {...register("firstName")}
                 />
-                {errors.firstName && <FormError error={errors.firstName.message} />}
+                {errors.firstName && (
+                  <FormError error={errors.firstName.message} />
+                )}
               </div>
               <div className="space-y-2">
                 <Label htmlFor="name">Last Name</Label>
@@ -105,7 +106,9 @@ async function  onSubmit (data: SignUpInput) {
                   required
                   {...register("lastName")}
                 />
-                {errors.lastName && <FormError error={errors.lastName.message} />}
+                {errors.lastName && (
+                  <FormError error={errors.lastName.message} />
+                )}
               </div>
 
               <div className="space-y-2">
@@ -166,8 +169,3 @@ async function  onSubmit (data: SignUpInput) {
     </div>
   );
 }
-
-
-
-
-

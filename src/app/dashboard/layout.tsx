@@ -1,10 +1,8 @@
-import Image from "next/image";
 import React from "react";
 import { Sidebar } from "@/app/components/sidebar";
 import { UserNav } from "@/app/components/user-nav";
 import { Input } from "@/components/ui/input";
 import { Toaster } from "@/components/ui/toaster";
-import { Separator } from "@/components/ui/separator";
 
 interface MailPageProps {
   children?: React.ReactNode;

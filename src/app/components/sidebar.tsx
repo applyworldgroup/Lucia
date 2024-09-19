@@ -1,6 +1,4 @@
-"use client";
-
-import * as React from "react";
+"use client";import * as React from "react";
 import {
   AlertCircle,
   Award,
@@ -28,10 +26,10 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { signOut } from "@/features/actions/auth/signout";
-import { useSession } from "./session-provider";
+// import { useSession } from "./session-provider";
 
 export function Sidebar() {
-  const {user} = useSession()
+  // const {user} = useSession()
   return (
     <div className="h-screen">
       <div>
@@ -150,7 +148,7 @@ export function Sidebar() {
                         Close
                       </Button>
                     </DialogClose>
-                    <Button onClick={() => signOut()} > Sign Out</Button>
+                    <Button onClick={() => signOut()}> Sign Out</Button>
                   </div>
                 </DialogFooter>
               </DialogContent>
