@@ -1,4 +1,5 @@
-"use client";import React, { useState } from "react";
+"use client";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { today, thisMonthStart, thisWeekStart } from "@/lib/date-calc";
 import {
@@ -55,123 +56,73 @@ import { Customer } from "@/types/schema";
 const mockData = [
   {
     id: 1,
-    name: "Alice Johnson",
-    email: "alice.johnson@example.com",
-    address: "123 Maple St, Sydney, NSW 2000",
-    passportNumber: "A1234567",
+    firstName: "Emily",
+    middleName: "A.",
+    lastName: "Brown",
+    email: "emily.brown@example.com",
+    address: "123 Elm St, City, Country",
+    passportNumber: "AB123456",
     currentVisa: "SUB_500",
-    visaExpiry: "2025-12-31T00:00:00Z",
-    phone: "+61 2 1234 5678",
-    createdAt: "2023-01-15T12:00:00Z",
-    updatedAt: "2023-01-15T12:00:00Z",
+    visaExpiry: new Date("2024-12-31"),
+    phone: "123-456-7890",
+    createdAt: new Date("2023-01-01"),
+    updatedAt: new Date("2023-06-15"),
   },
   {
     id: 2,
-    name: "David Smith",
-    email: "david.smith@example.com",
-    address: "456 Oak St, Melbourne, VIC 3000",
-    passportNumber: "B9876543",
+    firstName: "James",
+    middleName: "B.",
+    lastName: "Smith",
+    email: "james.smith@example.com",
+    address: "456 Oak St, City, Country",
+    passportNumber: "CD789123",
     currentVisa: "SUB_482",
-    visaExpiry: "2024-05-15T00:00:00Z",
-    phone: "+61 3 2345 6789",
-    createdAt: "2023-02-20T10:30:00Z",
-    updatedAt: "2023-02-20T10:30:00Z",
+    visaExpiry: new Date("2025-07-10"),
+    phone: "321-654-0987",
+    createdAt: new Date("2023-02-10"),
+    updatedAt: new Date("2023-07-20"),
   },
   {
     id: 3,
-    name: "Emma Brown",
-    email: "emma.brown@example.com",
-    address: "789 Pine St, Brisbane, QLD 4000",
-    passportNumber: "C3219876",
+    firstName: "Sophia",
+    middleName: "C.",
+    lastName: "Johnson",
+    email: "sophia.johnson@example.com",
+    address: "789 Pine St, City, Country",
+    passportNumber: "EF654789",
     currentVisa: "SUB_186",
-    visaExpiry: "2026-03-10T00:00:00Z",
-    phone: "+61 7 3456 7890",
-    createdAt: "2023-03-05T09:15:00Z",
-    updatedAt: "2023-03-05T09:15:00Z",
+    visaExpiry: new Date("2025-05-30"),
+    phone: "987-654-3210",
+    createdAt: new Date("2023-03-15"),
+    updatedAt: new Date("2023-08-12"),
   },
   {
     id: 4,
-    name: "Liam Wilson",
-    email: "liam.wilson@example.com",
-    address: "101 Birch St, Perth, WA 6000",
-    passportNumber: "D4567890",
-    currentVisa: "SUB_500",
-    visaExpiry: "2024-11-30T00:00:00Z",
-    phone: "+61 8 4567 8901",
-    createdAt: "2023-04-12T11:00:00Z",
-    updatedAt: "2023-04-12T11:00:00Z",
+    firstName: "Daniel",
+    middleName: "D.",
+    lastName: "Williams",
+    email: "daniel.williams@example.com",
+    address: "101 Birch St, City, Country",
+    passportNumber: "GH012345",
+    currentVisa: "SUB_407",
+    visaExpiry: new Date("2024-09-01"),
+    phone: "456-789-0123",
+    createdAt: new Date("2023-04-01"),
+    updatedAt: new Date("2023-09-22"),
   },
   {
     id: 5,
-    name: "Sophia Davis",
-    email: "sophia.davis@example.com",
-    address: "202 Elm St, Adelaide, SA 5000",
-    passportNumber: "E6543210",
-    currentVisa: "SUB_482",
-    visaExpiry: "2025-08-25T00:00:00Z",
-    phone: "+61 8 5678 9012",
-    createdAt: "2023-05-22T08:45:00Z",
-    updatedAt: "2023-05-22T08:45:00Z",
-  },
-  {
-    id: 6,
-    name: "James Garcia",
-    email: "james.garcia@example.com",
-    address: "303 Cedar St, Hobart, TAS 7000",
-    passportNumber: "F9876543",
-    currentVisa: "SUB_407",
-    visaExpiry: "2023-12-31T00:00:00Z",
-    phone: "+61 3 6789 0123",
-    createdAt: "2023-06-18T07:30:00Z",
-    updatedAt: "2023-06-18T07:30:00Z",
-  },
-  {
-    id: 7,
-    name: "Mia Martinez",
-    email: "mia.martinez@example.com",
-    address: "404 Spruce St, Darwin, NT 0800",
-    passportNumber: "G3216549",
-    currentVisa: "SUB_186",
-    visaExpiry: "2026-01-20T00:00:00Z",
-    phone: "+61 8 7890 1234",
-    createdAt: "2023-07-09T14:15:00Z",
-    updatedAt: "2023-07-09T14:15:00Z",
-  },
-  {
-    id: 8,
-    name: "Noah Thompson",
-    email: "noah.thompson@example.com",
-    address: "505 Willow St, Canberra, ACT 2600",
-    passportNumber: "H6543210",
-    currentVisa: "SUB_190",
-    visaExpiry: "2024-09-15T00:00:00Z",
-    phone: "+61 2 8901 2345",
-    createdAt: "2023-08-16T12:00:00Z",
-    updatedAt: "2023-08-16T12:00:00Z",
-  },
-  {
-    id: 9,
-    name: "Olivia Clark",
-    email: "olivia.clark@example.com",
-    address: "606 Ash St, Gold Coast, QLD 4217",
-    passportNumber: "I9876543",
+    firstName: "Olivia",
+    middleName: "E.",
+    lastName: "Garcia",
+    email: "olivia.garcia@example.com",
+    address: "202 Maple St, City, Country",
+    passportNumber: "IJ098765",
     currentVisa: "SUB_600",
-    visaExpiry: "2025-07-10T00:00:00Z",
-    phone: "+61 7 9012 3456",
-    createdAt: "2023-09-03T15:30:00Z",
-    updatedAt: "2023-09-03T15:30:00Z",
-  },
-  {
-    id: 10,
-    name: "Ethan Lewis",
-    email: "ethan.lewis@example.com",
-    address: "707 Cherry St, Newcastle, NSW 2300",
-    passportNumber: "J1234567",
-    currentVisa: "SUB_820",
-    visaExpiry: "2026-06-25T00:00:00Z",
-    phone: "+61 2 2345 6789",
-    createdAt: "2023-10-01T09:00:00Z",
-    updatedAt: "2023-10-01T09:00:00Z",
+    visaExpiry: new Date("2024-11-20"),
+    phone: "654-321-7890",
+    createdAt: new Date("2023-05-05"),
+    updatedAt: new Date("2023-10-15"),
   },
 ];
 
@@ -188,7 +139,7 @@ export default function Component() {
   const filteredData = mockData.filter(
     (item) =>
       (visaFilter === "all" || item.currentVisa === visaFilter) &&
-      (item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (item.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
         item.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
         item.passportNumber.toLowerCase().includes(searchTerm.toLowerCase()))
   );
@@ -221,13 +172,13 @@ export default function Component() {
   );
 
   const createdToday = sortedCustomers.filter(
-    (a) => a.createdAt === today.toString()
+    (a) => a.createdAt === today
   ).length;
   const createdThisWeek = sortedCustomers.filter(
-    (a) => a.createdAt >= thisWeekStart.toString()
+    (a) => a.createdAt >= thisWeekStart
   ).length;
   const createdThisMonth = sortedCustomers.filter(
-    (a) => a.createdAt >= thisMonthStart.toString()
+    (a) => a.createdAt >= thisMonthStart
   ).length;
 
   return (
@@ -405,7 +356,9 @@ export default function Component() {
           <TableBody>
             {paginatedData.map((item) => (
               <TableRow key={item.id}>
-                <TableCell className="px-4 py-4">{item.name}</TableCell>
+                <TableCell className="px-4 py-4">
+                  {item.firstName} {item.middleName} {item.lastName}
+                </TableCell>
                 <TableCell>{item.email}</TableCell>
                 <TableCell>{item.phone}</TableCell>
                 <TableCell>{item.address}</TableCell>

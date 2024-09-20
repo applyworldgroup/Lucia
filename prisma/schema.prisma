@@ -57,13 +57,15 @@ model ResetToken {
 
 model Customer {
   id               Int               @id @default(autoincrement())
-  name             String
+  firstName        String
+  middleName       String
+  lastName         String
   email            String            @unique
   address          String
-  passportNumber   String?
+  passportNumber   String?           @unique
   currentVisa      VisaType?
   visaExpiry       DateTime?
-  phone            String
+  phone            String            @unique
   visaApplications VisaApplication[]
   createdAt        DateTime          @default(now())
   updatedAt        DateTime          @updatedAt
@@ -71,7 +73,9 @@ model Customer {
 
 model VisaApplication {
   id              Int      @id @default(autoincrement())
-  name            String
+  firstName       String
+  middleName      String
+  lastName        String
   email           String   @unique
   address         String
   passportNumber  String   @unique

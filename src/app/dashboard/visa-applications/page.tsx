@@ -1,4 +1,5 @@
-"use client";import React, { useState } from "react";
+"use client";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { today, thisMonthStart, thisWeekStart } from "@/lib/date-calc";
 import {
@@ -69,101 +70,163 @@ interface Visa {
 const mockData = [
   {
     id: 1,
-    name: "John Doe",
-    email: "john@example.com",
-    address: "123 Main St, City, Country",
-    passportNumber: "A1234567",
-    visaAppliedDate: new Date("2023-05-15"),
-    visaStatus: "Pending",
-    previousVisa: "Sub 500",
-    visaType: "Sub 400",
-    totalAmount: 500,
-    totalPaid: 250,
-    overseer: "Jane Smith",
+    firstName: "John",
+    middleName: "A.",
+    lastName: "Doe",
+    email: "john.doe@example.com",
+    address: "123 Street, City, Country",
+    passportNumber: "AB123456",
+    visaAppliedDate: new Date("2024-01-15"),
+    visaStatus: "PENDING",
+    previousVisa: "SUB_500",
+    visaType: "SUB_482",
+    totalAmount: 2000,
+    totalPaid: 1500,
+    overseer: "Agent Smith",
   },
   {
     id: 2,
-    name: "Alice Johnson",
-    email: "alice@example.com",
-    address: "456 Elm St, City, Country",
-    passportNumber: "B2345678",
-    visaAppliedDate: new Date("2023-06-10"),
-    visaStatus: "Approved",
-    previousVisa: "Sub 500",
-    visaType: "Sub 482",
-    totalAmount: 750,
-    totalPaid: 750,
-    overseer: "Michael Brown",
+    firstName: "Jane",
+    middleName: "B.",
+    lastName: "Smith",
+    email: "jane.smith@example.com",
+    address: "456 Avenue, City, Country",
+    passportNumber: "XY654321",
+    visaAppliedDate: new Date("2023-12-01"),
+    visaStatus: "APPROVED",
+    previousVisa: "SUB_482",
+    visaType: "SUB_186",
+    totalAmount: 5000,
+    totalPaid: 5000,
+    overseer: "Agent Brown",
   },
   {
     id: 3,
-    name: "Robert Lee",
-    email: "robert@example.com",
-    address: "789 Oak St, City, Country",
-    passportNumber: "C3456789",
-    visaAppliedDate: new Date("2023-07-22"),
-    visaStatus: "Rejected",
-    previousVisa: "Sub 482",
-    visaType: "Sub 186",
-    totalAmount: 600,
-    totalPaid: 100,
-    overseer: "Emily Davis",
+    firstName: "Michael",
+    middleName: "C.",
+    lastName: "Johnson",
+    email: "michael.johnson@example.com",
+    address: "789 Boulevard, City, Country",
+    passportNumber: "CD789123",
+    visaAppliedDate: new Date("2024-03-10"),
+    visaStatus: "REJECTED",
+    previousVisa: "SUB_407",
+    visaType: "SUB_600",
+    totalAmount: 3000,
+    totalPaid: 2000,
+    overseer: "Agent Cooper",
   },
   {
     id: 4,
-    name: "Sarah White",
-    email: "sarah@example.com",
-    address: "101 Pine St, City, Country",
-    passportNumber: "D4567890",
-    visaAppliedDate: new Date("2023-08-05"),
-    visaStatus: "Pending",
-    previousVisa: "Sub 482",
-    visaType: "Sub 482",
-    totalAmount: 900,
-    totalPaid: 0,
-    overseer: "David Wilson",
+    firstName: "Alice",
+    middleName: "D.",
+    lastName: "Williams",
+    email: "alice.williams@example.com",
+    address: "101 Circle, City, Country",
+    passportNumber: "EF321456",
+    visaAppliedDate: new Date("2023-11-05"),
+    visaStatus: "PENDING",
+    previousVisa: "SUB_189",
+    visaType: "SUB_820",
+    totalAmount: 4000,
+    totalPaid: 3000,
+    overseer: "Agent Moore",
   },
   {
     id: 5,
-    name: "James Brown",
-    email: "james@example.com",
-    address: "202 Maple St, City, Country",
-    passportNumber: "E5678901",
-    visaAppliedDate: new Date("2023-05-20"),
-    visaStatus: "Approved",
-    previousVisa: "Sub 500",
-    visaType: "Sub 400",
-    totalAmount: 550,
-    totalPaid: 550,
-    overseer: "Olivia Miller",
+    firstName: "Chris",
+    middleName: "E.",
+    lastName: "Brown",
+    email: "chris.brown@example.com",
+    address: "202 Lane, City, Country",
+    passportNumber: "GH654789",
+    visaAppliedDate: new Date("2023-10-20"),
+    visaStatus: "APPROVED",
+    previousVisa: "SUB_186",
+    visaType: "SUB_801",
+    totalAmount: 3500,
+    totalPaid: 3500,
+    overseer: "Agent Clark",
   },
   {
     id: 6,
-    name: "Emma Garcia",
-    email: "emma@example.com",
-    address: "303 Birch St, City, Country",
-    passportNumber: "F6789012",
-    visaAppliedDate: new Date("2023-06-25"),
-    visaStatus: "Approved",
-    previousVisa: "Sub 482",
-    visaType: "Sub 482",
-    totalAmount: 800,
-    totalPaid: 800,
-    overseer: "James Taylor",
+    firstName: "David",
+    middleName: "F.",
+    lastName: "Jones",
+    email: "david.jones@example.com",
+    address: "303 Crescent, City, Country",
+    passportNumber: "IJ987654",
+    visaAppliedDate: new Date("2024-05-12"),
+    visaStatus: "PENDING",
+    previousVisa: "SUB_500",
+    visaType: "SUB_482",
+    totalAmount: 2500,
+    totalPaid: 1500,
+    overseer: "Agent Evans",
   },
   {
     id: 7,
-    name: "William Martinez",
-    email: "william@example.com",
-    address: "404 Cedar St, City, Country",
-    passportNumber: "G7890123",
-    visaAppliedDate: new Date("2023-07-30"),
-    visaStatus: "Pending",
-    previousVisa: "Sub 482",
-    visaType: "Sub 186",
-    totalAmount: 700,
-    totalPaid: 350,
-    overseer: "Sophia Anderson",
+    firstName: "Eve",
+    middleName: "G.",
+    lastName: "Martinez",
+    email: "eve.martinez@example.com",
+    address: "404 Square, City, Country",
+    passportNumber: "KL012345",
+    visaAppliedDate: new Date("2023-09-25"),
+    visaStatus: "REJECTED",
+    previousVisa: "SUB_407",
+    visaType: "SUB_186",
+    totalAmount: 4500,
+    totalPaid: 2500,
+    overseer: "Agent Lewis",
+  },
+  {
+    id: 8,
+    firstName: "Frank",
+    middleName: "H.",
+    lastName: "Garcia",
+    email: "frank.garcia@example.com",
+    address: "505 Parkway, City, Country",
+    passportNumber: "MN654321",
+    visaAppliedDate: new Date("2024-02-18"),
+    visaStatus: "PENDING",
+    previousVisa: "SUB_189",
+    visaType: "SUB_407",
+    totalAmount: 2200,
+    totalPaid: 1700,
+    overseer: "Agent Stewart",
+  },
+  {
+    id: 9,
+    firstName: "Grace",
+    middleName: "I.",
+    lastName: "Rodriguez",
+    email: "grace.rodriguez@example.com",
+    address: "606 Highway, City, Country",
+    passportNumber: "OP123456",
+    visaAppliedDate: new Date("2023-08-15"),
+    visaStatus: "APPROVED",
+    previousVisa: "SUB_482",
+    visaType: "SUB_500",
+    totalAmount: 6000,
+    totalPaid: 4000,
+    overseer: "Agent Carter",
+  },
+  {
+    id: 10,
+    firstName: "Hank",
+    middleName: "J.",
+    lastName: "Lee",
+    email: "hank.lee@example.com",
+    address: "707 Street, City, Country",
+    passportNumber: "QR098765",
+    visaAppliedDate: new Date("2024-04-14"),
+    visaStatus: "PENDING",
+    previousVisa: "SUB_500",
+    visaType: "SUB_820",
+    totalAmount: 1800,
+    totalPaid: 1800,
+    overseer: "Agent Harris",
   },
 ];
 
@@ -182,14 +245,14 @@ export default function Component() {
       (statusFilter === "all" ||
         item.visaStatus.toLowerCase() === statusFilter) &&
       (visaFilter === "all" || item.visaType === visaFilter) &&
-      (item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (item.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
         item.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
         item.passportNumber.toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
   const sortOptions = [
     { label: "Date", value: "visaAppliedDate", icon: Calendar },
-    { label: "Name", value: "name", icon: User },
+    { label: "Name", value: "firstName", icon: User },
   ];
 
   const handleSort = (value: string) => {
@@ -312,9 +375,9 @@ export default function Component() {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All</SelectItem>
-                <SelectItem value="pending">Pending</SelectItem>
-                <SelectItem value="approved">Approved</SelectItem>
-                <SelectItem value="rejected">Rejected</SelectItem>
+                <SelectItem value="PENDING">PENDING</SelectItem>
+                <SelectItem value="APPROVED">APPROVED</SelectItem>
+                <SelectItem value="REJECTED">REJECTED</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -328,11 +391,15 @@ export default function Component() {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All</SelectItem>
-                <SelectItem value="Sub 407">407</SelectItem>
-                <SelectItem value="Sub 482">482</SelectItem>
-                <SelectItem value="Sub 186">186</SelectItem>
-                <SelectItem value="Sub 400">400</SelectItem>
-                <SelectItem value="Sub 500">500</SelectItem>
+                <SelectItem value="SUB_407">407</SelectItem>
+                <SelectItem value="SUB_482">482</SelectItem>
+                <SelectItem value="SUB_186">186</SelectItem>
+                <SelectItem value="SUB_500">500</SelectItem>
+                <SelectItem value="SUB_189">189</SelectItem>
+                <SelectItem value="SUB_190">190</SelectItem>
+                <SelectItem value="SUB_600">600</SelectItem>
+                <SelectItem value="SUB_820">820</SelectItem>
+                <SelectItem value="SUB_801">801</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -414,7 +481,9 @@ export default function Component() {
           <TableBody>
             {paginatedData.map((item) => (
               <TableRow key={item.id}>
-                <TableCell className="px-4 py-4">{item.name}</TableCell>
+                <TableCell className="px-4 py-4">
+                  {item.firstName} {item.middleName} {item.lastName}
+                </TableCell>
                 <TableCell>{item.email}</TableCell>
                 <TableCell>{item.address}</TableCell>
                 <TableCell>{item.passportNumber}</TableCell>

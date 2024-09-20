@@ -14,7 +14,9 @@ const VisaTypeEnum = z.enum([
 
 export const visaSchema = z.object({
     id: z.number().optional(),
-    name: z.string().min(1, "Name is required"),
+    firstName: z.string().min(1, "Name is required"),
+    middleName: z.string().min(1, "Name is required").optional(),
+    lastName: z.string().min(1, "Name is required"),
     email: z.string().email("Invalid email address"),
     address: z.string().min(1, "Address is required"),
     passportNumber: z.string().min(1, "Passport number is required"),
@@ -28,7 +30,9 @@ export const visaSchema = z.object({
 });
 export const customerSchema = z.object({
     id: z.number().optional(),
-    name: z.string().min(1, "Name is required"),
+    firstName: z.string().min(1, "Name is required"),
+    middleName: z.string().min(1, "Name is required").optional(),
+    lastName: z.string().min(1, "Name is required"),
     email: z.string().email("Invalid email address").min(1, "Email is required"),
     address: z.string().min(1, "Address is required"),
     passportNumber: z.string().optional(),

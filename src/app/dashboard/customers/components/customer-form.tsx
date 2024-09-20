@@ -1,4 +1,5 @@
-"use client";import { useState, useEffect, useCallback } from "react";
+"use client";
+import { useState, useEffect, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
@@ -54,7 +55,9 @@ export default function CustomerForm({ initialData }: CustomerFormProps) {
   const form = useForm<Customer>({
     resolver: zodResolver(customerSchema),
     defaultValues: initialData || {
-      name: "",
+      firstName: "",
+      middleName: "",
+      lastName: "",
       email: "",
       address: "",
       passportNumber: "",
@@ -111,13 +114,13 @@ export default function CustomerForm({ initialData }: CustomerFormProps) {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleFormSubmit)}>
           <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <FormField
                 control={form.control}
-                name="name"
+                name="firstName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Name</FormLabel>
+                    <FormLabel>First Name</FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
@@ -127,18 +130,44 @@ export default function CustomerForm({ initialData }: CustomerFormProps) {
               />
               <FormField
                 control={form.control}
-                name="email"
+                name="middleName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Email</FormLabel>
+                    <FormLabel>Middle Name</FormLabel>
                     <FormControl>
-                      <Input type="email" {...field} />
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="lastName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Last Name</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
             </div>
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input type="email" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <FormField
               control={form.control}
               name="address"
@@ -155,7 +184,7 @@ export default function CustomerForm({ initialData }: CustomerFormProps) {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <FormField
                 control={form.control}
-                name="name"
+                name="phone"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Phone</FormLabel>

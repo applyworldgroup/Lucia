@@ -1,5 +1,4 @@
-"use client";
-import { useState, useEffect, useCallback } from "react";
+"use client";import { useState, useEffect, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
@@ -57,7 +56,9 @@ export default function VisaApplicationForm({
   const form = useForm<VisaApplication>({
     resolver: zodResolver(visaSchema),
     defaultValues: initialData || {
-      name: "",
+      firstName: "",
+      middleName: "",
+      lastName: "",
       email: "",
       address: "",
       passportNumber: "",
@@ -85,8 +86,6 @@ export default function VisaApplicationForm({
       updateVisaApplication(params.id, params.data),
     onSuccess: ({ success }) => {
       queryClient.invalidateQueries({ queryKey: ["visaApplications"] });
-      form.setValue("address", "");
-      form.setValue("address", "");
       alert(success);
     },
   });
@@ -121,13 +120,13 @@ export default function VisaApplicationForm({
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleFormSubmit)}>
           <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <FormField
                 control={form.control}
-                name="name"
+                name="firstName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Name</FormLabel>
+                    <FormLabel>First Name</FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
@@ -135,6 +134,34 @@ export default function VisaApplicationForm({
                   </FormItem>
                 )}
               />
+              <FormField
+                control={form.control}
+                name="middleName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Middle Name</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="lastName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Last Name</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <FormField
                 control={form.control}
                 name="email"
@@ -148,20 +175,20 @@ export default function VisaApplicationForm({
                   </FormItem>
                 )}
               />
+              <FormField
+                control={form.control}
+                name="address"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Address</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
-            <FormField
-              control={form.control}
-              name="address"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Address</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <FormField
                 control={form.control}
