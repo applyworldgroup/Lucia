@@ -1,8 +1,14 @@
 import { FC } from "react";
-interface RecordVisaApplicationProps {}
+import VisaApplicationForm from "../components/visa-application-form";
 
-const RecordVisaApplication: FC<RecordVisaApplicationProps> = ({}) => {
-  return <div> Record the visa application </div>;
+interface CreateVisaApplicationProps {}
+
+const CreateVisaApplication: FC<CreateVisaApplicationProps> = ({}) => {
+  return (
+    <div>
+      <VisaApplicationForm />
+    </div>
+  );
 };
 
-export default RecordVisaApplication;
+export default CreateVisaApplication;

@@ -2,7 +2,13 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   Table,
   TableBody,
@@ -38,6 +44,8 @@ import {
   ArrowUp,
   ArrowUpDown,
   Filter,
+  RefreshCwIcon,
+  SearchIcon,
 } from "lucide-react";
 import AppointmentForm from "./components/appointment-form";
 import { Badge } from "@/components/ui/badge";
@@ -189,8 +197,18 @@ export default function Appointments() {
   ).length;
 
   return (
-    <div className="w-full mx-auto py-10">
-      <h1 className="text-3xl font-bold mb-6">Appointments</h1>
+    <div className="w-full mx-auto ">
+      <CardHeader className="space-y-1 px-0 pt-0">
+        <div className="flex items-center justify-between">
+          <CardTitle className="text-2xl font-bold">Appointments</CardTitle>
+          <Button>
+            {/* <Button onClick={() => setCurrentPage(1)}> */}
+            <RefreshCwIcon className="mr-2 h-4 w-4" />
+            Refresh
+          </Button>
+        </div>
+        <CardDescription>Manage and track daily appointments</CardDescription>
+      </CardHeader>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
         <Card>
           <CardHeader className="flex w-full flex-row items-center justify-between space-y-0 pb-2">
@@ -238,121 +256,119 @@ export default function Appointments() {
           </CardContent>
         </Card>
       </div>
-
-      <div className="flex justify-between items-center mb-6">
-        <div className="relative">
-          <Search className="absolute left-2 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-          <Input
-            type="search"
-            placeholder="Search by name or email..."
-            className="pl-8"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </div>
-        <div className="flex items-center gap-4">
-          <div className="flex items-center space-x-4">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="outline"
-                  className="min-w-[200px] justify-between"
-                >
-                  <span className="flex items-center">
-                    {sortOptions.find((option) => option.value === sortBy)
-                      ?.icon &&
-                      React.createElement(
-                        sortOptions.find((option) => option.value === sortBy)!
-                          .icon,
-                        { className: "mr-2 h-4 w-4" }
-                      )}
-                    Sort by{" "}
-                    {
-                      sortOptions.find((option) => option.value === sortBy)
-                        ?.label
-                    }
-                  </span>
-                  <ChevronDown className="ml-2 h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-56">
-                <DropdownMenuLabel>Sort Options</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                {sortOptions.map((option) => (
-                  <DropdownMenuItem
-                    key={option.value}
-                    onClick={() => handleSort(option.value)}
-                    className="flex items-center justify-between"
-                  >
-                    <span className="flex items-center">
-                      {React.createElement(option.icon, {
-                        className: "mr-2 h-4 w-4",
-                      })}
-                      {option.label}
-                    </span>
-                    {sortBy === option.value &&
-                      (sortOrder === "asc" ? (
-                        <ArrowUp className="h-4 w-4" />
-                      ) : (
-                        <ArrowDown className="h-4 w-4" />
-                      ))}
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-            <Button
-              variant="outline"
-              onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
-              className="px-3"
-            >
-              <ArrowUpDown className="h-4 w-4" />
-            </Button>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="outline"
-                  className="min-w-[200px] justify-between"
-                >
-                  <span className="flex items-center">
-                    <Filter className="mr-2 h-4 w-4" />
-                    Filter Options
-                  </span>
-                  <ChevronDown className="ml-2 h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-56">
-                <DropdownMenuLabel>Filter by Status</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                {["Confirmed", "Pending", "Cancelled"].map((status) => (
-                  <DropdownMenuCheckboxItem
-                    key={status}
-                    checked={filters.status.includes(status)}
-                    onCheckedChange={() => handleFilter("status", status)}
-                  >
-                    {status}
-                  </DropdownMenuCheckboxItem>
-                ))}
-                <DropdownMenuSeparator />
-                <DropdownMenuLabel>Filter by Address</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                {["123 Main St", "456 Elm St", "789 Oak St"].map((address) => (
-                  <DropdownMenuCheckboxItem
-                    key={address}
-                    checked={filters.address.includes(address)}
-                    onCheckedChange={() => handleFilter("address", address)}
-                  >
-                    {address}
-                  </DropdownMenuCheckboxItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
+      <CardContent className="px-0">
+        <div className="mb-6 flex flex-col space-y-4 md:flex-row md:items-end md:space-x-4 md:space-y-0">
+          <div className="flex-1 space-y-2">
+            <label htmlFor="search" className="text-sm font-medium">
+              Search Applications
+            </label>
+            <div className="relative">
+              <SearchIcon className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
+              <Input
+                id="search"
+                className="pl-8 md:w-1/2"
+                placeholder="Search by name, email, or passport number"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
           </div>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="outline"
+                className="min-w-[200px] justify-between"
+              >
+                <span className="flex items-center">
+                  {sortOptions.find((option) => option.value === sortBy)
+                    ?.icon &&
+                    React.createElement(
+                      sortOptions.find((option) => option.value === sortBy)!
+                        .icon,
+                      { className: "mr-2 h-4 w-4" }
+                    )}
+                  Sort by{" "}
+                  {sortOptions.find((option) => option.value === sortBy)?.label}
+                </span>
+                <ChevronDown className="ml-2 h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56">
+              <DropdownMenuLabel>Sort Options</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              {sortOptions.map((option) => (
+                <DropdownMenuItem
+                  key={option.value}
+                  onClick={() => handleSort(option.value)}
+                  className="flex items-center justify-between"
+                >
+                  <span className="flex items-center">
+                    {React.createElement(option.icon, {
+                      className: "mr-2 h-4 w-4",
+                    })}
+                    {option.label}
+                  </span>
+                  {sortBy === option.value &&
+                    (sortOrder === "asc" ? (
+                      <ArrowUp className="h-4 w-4" />
+                    ) : (
+                      <ArrowDown className="h-4 w-4" />
+                    ))}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="outline"
+                className="min-w-[200px] justify-between"
+              >
+                <span className="flex items-center">
+                  <Filter className="mr-2 h-4 w-4" />
+                  Filter Options
+                </span>
+                <ChevronDown className="ml-2 h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56">
+              <DropdownMenuLabel>Filter by Status</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              {["Confirmed", "Pending", "Cancelled"].map((status) => (
+                <DropdownMenuCheckboxItem
+                  key={status}
+                  checked={filters.status.includes(status)}
+                  onCheckedChange={() => handleFilter("status", status)}
+                >
+                  {status}
+                </DropdownMenuCheckboxItem>
+              ))}
+              <DropdownMenuSeparator />
+              <DropdownMenuLabel>Filter by Address</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              {["123 Main St", "456 Elm St", "789 Oak St"].map((address) => (
+                <DropdownMenuCheckboxItem
+                  key={address}
+                  checked={filters.address.includes(address)}
+                  onCheckedChange={() => handleFilter("address", address)}
+                >
+                  {address}
+                </DropdownMenuCheckboxItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <Button
+            variant="outline"
+            onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
+            className="px-3"
+          >
+            <ArrowUpDown className="h-4 w-4" />
+          </Button>
           <Button onClick={() => setIsBookDialogOpen(true)}>
             Book Appointment
           </Button>
         </div>
-      </div>
-
+      </CardContent>
       <div className="border rounded-md">
         <Table>
           <TableHeader>
