@@ -60,7 +60,10 @@ model Customer {
   name             String
   email            String            @unique
   address          String
-  phone            String?
+  passportNumber   String?
+  currentVisa      VisaType?
+  visaExpiry       DateTime?
+  phone            String
   visaApplications VisaApplication[]
   createdAt        DateTime          @default(now())
   updatedAt        DateTime          @updatedAt
