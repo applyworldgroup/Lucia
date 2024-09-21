@@ -1,9 +1,14 @@
 "use client";
-
-import { useState } from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   Table,
   TableBody,
@@ -14,8 +19,10 @@ import {
 } from "@/components/ui/table";
 import {
   DropdownMenu,
+  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
@@ -31,11 +38,19 @@ import {
   Search,
   MoreHorizontal,
   Edit,
+  Clock,
+  User,
+  ArrowDown,
+  ArrowUp,
+  ArrowUpDown,
+  Filter,
+  RefreshCwIcon,
+  SearchIcon,
 } from "lucide-react";
 import AppointmentForm from "./components/appointment-form";
 import { Badge } from "@/components/ui/badge";
+import { DropdownMenuLabel } from "@radix-ui/react-dropdown-menu";
 
-// Mock data for appointments
 const appointments = [
   {
     id: 1,
@@ -70,8 +85,19 @@ const appointments = [
     date: new Date("2023-06-17"),
     time: "11:30",
   },
-  // Add more mock appointments as needed
 ];
+
+interface Appointment {
+  id: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+  address: string;
+  phone: string;
+  status: string;
+  date: Date;
+  time: string;
+}
 
 export default function Appointments() {
   const [sortBy, setSortBy] = useState("date");
@@ -80,50 +106,10 @@ export default function Appointments() {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isBookDialogOpen, setIsBookDialogOpen] = useState(false);
   const [editingAppointment, setEditingAppointment] = useState(null);
-
-  const sortedAppointments = [...appointments]
-    .sort((a, b) => {
-      if (sortBy === "date") {
-        return sortOrder === "asc"
-          ? a.date.getTime() - b.date.getTime()
-          : b.date.getTime() - a.date.getTime();
-      } else if (sortBy === "time") {
-        return sortOrder === "asc"
-          ? a.time.localeCompare(b.time)
-          : b.time.localeCompare(a.time);
-      } else if (sortBy === "lastName") {
-        return sortOrder === "asc"
-          ? a.lastName.localeCompare(b.lastName)
-          : b.lastName.localeCompare(a.lastName);
-      }
-      return 0;
-    })
-    .filter(
-      (appointment) =>
-        `${appointment.firstName} ${appointment.lastName}`
-          .toLowerCase()
-          .includes(searchTerm.toLowerCase()) ||
-        appointment.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        appointment.phone.includes(searchTerm)
-    );
-
-  const today = new Date();
-  const thisWeekStart = new Date(
-    today.getFullYear(),
-    today.getMonth(),
-    today.getDate() - today.getDay()
-  );
-  const thisMonthStart = new Date(today.getFullYear(), today.getMonth(), 1);
-
-  const appointmentsToday = sortedAppointments.filter(
-    (a) => a.date.toDateString() === today.toDateString()
-  ).length;
-  const appointmentsThisWeek = sortedAppointments.filter(
-    (a) => a.date >= thisWeekStart
-  ).length;
-  const appointmentsThisMonth = sortedAppointments.filter(
-    (a) => a.date >= thisMonthStart
-  ).length;
+  const [filters, setFilters] = React.useState({
+    status: [] as string[],
+    address: [] as string[],
+  });
 
   const handleEditAppointment = (appointment) => {
     setEditingAppointment(appointment);
@@ -146,21 +132,95 @@ export default function Appointments() {
     setEditingAppointment(null);
   };
 
+  const sortOptions = [
+    { label: "Date", value: "date", icon: Calendar },
+    { label: "Time", value: "time", icon: Clock },
+    { label: "Last Name", value: "lastName", icon: User },
+  ];
+
+  const handleSort = (value: string) => {
+    if (sortBy === value) {
+      setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+    } else {
+      setSortBy(value);
+      setSortOrder("asc");
+    }
+  };
+  const handleFilter = (type: "status" | "address", value: string) => {
+    setFilters((prev) => ({
+      ...prev,
+      [type]: prev[type].includes(value)
+        ? prev[type].filter((item) => item !== value)
+        : [...prev[type], value],
+    }));
+  };
+
+  const filteredAppointments = appointments.filter(
+    (appointment) =>
+      (filters.status.length === 0 ||
+        filters.status.includes(appointment.status)) &&
+      (filters.address.length === 0 ||
+        filters.address.includes(appointment.address)) &&
+      (searchTerm === "" ||
+        appointment.firstName
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase()) ||
+        appointment.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        appointment.email.toLowerCase().includes(searchTerm.toLowerCase()))
+  );
+
+  const sortedAppointments = [...filteredAppointments].sort((a, b) => {
+    if (a[sortBy as keyof Appointment] < b[sortBy as keyof Appointment])
+      return sortOrder === "asc" ? -1 : 1;
+    if (a[sortBy as keyof Appointment] > b[sortBy as keyof Appointment])
+      return sortOrder === "asc" ? 1 : -1;
+    return 0;
+  });
+
+  const today = new Date();
+  const thisWeekStart = new Date(
+    today.getFullYear(),
+    today.getMonth(),
+    today.getDate() - today.getDay()
+  );
+  const thisMonthStart = new Date(today.getFullYear(), today.getMonth(), 1);
+
+  // run the filter in appointments inested of sortedAppointments.
+  const appointmentsToday = sortedAppointments.filter(
+    (a) => a.date.toDateString() === today.toDateString()
+  ).length;
+  const appointmentsThisWeek = sortedAppointments.filter(
+    (a) => a.date >= thisWeekStart
+  ).length;
+  const appointmentsThisMonth = sortedAppointments.filter(
+    (a) => a.date >= thisMonthStart
+  ).length;
+
   return (
-    <div className="container mx-auto py-10">
-      <h1 className="text-3xl font-bold mb-6">Appointments</h1>
+    <div className="w-full mx-auto ">
+      <CardHeader className="space-y-1 px-0 pt-0">
+        <div className="flex items-center justify-between">
+          <CardTitle className="text-2xl font-bold">Appointments</CardTitle>
+          <Button>
+            {/* <Button onClick={() => setCurrentPage(1)}> */}
+            <RefreshCwIcon className="mr-2 h-4 w-4" />
+            Refresh
+          </Button>
+        </div>
+        <CardDescription>Manage and track daily appointments</CardDescription>
+      </CardHeader>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardHeader className="flex w-full flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-              Today's Appointments
+              Today&apos;s Appointments
             </CardTitle>
             <Calendar className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{appointmentsToday}</div>
             <p className="text-xs text-muted-foreground">
-              {appointmentsToday === 1 ? "appointment" : "appointments"}{" "}
+              {appointmentsToday === 1 ? "appointment" : "appointments"}
               scheduled for today
             </p>
           </CardContent>
@@ -168,7 +228,7 @@ export default function Appointments() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-              This Week's Appointments
+              This Week&apos;s Appointments
             </CardTitle>
             <Calendar className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
@@ -183,7 +243,7 @@ export default function Appointments() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-              This Month's Appointments
+              This Month&apos;s Appointments
             </CardTitle>
             <Calendar className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
@@ -196,86 +256,124 @@ export default function Appointments() {
           </CardContent>
         </Card>
       </div>
-
-      <div className="flex justify-between items-center mb-6">
-        <div className="relative">
-          <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input
-            placeholder="Search appointments..."
-            className="pl-8 w-[300px]"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </div>
-        <div className="flex items-center gap-4">
+      <CardContent className="px-0">
+        <div className="mb-6 flex flex-col space-y-4 md:flex-row md:items-end md:space-x-4 md:space-y-0">
+          <div className="flex-1 space-y-2">
+            <label htmlFor="search" className="text-sm font-medium">
+              Search Applications
+            </label>
+            <div className="relative">
+              <SearchIcon className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
+              <Input
+                id="search"
+                className="pl-8 md:w-1/2"
+                placeholder="Search by name, email, or passport number"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
+          </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline">
-                Sort By <ChevronDown className="ml-2 h-4 w-4" />
+              <Button
+                variant="outline"
+                className="min-w-[200px] justify-between"
+              >
+                <span className="flex items-center">
+                  {sortOptions.find((option) => option.value === sortBy)
+                    ?.icon &&
+                    React.createElement(
+                      sortOptions.find((option) => option.value === sortBy)!
+                        .icon,
+                      { className: "mr-2 h-4 w-4" }
+                    )}
+                  Sort by{" "}
+                  {sortOptions.find((option) => option.value === sortBy)?.label}
+                </span>
+                <ChevronDown className="ml-2 h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuItem
-                onClick={() => {
-                  setSortBy("date");
-                  setSortOrder("asc");
-                }}
-              >
-                Date (Ascending)
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={() => {
-                  setSortBy("date");
-                  setSortOrder("desc");
-                }}
-              >
-                Date (Descending)
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={() => {
-                  setSortBy("time");
-                  setSortOrder("asc");
-                }}
-              >
-                Time (Ascending)
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={() => {
-                  setSortBy("time");
-                  setSortOrder("desc");
-                }}
-              >
-                Time (Descending)
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={() => {
-                  setSortBy("lastName");
-                  setSortOrder("asc");
-                }}
-              >
-                Last Name (A-Z)
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={() => {
-                  setSortBy("lastName");
-                  setSortOrder("desc");
-                }}
-              >
-                Last Name (Z-A)
-              </DropdownMenuItem>
+            <DropdownMenuContent className="w-56">
+              <DropdownMenuLabel>Sort Options</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              {sortOptions.map((option) => (
+                <DropdownMenuItem
+                  key={option.value}
+                  onClick={() => handleSort(option.value)}
+                  className="flex items-center justify-between"
+                >
+                  <span className="flex items-center">
+                    {React.createElement(option.icon, {
+                      className: "mr-2 h-4 w-4",
+                    })}
+                    {option.label}
+                  </span>
+                  {sortBy === option.value &&
+                    (sortOrder === "asc" ? (
+                      <ArrowUp className="h-4 w-4" />
+                    ) : (
+                      <ArrowDown className="h-4 w-4" />
+                    ))}
+                </DropdownMenuItem>
+              ))}
             </DropdownMenuContent>
           </DropdownMenu>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="outline"
+                className="min-w-[200px] justify-between"
+              >
+                <span className="flex items-center">
+                  <Filter className="mr-2 h-4 w-4" />
+                  Filter Options
+                </span>
+                <ChevronDown className="ml-2 h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56">
+              <DropdownMenuLabel>Filter by Status</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              {["Confirmed", "Pending", "Cancelled"].map((status) => (
+                <DropdownMenuCheckboxItem
+                  key={status}
+                  checked={filters.status.includes(status)}
+                  onCheckedChange={() => handleFilter("status", status)}
+                >
+                  {status}
+                </DropdownMenuCheckboxItem>
+              ))}
+              <DropdownMenuSeparator />
+              <DropdownMenuLabel>Filter by Address</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              {["123 Main St", "456 Elm St", "789 Oak St"].map((address) => (
+                <DropdownMenuCheckboxItem
+                  key={address}
+                  checked={filters.address.includes(address)}
+                  onCheckedChange={() => handleFilter("address", address)}
+                >
+                  {address}
+                </DropdownMenuCheckboxItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <Button
+            variant="outline"
+            onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
+            className="px-3"
+          >
+            <ArrowUpDown className="h-4 w-4" />
+          </Button>
           <Button onClick={() => setIsBookDialogOpen(true)}>
             Book Appointment
           </Button>
         </div>
-      </div>
-
+      </CardContent>
       <div className="border rounded-md">
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Name</TableHead>
+              <TableHead className="py-4">Name</TableHead>
               <TableHead>Email</TableHead>
               <TableHead>Address</TableHead>
               <TableHead>Phone</TableHead>
@@ -293,25 +391,7 @@ export default function Appointments() {
                 <TableCell>{appointment.address}</TableCell>
                 <TableCell>{appointment.phone}</TableCell>
                 <TableCell>
-                  {/* <Badge
-                    variant={
-                      {
-                        Confirmed: "default",
-                        Pending: "secondary",
-                        Cancelled: "destructive",
-                        Appointed: "outline",
-                      }[appointment.status] as //for ts error
-                        | "default"
-                        | "secondary"
-                        | "destructive"
-                        | "outline"
-                    }
-                  >
-                    {appointment.status}
-                  </Badge> */}
-                  <Badge variant={"secondary"}>
-                    {appointment.status}
-                  </Badge>
+                  <Badge variant={"secondary"}>{appointment.status}</Badge>
                 </TableCell>
                 <TableCell>{appointment.date.toLocaleDateString()}</TableCell>
                 <TableCell>{appointment.time}</TableCell>
@@ -345,7 +425,8 @@ export default function Appointments() {
               Edit Appointment
             </DialogTitle>
             <DialogDescription>
-              Make changes to the appointment here. Click save when you're done.
+              Make changes to the appointment here. Click save when you&apos;re
+              done.
             </DialogDescription>
           </DialogHeader>
           {editingAppointment && (
