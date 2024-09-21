@@ -243,7 +243,7 @@ export default function Component() {
   const filteredData = mockData.filter(
     (item) =>
       (statusFilter === "all" ||
-        item.visaStatus.toLowerCase() === statusFilter) &&
+        item.visaStatus === statusFilter) &&
       (visaFilter === "all" || item.visaType === visaFilter) &&
       (item.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
         item.email.toLowerCase().includes(searchTerm.toLowerCase()) ||

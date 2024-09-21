@@ -364,7 +364,7 @@ export default function Component() {
                 <TableCell>{item.address}</TableCell>
                 <TableCell>{item.passportNumber}</TableCell>
                 <TableCell>{item.currentVisa}</TableCell>
-                <TableCell>{item.visaExpiry.toString()}</TableCell>
+                <TableCell>{item.visaExpiry.toDateString()}</TableCell>
                 <TableCell className="text-right">
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
