@@ -30,12 +30,16 @@ import {
 } from "@/components/ui/dialog";
 import { signOut } from "@/features/actions/auth/signout";
 import { cn } from "@/lib/utils";
+import { useCollapse } from "@/store/useCollapse";
 
 export function Sidebar() {
-  const [isCollapsed, setIsCollapsed] = React.useState(false);
+  // const [isCollapsed, setIsCollapsed] = React.useState(false);
   const pathname = usePathname();
 
-  const toggleSidebar = () => setIsCollapsed(!isCollapsed);
+  // const toggleSidebar = () => setIsCollapsed(!isCollapsed);
+  // const isCollapsed = useCollapse((state) => state.isCollapsed)
+
+  const { isCollapsed, setIsCollapsed } = useCollapse();
 
   return (
     <div
@@ -44,24 +48,26 @@ export function Sidebar() {
         isCollapsed ? "w-16" : "w-64"
       )}
     >
-      <div className="flex flex-col justify-between h-full border-r bg-background">
-        <div>
-          <div className="flex items-center p-4">
-            <Image
-              width={40}
-              height={40}
-              src="/icons8-literature-50.png"
-              alt="Logo"
-              className="transition-all duration-300 ease-in-out"
-            />
-            {!isCollapsed && (
-              <span className="ml-2 font-bold text-lg transition-opacity duration-300 ease-in-out">
-               HARMONY
-              </span>
-            )}
+      <div className="flex flex-col justify-between h-screen border-r">
+        <div className="flex flex-col justify-between h-full">
+          <div className="">
+            <div className="flex items-center p-4">
+              <Image
+                width={40}
+                height={40}
+                src="/icons8-literature-50.png"
+                alt="Logo"
+                className="transition-all duration-300 ease-in-out"
+              />
+              {!isCollapsed && (
+                <span className="ml-2 font-bold text-lg transition-opacity duration-300 ease-in-out">
+                  HARMONY
+                </span>
+              )}
+            </div>
+            <Separator />
           </div>
-          <Separator />
-          <div className="py-4">
+          <div className=" flex flex-1 flex-col justify-between ">
             <NavItems
               links={[
                 {
@@ -122,66 +128,37 @@ export function Sidebar() {
               isCollapsed={isCollapsed}
               activePath={pathname}
             />
-            <Separator className="my-4" />
-            <NavItems
-              links={[
-                {
-                  title: "Settings",
-                  icon: Settings,
-                  variant: "ghost",
-                  url: "/dashboard/settings",
-                },
-                {
-                  title: "Updates",
-                  icon: AlertCircle,
-                  variant: "ghost",
-                  url: "/dashboard/updates",
-                },
-              ]}
-              isCollapsed={isCollapsed}
-              activePath={pathname}
-            />
+            <div>
+              <Separator />
+              <NavItems
+                links={[
+                  {
+                    title: "Settings",
+                    icon: Settings,
+                    variant: "ghost",
+                    url: "/dashboard/settings",
+                  },
+                  {
+                    title: "Updates",
+                    icon: AlertCircle,
+                    variant: "ghost",
+                    url: "/dashboard/updates",
+                  },
+                ]}
+                isCollapsed={isCollapsed}
+                activePath={pathname}
+              />
+            </div>
           </div>
-        </div>
-        <div className="p-4">
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button variant="ghost" className="w-full justify-start">
-                <LogOutIcon className="h-5 w-5 mr-2" />
-                {!isCollapsed && "Sign Out"}
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
-              <DialogHeader>
-                <DialogTitle>Sign Out</DialogTitle>
-              </DialogHeader>
-              <div>
-                <p className="text-muted-foreground text-sm">
-                  Are you sure you want to sign out? This will log you out of
-                  your account.
-                </p>
-              </div>
-              <DialogFooter>
-                <div className="flex justify-end gap-2">
-                  <DialogClose asChild>
-                    <Button type="button" variant="secondary">
-                      Close
-                    </Button>
-                  </DialogClose>
-                  <Button onClick={() => signOut()}>Sign Out</Button>
-                </div>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
         </div>
       </div>
       <Button
         variant="ghost"
         size="icon"
-        className={`absolute top-4 right-1 hidden md:flex ${
+        className={`absolute top-4 right-1 md:flex ${
           isCollapsed ? "left-3 opacity-0" : ""
         } `}
-        onClick={toggleSidebar}
+        onClick={() => setIsCollapsed()}
       >
         {isCollapsed ? (
           <ChevronRight className="h-4 w-4" />

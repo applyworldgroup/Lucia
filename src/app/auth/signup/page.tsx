@@ -42,6 +42,7 @@ export default function SignIn() {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors , isSubmitting},
   } = useForm<SignUpInput>({
     defaultValues: {
@@ -72,6 +73,7 @@ export default function SignIn() {
         description:
           "We have sent an verification email, please verify your email before signing in.",
       });
+      reset();
       router.push("/dashboard");
     }
   }

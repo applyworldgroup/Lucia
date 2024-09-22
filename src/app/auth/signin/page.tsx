@@ -54,6 +54,7 @@ export default function SignIn() {
     register,
     handleSubmit,
     getValues,
+    reset,
     formState: { errors, isSubmitting },
   } = useForm<SignInInput>({
     resolver: zodResolver(signInSchema),
@@ -84,6 +85,7 @@ export default function SignIn() {
         title:`🙏Welcome, ${data.email.split('@')[0].charAt(0).toUpperCase() + data.email.split('@')[0].slice(1)} Boss`,
         description: "Signed in successfully",
       });
+      reset();
       router.push("/dashboard");
     }
   }
@@ -97,6 +99,7 @@ export default function SignIn() {
         variant: "destructive",
         description: res.error,
       });
+      
     } else {
       toast({
         variant: "default",
