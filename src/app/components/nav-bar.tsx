@@ -1,6 +1,5 @@
 "use client";import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { LogOutIcon, Menu } from "lucide-react";
+import { LogOutIcon } from "lucide-react";
 import { FC } from "react";
 import { UserNav } from "./user-nav";
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";

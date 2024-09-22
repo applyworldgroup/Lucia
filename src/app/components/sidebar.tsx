@@ -11,7 +11,6 @@ import {
   ChevronRight,
   DownloadCloud,
   Inbox,
-  LogOutIcon,
   Settings,
   Users,
 } from "lucide-react";
@@ -19,16 +18,6 @@ import { Separator } from "@/components/ui/separator";
 import { NavItems } from "./nav-items";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { signOut } from "@/features/actions/auth/signout";
 import { cn } from "@/lib/utils";
 import { useCollapse } from "@/store/useCollapse";
 
