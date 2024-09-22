@@ -56,7 +56,7 @@ export function Sidebar() {
             />
             {!isCollapsed && (
               <span className="ml-2 font-bold text-lg transition-opacity duration-300 ease-in-out">
-                ETHEREAL
+               HARMONY
               </span>
             )}
           </div>

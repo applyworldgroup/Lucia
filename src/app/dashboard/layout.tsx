@@ -9,7 +9,7 @@ interface MailPageProps {
 export default function MailPage({ children }: MailPageProps) {
   return (
     <div className="flex h-screen overflow-hidden">
-      <div className="hidden md:block">
+      <div className="">
         <Sidebar />
       </div>
       <div className="flex-1 flex flex-col overflow-hidden">
