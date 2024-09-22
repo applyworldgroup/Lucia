@@ -18,6 +18,7 @@ import FormError from "@/app/components/form-error";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 import { signUpUser } from "@/features/actions/auth/signup";
+import LoadingSpinner from "@/app/components/loading-spinner";
 
 // enum ROLE {
 //   ADMIN = "ADMIN",
@@ -41,7 +42,7 @@ export default function SignIn() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors , isSubmitting},
   } = useForm<SignUpInput>({
     defaultValues: {
       firstName: "",
@@ -153,8 +154,8 @@ export default function SignIn() {
                   )}
                 </div>
               </div>
-              <Button type="submit" className="w-full">
-                Sign Up
+              <Button type="submit" className="w-full flex gap-4" disabled={isSubmitting}>
+              {isSubmitting && <LoadingSpinner />}  Sign Up
               </Button>
             </div>
           </form>

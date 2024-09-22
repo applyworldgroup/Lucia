@@ -22,6 +22,7 @@ import FormError from "@/app/components/form-error";
 import { signInUser } from "@/features/actions/auth/signin";
 import { resendVerificationEmail } from "@/features/actions/auth/resendVerificationEmail";
 import { useCountdown } from "usehooks-ts";
+import LoadingSpinner from "@/app/components/loading-spinner";
 
 const signInSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -53,7 +54,7 @@ export default function SignIn() {
     register,
     handleSubmit,
     getValues,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<SignInInput>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
@@ -178,8 +179,8 @@ export default function SignIn() {
                   Send verification email {(count > 0 && count < 60) && `in ${count}s` }
                 </Button>
               )}
-              <Button type="submit" className="w-full">
-                Login
+              <Button type="submit" className="w-full flex gap-4" disabled={isSubmitting}>
+              {isSubmitting && <LoadingSpinner />}  Login
               </Button>
             </div>
           </form>
