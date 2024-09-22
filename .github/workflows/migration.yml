@@ -1,9 +1,9 @@
-name: Deploy
+name: Migration
 
 on:
   push:
     branches:
-      - main  # or the branch you're deploying
+      - main 
 
 jobs:
   deploy:
@@ -24,6 +24,3 @@ jobs:
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: npx prisma migrate deploy
-
-      - name: Deploy to Vercel
-        run: npm run vercel-deploy  # This runs your custom deploy script (adjust accordingly)
