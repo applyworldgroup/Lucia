@@ -145,8 +145,8 @@ export default function Component() {
   );
 
   const sortOptions = [
-    { label: "Date", value: "visaAppliedDate", icon: Calendar },
-    { label: "Name", value: "name", icon: User },
+    { label: "Date", value: "createdAt", icon: Calendar },
+    { label: "Name", value: "firstName", icon: User },
   ];
 
   const handleSort = (value: string) => {

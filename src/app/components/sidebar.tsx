@@ -76,24 +76,24 @@ export function Sidebar() {
                   variant: "ghost",
                   url: "/dashboard/appointments",
                 },
-                {
-                  title: "Visitors",
-                  icon: Users,
-                  variant: "ghost",
-                  url: "/dashboard/visitors",
-                },
+                // {
+                //   title: "Visitors",
+                //   icon: Users,
+                //   variant: "ghost",
+                //   url: "/dashboard/visitors",
+                // },
                 {
                   title: "Calender",
                   icon: Calendar,
                   variant: "ghost",
                   url: "/dashboard/calender",
                 },
-                {
-                  title: "Team",
-                  icon: Users,
-                  variant: "ghost",
-                  url: "/dashboard/team",
-                },
+                // {
+                //   title: "Team",
+                //   icon: Users,
+                //   variant: "ghost",
+                //   url: "/dashboard/team",
+                // },
                 {
                   title: "Customers",
                   icon: Users,

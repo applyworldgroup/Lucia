@@ -74,7 +74,7 @@ const CustomDayHeader = ({ label }) => (
 const CustomDateCell = ({ children }) => {
   return (
     <div className={`h-full flex flex-col border-4 w-full border-secondary`}>
-      <div className="flex-1 text-red-500 p-2">
+      <div className="flex-1 p-2">
         {children}
       </div>
     </div>
@@ -140,14 +140,6 @@ export default function Component() {
       setSelectedEvent(null)
     }
   }
-
-  const { defaultDate, scrollToTime } = useMemo(
-    () => ({
-      defaultDate: new Date(),
-      scrollToTime: new Date(1970, 1, 1, 6),
-    }),
-    []
-  )
 
   return (
     <div className="container mx-auto p-4">
