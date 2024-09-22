@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { PlusIcon, RefreshCw, UserIcon, BriefcaseIcon, FolderIcon, PhoneIcon, MailIcon, RefreshCwIcon } from 'lucide-react'
+import { PlusIcon, UserIcon, PhoneIcon, MailIcon, RefreshCwIcon } from 'lucide-react'
 
 // Mock data for team members
 const initialTeamMembers = [
@@ -40,12 +40,6 @@ export default function TeamPage() {
     setNewMember({ name: '', role: '', email: '', phone: '' })
     setIsDialogOpen(false)
   }
-
-  const overviewCards = [
-    { title: "Total Team Members", count: teamMembers.length, icon: <UserIcon className="h-4 w-4 text-muted-foreground" /> },
-    { title: "Departments", count: 3, icon: <BriefcaseIcon className="h-4 w-4 text-muted-foreground" /> },
-    { title: "Active Projects", count: 5, icon: <FolderIcon className="h-4 w-4 text-muted-foreground" /> },
-  ]
 
   return (
     <div className="min-h-screen">

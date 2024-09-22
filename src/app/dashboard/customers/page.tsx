@@ -30,13 +30,11 @@ import {
   ArrowUp,
   ArrowUpDown,
   Calendar,
-  CalendarIcon,
   ChevronDown,
   ChevronLeftIcon,
   ChevronRightIcon,
   DownloadIcon,
   Edit,
-  FilterIcon,
   MoreHorizontal,
   RefreshCwIcon,
   SearchIcon,
@@ -130,7 +128,6 @@ export default function Component() {
   const [sortBy, setSortBy] = useState("visaAppliedDate");
   const [sortOrder, setSortOrder] = useState("asc");
   const [searchTerm, setSearchTerm] = useState("");
-  const [statusFilter, setStatusFilter] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
   const [visaFilter, setVisaFilter] = useState("all");
   const itemsPerPage = 10;

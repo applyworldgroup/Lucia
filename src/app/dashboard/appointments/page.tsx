@@ -35,7 +35,6 @@ import {
 import {
   Calendar,
   ChevronDown,
-  Search,
   MoreHorizontal,
   Edit,
   Clock,

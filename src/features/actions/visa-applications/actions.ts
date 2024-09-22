@@ -1,7 +1,7 @@
 'use server'
 
 import { VisaApplication } from '@/types/schema'
-import { revalidatePath } from 'next/cache'
+// import { revalidatePath } from 'next/cache'
 
 export async function createVisaApplication(data: VisaApplication) {
     // Implement your database logic here

@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
@@ -8,7 +8,6 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
-  Card,
   CardContent,
   CardDescription,
   CardFooter,
@@ -49,7 +48,7 @@ interface CustomerFormProps {
 }
 
 export default function CustomerForm({ initialData }: CustomerFormProps) {
-  const [isEditing, setIsEditing] = useState(!!initialData);
+  const [isEditing] = useState(!!initialData);
   const queryClient = useQueryClient();
 
   const form = useForm<Customer>({

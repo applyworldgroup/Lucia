@@ -1,7 +1,7 @@
 'use server'
 
 import { Customer } from '@/types/schema'
-import { revalidatePath } from 'next/cache'
+// import { revalidatePath } from 'next/cache'
 
 export async function createCustomer(data: Customer) {
     // Implement your database logic here

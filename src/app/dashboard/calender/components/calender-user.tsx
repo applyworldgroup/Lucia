@@ -8,7 +8,6 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { CalendarIcon, Clock, MapPin, Plus, Trash2, User } from 'lucide-react'
 import { cn } from "@/lib/utils"
 
@@ -40,7 +39,7 @@ const EventComponent = ({ event }: { event: Event }) => (
 )
 
 // Custom toolbar component
-const CustomToolbar = ({ label, onNavigate, onView, view }: any) => (
+const CustomToolbar = ({ label, onNavigate, onView, view }) => (
   <div className="rbc-toolbar">
     <div className="rbc-btn-group">
       <Button variant="outline" onClick={() => onNavigate('PREV')}>Back</Button>

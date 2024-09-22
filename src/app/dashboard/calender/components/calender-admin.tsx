@@ -95,7 +95,7 @@ export default function AdminCalender() {
     }
   }
 
-  const eventStyleGetter = useCallback((event: Event) => {
+  const eventStyleGetter = useCallback(() => {
     const style = {
       backgroundColor: '#3182ce',
       borderRadius: '5px',
@@ -122,7 +122,7 @@ export default function AdminCalender() {
         <Button onClick={() => setShowAddModal(true)}>
           <Plus className="mr-2 h-4 w-4" /> Add New Event
         </Button>
-        <Select value={view} onValueChange={(newView: any) => setView(newView)}>
+        <Select value={view} onValueChange={(newView) => setView(newView)}>
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="Select view" />
           </SelectTrigger>

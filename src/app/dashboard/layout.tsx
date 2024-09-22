@@ -1,9 +1,5 @@
 import React from "react";import { Sidebar } from "@/app/components/sidebar";
-import { UserNav } from "@/app/components/user-nav";
-import { Input } from "@/components/ui/input";
 import { Toaster } from "@/components/ui/toaster";
-import { Button } from "@/components/ui/button";
-import { Menu } from "lucide-react";
 import NavBar from "@/app/components/nav-bar";
 
 interface MailPageProps {

@@ -1,13 +1,12 @@
 'use client'
 
-import { useState, useCallback, useMemo } from 'react'
+import { useState, useCallback } from 'react'
 import { Calendar, momentLocalizer, Views } from 'react-big-calendar'
 import moment from 'moment'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { ArrowLeft, ArrowRight, CalendarIcon, Clock, MapPin, Plus, Trash2 } from 'lucide-react'
 
 // Import the CSS for react-big-calendar
@@ -40,7 +39,7 @@ const CustomEvent = ({ event }: { event: Event }) => (
   </div>
 )
 
-const CustomToolbar = ({ label, onNavigate, onView, view }) => (
+const CustomToolbar = ({ label, onNavigate, onView }) => (
   <div className="flex justify-between items-center  py-4">
     <div className='flex items-center gap-8'>
       <Button onClick={() => onNavigate('PREV')} variant={"outline"}className='flex gap-2'><ArrowLeft size={15}/> Prev </Button>
