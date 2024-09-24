@@ -31,6 +31,7 @@ import {
   ArrowUp,
   ArrowUpIcon,
   Calendar,
+  CheckCircle,
   ChevronDown,
   ChevronLeftIcon,
   ChevronRightIcon,
@@ -526,7 +527,9 @@ export default function JobReadyProgram() {
                 <TableCell>{item.supervisorName}</TableCell>
                 <TableCell>{item.supervisorContact}</TableCell>
                 <TableCell>{item.completionDate?.toDateString()}</TableCell>
-                <TableCell>{item.certificateIssued}</TableCell>
+                <TableCell>
+                  {item.certificateIssued && <CheckCircle />}
+                </TableCell>
                 <TableCell className="text-right">
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
