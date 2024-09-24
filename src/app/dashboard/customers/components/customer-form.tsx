@@ -42,7 +42,6 @@ import {
   updateCustomer,
 } from "@/features/actions/customers/actions";
 import Link from "next/link";
-
 interface CustomerFormProps {
   initialData?: Customer;
 }
@@ -59,7 +58,7 @@ export default function CustomerForm({ initialData }: CustomerFormProps) {
       lastName: "",
       email: "",
       address: "",
-      passportNumber: "",
+      passportNumber: undefined,
       currentVisa: undefined,
       visaExpiry: undefined,
       phone: "",
@@ -68,19 +67,17 @@ export default function CustomerForm({ initialData }: CustomerFormProps) {
 
   const createMutation = useMutation({
     mutationFn: createCustomer,
-    onSuccess: ({ success }) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["customers"] });
-      alert(success);
       form.reset();
     },
   });
 
   const updateMutation = useMutation({
-    mutationFn: (params: { id: number; data: Partial<Customer> }) =>
+    mutationFn: (params: { id: string; data: Partial<Customer> }) =>
       updateCustomer(params.id, params.data),
-    onSuccess: ({ success }) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["customers"] });
-      alert(success);
       form.reset();
     },
   });
@@ -93,7 +90,7 @@ export default function CustomerForm({ initialData }: CustomerFormProps) {
         createMutation.mutate(data);
       }
     },
-    [isEditing, initialData, updateMutation, createMutation]
+    [isEditing, initialData, updateMutation, createMutation],
   );
   return (
     <div className="w-full">
@@ -253,7 +250,7 @@ export default function CustomerForm({ initialData }: CustomerFormProps) {
                             variant={"outline"}
                             className={cn(
                               "w-full pl-3 text-left font-normal",
-                              !field.value && "text-muted-foreground"
+                              !field.value && "text-muted-foreground",
                             )}
                           >
                             {field.value ? (

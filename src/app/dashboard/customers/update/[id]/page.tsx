@@ -1,8 +1,27 @@
+"use client";
 import { FC } from "react";
-interface UpdateCustomerProps {}
+import { useQuery } from "@tanstack/react-query";
+import { getCustomerById } from "@/features/actions/customers/actions";
+import CustomerForm from "../../components/customer-form";
 
-const UpdateCustomer: FC<UpdateCustomerProps> = ({}) => {
-  return <div> Update Customer Page </div>;
+interface UpdateCustomer {
+  id: string;
+}
+const UpdateCustomer: FC<UpdateCustomer> = ({ id }) => {
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["customer", id],
+    queryFn: () => getCustomerById(id),
+  });
+
+  if (isLoading) return <div>Loading...</div>;
+  if (isError) return <div>Error fetching customer</div>;
+  if (!data || !data.success || !data.data) return <div>No customer found</div>;
+
+  return (
+    <div>
+      <CustomerForm initialData={data.data} />
+    </div>
+  );
 };
 
-export default UpdateCustomer;
+export default CustomerForm;
