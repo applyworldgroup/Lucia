@@ -1,5 +1,4 @@
-"use client";
-import React, { useState } from "react";
+"use client";import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { today, thisMonthStart, thisWeekStart } from "@/lib/date-calc";
 import {
@@ -235,7 +234,7 @@ export default function Component() {
   const [statusFilter, setStatusFilter] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
   const [visaFilter, setVisaFilter] = useState("all");
-  const itemsPerPage = 10;
+  const itemsPerPage = 5;
 
   // Filter and search functionality
   const filteredData = mockData.filter(
@@ -462,6 +461,7 @@ export default function Component() {
         <Table>
           <TableHeader>
             <TableRow className="bg-secondary">
+              <TableHead className="px-4 py-4">S.N</TableHead>
               <TableHead className="px-4 py-4">Name</TableHead>
               <TableHead>Email</TableHead>
               <TableHead>Address</TableHead>
@@ -477,8 +477,11 @@ export default function Component() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {paginatedData.map((item) => (
+            {paginatedData.map((item, index) => (
               <TableRow key={item.id}>
+                <TableCell className="px-4 py-4">
+                  {((currentPage - 1) * itemsPerPage + 1) + index}
+                </TableCell>
                 <TableCell className="px-4 py-4">
                   {item.firstName} {item.middleName} {item.lastName}
                 </TableCell>

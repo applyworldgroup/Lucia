@@ -1,4 +1,5 @@
-name: Migrationon:
+name: Migration
+on:
   push:
     branches:
       - main
