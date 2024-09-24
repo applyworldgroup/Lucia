@@ -75,8 +75,22 @@
     }
   },
   "lint-staged": {
-    "*.{js,ts}": [
+    "*.ts": [
       "eslint --fix",
+      "prettier --write"
+    ],
+    "*.tsx": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.js": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.json": [
+      "prettier --write"
+    ],
+    "*.md": [
       "prettier --write"
     ]
   },

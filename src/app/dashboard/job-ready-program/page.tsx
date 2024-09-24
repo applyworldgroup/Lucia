@@ -1,4 +1,56 @@
-"use client";import React, { useMemo, useState } from "react";import { Button } from "@/components/ui/button";import { today, thisMonthStart, thisWeekStart } from "@/lib/date-calc";import {  Card,  CardContent,  CardDescription,  CardHeader,  CardTitle,} from "@/components/ui/card";import { Input } from "@/components/ui/input";import {  Select,  SelectContent,  SelectItem,  SelectTrigger,  SelectValue,} from "@/components/ui/select";import {  Table,  TableBody,  TableCell,  TableHead,  TableHeader,  TableRow,} from "@/components/ui/table";import {  ArrowDown,  ArrowDownIcon,  ArrowUp,  ArrowUpDown,  ArrowUpIcon,  Calendar,  ChevronDown,  ChevronLeftIcon,  ChevronRightIcon,  DownloadIcon,  Edit,  MoreHorizontal,  RefreshCwIcon,  SearchIcon,  User,} from "lucide-react";import {  DropdownMenu,  DropdownMenuContent,  DropdownMenuItem,  DropdownMenuLabel,  DropdownMenuSeparator,  DropdownMenuTrigger,} from "@/components/ui/dropdown-menu";import Link from "next/link";enum JRPStatus {
+"use client";
+import React, { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { today, thisMonthStart, thisWeekStart } from "@/lib/date-calc";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  ArrowDown,
+  ArrowDownIcon,
+  ArrowUp,
+  ArrowUpIcon,
+  Calendar,
+  ChevronDown,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  DownloadIcon,
+  Edit,
+  MoreHorizontal,
+  RefreshCwIcon,
+  SearchIcon,
+  User,
+} from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import Link from "next/link";
+enum JRPStatus {
   ENROLLED = "ENROLLED",
   IN_PROGRESS = "IN_PROGRESS",
   COMPLETED = "COMPLETED",
@@ -177,76 +229,74 @@ const mockData = [
 ];
 
 export default function JobReadyProgram() {
- const [sort, setSort] = useState({ by: "startDate", order: "asc" });
- const [filters, setFilters] = useState({
-   status: "all",
-   program: "all",
-   search: "",
- });
- const [currentPage, setCurrentPage] = useState(1);
- const itemsPerPage = 10;
+  const [sort, setSort] = useState({ by: "startDate", order: "asc" });
+  const [filters, setFilters] = useState({
+    status: "all",
+    program: "all",
+    search: "",
+  });
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
+  const sortOptions = [
+    { label: "Date", value: "startDate", icon: Calendar },
+    { label: "Name", value: "programType", icon: User },
+  ];
+  // Handle sorting
+  const handleSort = (value: string) => {
+    setSort((prevSort) => ({
+      by: value,
+      order: prevSort.by === value && prevSort.order === "asc" ? "desc" : "asc",
+    }));
+  };
 
-   const sortOptions = [
-     { label: "Date", value: "startDate", icon: Calendar },
-     { label: "Name", value: "programType", icon: User },
-   ];
- // Handle sorting
- const handleSort = (value: string) => {
-   setSort((prevSort) => ({
-     by: value,
-     order: prevSort.by === value && prevSort.order === "asc" ? "desc" : "asc",
-   }));
- };
+  // Handle filtering
+  const handleFilterChange = (filterKey: string, value: string) => {
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      [filterKey]: value,
+    }));
+  };
 
- // Handle filtering
- const handleFilterChange = (filterKey: string, value: string) => {
-   setFilters((prevFilters) => ({
-     ...prevFilters,
-     [filterKey]: value,
-   }));
- };
+  // Filter data
+  const filteredData = mockData.filter((item) => {
+    const searchText = filters.search.toLowerCase();
+    const customer = item.customer;
+    return (
+      (filters.status === "all" || item.status === filters.status) &&
+      (filters.program === "all" || item.programType === filters.program) &&
+      (customer.firstName.toLowerCase().includes(searchText) ||
+        customer.email.toLowerCase().includes(searchText) ||
+        customer.passportNumber.toLowerCase().includes(searchText))
+    );
+  });
 
- // Filter data
- const filteredData = mockData.filter((item) => {
-   const searchText = filters.search.toLowerCase();
-   const customer = item.customer;
-   return (
-     (filters.status === "all" || item.status === filters.status) &&
-     (filters.program === "all" || item.programType === filters.program) &&
-     (customer.firstName.toLowerCase().includes(searchText) ||
-       customer.email.toLowerCase().includes(searchText) ||
-       customer.passportNumber.toLowerCase().includes(searchText))
-   );
- });
+  // Sort data
+  const sortedApplications = [...filteredData].sort((a, b) => {
+    const aValue = a[sort.by as keyof JobReadyProgram];
+    const bValue = b[sort.by as keyof JobReadyProgram];
 
- // Sort data
- const sortedApplications = [...filteredData].sort((a, b) => {
-   const aValue = a[sort.by as keyof JobReadyProgram];
-   const bValue = b[sort.by as keyof JobReadyProgram];
+    if (aValue < bValue) return sort.order === "asc" ? -1 : 1;
+    if (aValue > bValue) return sort.order === "asc" ? 1 : -1;
+    return 0;
+  });
 
-   if (aValue < bValue) return sort.order === "asc" ? -1 : 1;
-   if (aValue > bValue) return sort.order === "asc" ? 1 : -1;
-   return 0;
- });
+  // Pagination
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+  const paginatedData = sortedApplications.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage,
+  );
 
- // Pagination
- const totalPages = Math.ceil(filteredData.length / itemsPerPage);
- const paginatedData = sortedApplications.slice(
-   (currentPage - 1) * itemsPerPage,
-   currentPage * itemsPerPage
- );
-
-const appliedToday = sortedApplications.filter(
-  (a) => a.startDate === today
-).length;
-const appliedThisWeek = sortedApplications.filter(
-  (a) => a.startDate >= thisWeekStart
-).length;
-const appliedThisMonth = sortedApplications.filter(
-  (a) => a.startDate >= thisMonthStart
-).length;
-
+  const appliedToday = sortedApplications.filter(
+    (a) => a.startDate === today,
+  ).length;
+  const appliedThisWeek = sortedApplications.filter(
+    (a) => a.startDate >= thisWeekStart,
+  ).length;
+  const appliedThisMonth = sortedApplications.filter(
+    (a) => a.startDate >= thisMonthStart,
+  ).length;
 
   return (
     <div className="min-h-screen">
@@ -382,7 +432,7 @@ const appliedThisMonth = sortedApplications.filter(
                     React.createElement(
                       sortOptions.find((option) => option.value === sort.by)!
                         .icon,
-                      { className: "mr-2 h-4 w-4" }
+                      { className: "mr-2 h-4 w-4" },
                     )}
                   Sort by{" "}
                   {
