@@ -51,6 +51,7 @@ import {
 import Link from "next/link";
 import { getAllCustomers } from "@/features/actions/customers/actions";
 import { useQuery } from "@tanstack/react-query";
+import LoadingSpinner from "@/app/components/loading-spinner";
 
 export default function Customers() {
   const [sortBy, setSortBy] = useState("visaAppliedDate");
@@ -65,7 +66,12 @@ export default function Customers() {
     queryFn: () => getAllCustomers(),
   });
 
-  if (isLoading) return <p>Loading customers...</p>;
+  if (isLoading)
+    return (
+      <div className="h-full flex items-center justify-center">
+        <LoadingSpinner />
+      </div>
+    );
   if (isError) return <p>Error: {error.message}</p>;
 
   const customers = data || [];
