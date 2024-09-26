@@ -399,28 +399,7 @@ export default function JobReadyProgram() {
               </SelectContent>
             </Select>
           </div>
-          {/* <div className=" w-full md:w-[12rem]">
-            <label htmlFor="status" className="text-sm font-medium">
-              JobReadyProgram
-            </label>
-            <Select value={programFilter} onValueChange={setProgramFilter}>
-              <SelectTrigger id="JobReadyProgram">
-                <SelectValue placeholder="Select JobReadyProgram" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All</SelectItem>
-                <SelectItem value="SUB_407">407</SelectItem>
-                <SelectItem value="SUB_482">482</SelectItem>
-                <SelectItem value="SUB_186">186</SelectItem>
-                <SelectItem value="SUB_500">500</SelectItem>
-                <SelectItem value="SUB_189">189</SelectItem>
-                <SelectItem value="SUB_190">190</SelectItem>
-                <SelectItem value="SUB_600">600</SelectItem>
-                <SelectItem value="SUB_820">820</SelectItem>
-                <SelectItem value="SUB_801">801</SelectItem>
-              </SelectContent>
-            </Select>
-          </div> */}
+
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
@@ -528,7 +507,7 @@ export default function JobReadyProgram() {
                 <TableCell>{item.supervisorContact}</TableCell>
                 <TableCell>{item.completionDate?.toDateString()}</TableCell>
                 <TableCell>
-                  {item.certificateIssued && <CheckCircle />}
+                  {item.certificateIssued && <CheckCircle size={15} />}
                 </TableCell>
                 <TableCell className="text-right">
                   <DropdownMenu>

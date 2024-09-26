@@ -35,13 +35,14 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Customer, customerSchema } from "@/types/schema";
+import { CustomerInputSchema } from "@/types/schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   createCustomer,
   updateCustomer,
 } from "@/features/actions/customers/actions";
 import Link from "next/link";
+import { Customer } from "@prisma/client";
 interface CustomerFormProps {
   initialData?: Customer;
 }
@@ -51,10 +52,10 @@ export default function CustomerForm({ initialData }: CustomerFormProps) {
   const queryClient = useQueryClient();
 
   const form = useForm<Customer>({
-    resolver: zodResolver(customerSchema),
+    resolver: zodResolver(CustomerInputSchema),
     defaultValues: initialData || {
       firstName: "",
-      middleName: "",
+      middleName: undefined,
       lastName: "",
       email: "",
       address: "",
@@ -85,7 +86,7 @@ export default function CustomerForm({ initialData }: CustomerFormProps) {
   const handleFormSubmit = useCallback(
     (data: Customer) => {
       if (isEditing && initialData?.id) {
-        updateMutation.mutate({ id: initialData.id, data });
+        updateMutation.mutate({ id: initialData.id, data: data });
       } else {
         createMutation.mutate(data);
       }
@@ -116,7 +117,12 @@ export default function CustomerForm({ initialData }: CustomerFormProps) {
                 name="firstName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>First Name</FormLabel>
+                    <FormLabel>
+                      First Name{" "}
+                      <span className="text-red-500" title="Required">
+                        *
+                      </span>
+                    </FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
@@ -131,7 +137,7 @@ export default function CustomerForm({ initialData }: CustomerFormProps) {
                   <FormItem>
                     <FormLabel>Middle Name</FormLabel>
                     <FormControl>
-                      <Input {...field} />
+                      <Input {...field} value={field.value ?? undefined} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -142,7 +148,12 @@ export default function CustomerForm({ initialData }: CustomerFormProps) {
                 name="lastName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Last Name</FormLabel>
+                    <FormLabel>
+                      Last Name{" "}
+                      <span className="text-red-500" title="Required">
+                        *
+                      </span>
+                    </FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
@@ -156,7 +167,12 @@ export default function CustomerForm({ initialData }: CustomerFormProps) {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>
+                    Email{" "}
+                    <span className="text-red-500" title="Required">
+                      *
+                    </span>
+                  </FormLabel>
                   <FormControl>
                     <Input type="email" {...field} />
                   </FormControl>
@@ -169,7 +185,12 @@ export default function CustomerForm({ initialData }: CustomerFormProps) {
               name="address"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Address</FormLabel>
+                  <FormLabel>
+                    Address{" "}
+                    <span className="text-red-500" title="Required">
+                      *
+                    </span>
+                  </FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -183,7 +204,9 @@ export default function CustomerForm({ initialData }: CustomerFormProps) {
                 name="phone"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Phone</FormLabel>
+                    <FormLabel>
+                      Phone <span className="text-red-500">*</span>
+                    </FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
@@ -198,7 +221,7 @@ export default function CustomerForm({ initialData }: CustomerFormProps) {
                   <FormItem>
                     <FormLabel>Passport Number</FormLabel>
                     <FormControl>
-                      <Input {...field} />
+                      <Input {...field} value={field.value ?? undefined} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -214,7 +237,7 @@ export default function CustomerForm({ initialData }: CustomerFormProps) {
                     <FormLabel>Current Visa</FormLabel>
                     <Select
                       onValueChange={field.onChange}
-                      defaultValue={field.value}
+                      defaultValue={field.value ?? undefined}
                     >
                       <FormControl>
                         <SelectTrigger>
@@ -265,8 +288,8 @@ export default function CustomerForm({ initialData }: CustomerFormProps) {
                       <PopoverContent className="w-auto p-0" align="start">
                         <Calendar
                           mode="single"
-                          selected={field.value}
-                          onSelect={field.onChange}
+                          selected={field.value ?? undefined}
+                          onSelect={(date) => field.onChange(date ?? null)}
                           disabled={(date) =>
                             date > new Date() || date < new Date("1900-01-01")
                           }

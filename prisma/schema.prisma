@@ -56,7 +56,7 @@ model ResetToken {
 }
 
 model Customer {
-  id                String                 @id @default(uuid())
+  id                String             @id @default(uuid())
   firstName         String
   middleName        String?
   lastName          String
@@ -74,7 +74,7 @@ model Customer {
 }
 
 model VisaApplication {
-  id                    String                 @id @default(uuid())
+  id              String   @id @default(uuid())
   firstName       String
   middleName      String?
   lastName        String
@@ -88,7 +88,7 @@ model VisaApplication {
   totalAmount     Float    @default(0.0)
   totalPaid       Float    @default(0.0)
   overseer        String?
-  customerId      String 
+  customerId      String
   customer        Customer @relation(fields: [customerId], references: [id])
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
@@ -97,7 +97,7 @@ model VisaApplication {
 // Existing code...
 
 model JobReadyProgram {
-  id                    String                 @id @default(uuid())
+  id                String    @id @default(uuid())
   customerId        String
   customer          Customer  @relation(fields: [customerId], references: [id])
   programType       String
@@ -116,7 +116,7 @@ model JobReadyProgram {
 }
 
 model SkillsAssessment {
-  id                    String                 @id @default(uuid())
+  id                     String    @id @default(uuid())
   customerId             String
   customer               Customer  @relation(fields: [customerId], references: [id])
   occupation             String
