@@ -1,4 +1,5 @@
-"use client";import { useState, useCallback } from "react";
+"use client";
+import { useState, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
@@ -34,7 +35,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { VisaApplication, visaSchema } from "@/types/schema";
+import { VisaApplication, VisaApplicationSchema } from "@/types/schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   createVisaApplication,
@@ -53,7 +54,7 @@ export default function VisaApplicationForm({
   const queryClient = useQueryClient();
 
   const form = useForm<VisaApplication>({
-    resolver: zodResolver(visaSchema),
+    resolver: zodResolver(VisaApplicationSchema),
     defaultValues: initialData || {
       firstName: "",
       middleName: "",
@@ -81,7 +82,7 @@ export default function VisaApplicationForm({
   });
 
   const updateMutation = useMutation({
-    mutationFn: (params: { id: number; data: Partial<VisaApplication> }) =>
+    mutationFn: (params: { id: string; data: Partial<VisaApplication> }) =>
       updateVisaApplication(params.id, params.data),
     onSuccess: ({ success }) => {
       queryClient.invalidateQueries({ queryKey: ["visaApplications"] });
@@ -97,7 +98,7 @@ export default function VisaApplicationForm({
         createMutation.mutate(data);
       }
     },
-    [isEditing, initialData, updateMutation, createMutation]
+    [isEditing, initialData, updateMutation, createMutation],
   );
   return (
     <div className="w-full">
@@ -215,7 +216,7 @@ export default function VisaApplicationForm({
                             variant={"outline"}
                             className={cn(
                               "w-full pl-3 text-left font-normal",
-                              !field.value && "text-muted-foreground"
+                              !field.value && "text-muted-foreground",
                             )}
                           >
                             {field.value ? (

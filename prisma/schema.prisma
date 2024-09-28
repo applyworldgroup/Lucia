@@ -56,25 +56,27 @@ model ResetToken {
 }
 
 model Customer {
-  id               Int               @id @default(autoincrement())
-  firstName        String
-  middleName       String
-  lastName         String
-  email            String            @unique
-  address          String
-  passportNumber   String?           @unique
-  currentVisa      VisaType?
-  visaExpiry       DateTime?
-  phone            String            @unique
-  visaApplications VisaApplication[]
-  createdAt        DateTime          @default(now())
-  updatedAt        DateTime          @updatedAt
+  id                String             @id @default(uuid())
+  firstName         String
+  middleName        String?
+  lastName          String
+  email             String             @unique
+  address           String
+  passportNumber    String?            @unique
+  currentVisa       VisaType?
+  visaExpiry        DateTime?
+  phone             String             @unique
+  visaApplications  VisaApplication[]
+  jobReadyPrograms  JobReadyProgram[]
+  skillsAssessments SkillsAssessment[]
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
 }
 
 model VisaApplication {
-  id              Int      @id @default(autoincrement())
+  id              String   @id @default(uuid())
   firstName       String
-  middleName      String
+  middleName      String?
   lastName        String
   email           String   @unique
   address         String
@@ -86,11 +88,75 @@ model VisaApplication {
   totalAmount     Float    @default(0.0)
   totalPaid       Float    @default(0.0)
   overseer        String?
-  customerId      Int // Foreign key to the Customer table
+  customerId      String
   customer        Customer @relation(fields: [customerId], references: [id])
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 }
+
+// Existing code...
+
+model JobReadyProgram {
+  id                String    @id @default(uuid())
+  customerId        String
+  customer          Customer  @relation(fields: [customerId], references: [id])
+  programType       String
+  startDate         DateTime
+  endDate           DateTime
+  status            JRPStatus
+  workplacement     String?
+  employerName      String?
+  employerABN       String?
+  supervisorName    String?
+  supervisorContact String?
+  completionDate    DateTime?
+  certificateIssued Boolean   @default(false)
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+}
+
+model SkillsAssessment {
+  id                     String    @id @default(uuid())
+  customerId             String
+  customer               Customer  @relation(fields: [customerId], references: [id])
+  occupation             String
+  assessingAuthority     String
+  applicationDate        DateTime
+  status                 SAStatus
+  documentationSubmitted Boolean
+  skillsAssessmentType   SAType
+  outcomeReceived        Boolean   @default(false)
+  outcomeDate            DateTime?
+  outcomeResult          String?
+  appealSubmitted        Boolean   @default(false)
+  appealDate             DateTime?
+  appealOutcome          String?
+  createdAt              DateTime  @default(now())
+  updatedAt              DateTime  @updatedAt
+}
+
+enum JRPStatus {
+  ENROLLED
+  IN_PROGRESS
+  COMPLETED
+  WITHDRAWN
+}
+
+enum SAStatus {
+  SUBMITTED
+  UNDER_ASSESSMENT
+  ADDITIONAL_INFO_REQUIRED
+  COMPLETED
+  APPEALED
+}
+
+enum SAType {
+  SKILLS_ASSESSMENT
+  QUALIFICATION_ASSESSMENT
+  PROVISIONAL_SKILLS_ASSESSMENT
+}
+
+// Existing Customer model updated to include relations
 
 enum Role {
   ADMIN

@@ -49,82 +49,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
-import { Customer } from "@/types/schema";
+import { getAllCustomers } from "@/features/actions/customers/actions";
+import { useQuery } from "@tanstack/react-query";
+import LoadingSpinner from "@/app/components/loading-spinner";
 
-const mockData = [
-  {
-    id: 1,
-    firstName: "Emily",
-    middleName: "A.",
-    lastName: "Brown",
-    email: "emily.brown@example.com",
-    address: "123 Elm St, City, Country",
-    passportNumber: "AB123456",
-    currentVisa: "SUB_500",
-    visaExpiry: new Date("2024-12-31"),
-    phone: "123-456-7890",
-    createdAt: new Date("2023-01-01"),
-    updatedAt: new Date("2023-06-15"),
-  },
-  {
-    id: 2,
-    firstName: "James",
-    middleName: "B.",
-    lastName: "Smith",
-    email: "james.smith@example.com",
-    address: "456 Oak St, City, Country",
-    passportNumber: "CD789123",
-    currentVisa: "SUB_482",
-    visaExpiry: new Date("2025-07-10"),
-    phone: "321-654-0987",
-    createdAt: new Date("2023-02-10"),
-    updatedAt: new Date("2023-07-20"),
-  },
-  {
-    id: 3,
-    firstName: "Sophia",
-    middleName: "C.",
-    lastName: "Johnson",
-    email: "sophia.johnson@example.com",
-    address: "789 Pine St, City, Country",
-    passportNumber: "EF654789",
-    currentVisa: "SUB_186",
-    visaExpiry: new Date("2025-05-30"),
-    phone: "987-654-3210",
-    createdAt: new Date("2023-03-15"),
-    updatedAt: new Date("2023-08-12"),
-  },
-  {
-    id: 4,
-    firstName: "Daniel",
-    middleName: "D.",
-    lastName: "Williams",
-    email: "daniel.williams@example.com",
-    address: "101 Birch St, City, Country",
-    passportNumber: "GH012345",
-    currentVisa: "SUB_407",
-    visaExpiry: new Date("2024-09-01"),
-    phone: "456-789-0123",
-    createdAt: new Date("2023-04-01"),
-    updatedAt: new Date("2023-09-22"),
-  },
-  {
-    id: 5,
-    firstName: "Olivia",
-    middleName: "E.",
-    lastName: "Garcia",
-    email: "olivia.garcia@example.com",
-    address: "202 Maple St, City, Country",
-    passportNumber: "IJ098765",
-    currentVisa: "SUB_600",
-    visaExpiry: new Date("2024-11-20"),
-    phone: "654-321-7890",
-    createdAt: new Date("2023-05-05"),
-    updatedAt: new Date("2023-10-15"),
-  },
-];
-
-export default function Component() {
+export default function Customers() {
   const [sortBy, setSortBy] = useState("visaAppliedDate");
   const [sortOrder, setSortOrder] = useState("asc");
   const [searchTerm, setSearchTerm] = useState("");
@@ -132,13 +61,27 @@ export default function Component() {
   const [visaFilter, setVisaFilter] = useState("all");
   const itemsPerPage = 10;
 
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ["customers"],
+    queryFn: () => getAllCustomers(),
+  });
+
+  if (isLoading)
+    return (
+      <div className="h-full flex items-center justify-center">
+        <LoadingSpinner />
+      </div>
+    );
+  if (isError) return <p>Error: {error.message}</p>;
+
+  const customers = data || [];
   // Filter and search functionality
-  const filteredData = mockData.filter(
+  const filteredData = customers.filter(
     (item) =>
       (visaFilter === "all" || item.currentVisa === visaFilter) &&
       (item.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
         item.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.passportNumber.toLowerCase().includes(searchTerm.toLowerCase()))
+        item.passportNumber?.toLowerCase().includes(searchTerm.toLowerCase())),
   );
 
   const sortOptions = [
@@ -155,27 +98,28 @@ export default function Component() {
     }
   };
   const sortedCustomers = [...filteredData].sort((a, b) => {
-    if (a[sortBy as keyof Customer] < b[sortBy as keyof Customer])
-      return sortOrder === "asc" ? -1 : 1;
-    if (a[sortBy as keyof Customer] > b[sortBy as keyof Customer])
-      return sortOrder === "asc" ? 1 : -1;
+    const aValue = a[sortBy] ?? "";
+    const bValue = b[sortBy] ?? "";
+
+    if (aValue < bValue) return sortOrder === "asc" ? -1 : 1;
+    if (aValue > bValue) return sortOrder === "asc" ? 1 : -1;
     return 0;
   });
   // Pagination
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
   const paginatedData = sortedCustomers.slice(
     (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
+    currentPage * itemsPerPage,
   );
 
   const createdToday = sortedCustomers.filter(
-    (a) => a.createdAt === today
+    (a) => a.createdAt === today,
   ).length;
   const createdThisWeek = sortedCustomers.filter(
-    (a) => a.createdAt >= thisWeekStart
+    (a) => a.createdAt >= thisWeekStart,
   ).length;
   const createdThisMonth = sortedCustomers.filter(
-    (a) => a.createdAt >= thisMonthStart
+    (a) => a.createdAt >= thisMonthStart,
   ).length;
 
   return (
@@ -291,7 +235,7 @@ export default function Component() {
                     React.createElement(
                       sortOptions.find((option) => option.value === sortBy)!
                         .icon,
-                      { className: "mr-2 h-4 w-4" }
+                      { className: "mr-2 h-4 w-4" },
                     )}
                   Sort by{" "}
                   {sortOptions.find((option) => option.value === sortBy)?.label}
@@ -361,7 +305,7 @@ export default function Component() {
                 <TableCell>{item.address}</TableCell>
                 <TableCell>{item.passportNumber}</TableCell>
                 <TableCell>{item.currentVisa}</TableCell>
-                <TableCell>{item.visaExpiry.toDateString()}</TableCell>
+                <TableCell>{item.visaExpiry?.toDateString()}</TableCell>
                 <TableCell className="text-right">
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -373,7 +317,7 @@ export default function Component() {
                     <DropdownMenuContent align="end">
                       <DropdownMenuItem>
                         <Link
-                          href={`visa-applications/update/${item.id}`}
+                          href={`customers/update/${item.id}`}
                           className="flex items-center"
                         >
                           <Edit className="mr-2 h-4 w-4" />

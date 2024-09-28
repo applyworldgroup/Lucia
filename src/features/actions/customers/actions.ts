@@ -1,27 +1,53 @@
-'use server'
+"use server";
 
-import { Customer } from '@/types/schema'
-// import { revalidatePath } from 'next/cache'
+// import { Customer } from '@/types/schema'
+import { revalidatePath } from "next/cache";
+import prisma from "@/lib/db";
+import { Customer } from "@prisma/client";
 
 export async function createCustomer(data: Customer) {
-    // Implement your database logic here
-    // For example, using Prisma:
-    // const result = await prisma.Customer.create({ data })
-
-    // Revalidate the path after successful creation
-    console.log("Visa Application", data);
-    // revalidatePath('/visa-applications')
-
-    return { success: true }
+  try {
+    const newCustomer = await prisma.customer.create({
+      data,
+    });
+    revalidatePath("/customers");
+    return { success: true, data: newCustomer };
+  } catch (error) {
+    console.error("Error creating customer:", error);
+    return { success: false, error: "Failed to create customer" };
+  }
 }
 
-export async function updateCustomer(id: number, data: Partial<Customer>) {
-    // Implement your database update logic here
-    // For example, using Prisma:
-    // const result = await prisma.Customer.update({ where: { id }, data })
+export async function updateCustomer(id: string, data: Partial<Customer>) {
+  try {
+    const updatedCustomer = await prisma.customer.update({
+      where: { id },
+      data,
+    });
+    revalidatePath("/customers");
 
-    // Revalidate the path after successful update
-    // revalidatePath('/visa-applications')
-    console.log("Visa Application update", data);
-    return { success: true }
+    return { success: true, data: updatedCustomer };
+  } catch (error) {
+    console.error("Error updating customer:", error);
+    return { success: false, error: "Failed to update customer" };
+  }
+}
+
+export async function getAllCustomers(): Promise<Customer[]> {
+  try {
+    const customers = await prisma.customer.findMany();
+    return customers;
+  } catch (error) {
+    console.error("Error fetching customers:", error);
+    throw new Error("Failed to fetch customers");
+  }
+}
+
+export async function getCustomerById(id: string) {
+  const customer = await prisma.customer.findUnique({ where: { id } });
+  return { success: true, data: customer };
+}
+export async function getCustomerByEmail(email: string) {
+  const customer = await prisma.customer.findUnique({ where: { email } });
+  return { success: true, data: customer };
 }

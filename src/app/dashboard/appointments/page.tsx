@@ -107,7 +107,6 @@ export default function Appointments() {
   const [editingAppointment, setEditingAppointment] = useState(null);
   const [filters, setFilters] = React.useState({
     status: [] as string[],
-    address: [] as string[],
   });
 
   const handleEditAppointment = (appointment) => {
@@ -158,14 +157,12 @@ export default function Appointments() {
     (appointment) =>
       (filters.status.length === 0 ||
         filters.status.includes(appointment.status)) &&
-      (filters.address.length === 0 ||
-        filters.address.includes(appointment.address)) &&
       (searchTerm === "" ||
         appointment.firstName
           .toLowerCase()
           .includes(searchTerm.toLowerCase()) ||
         appointment.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        appointment.email.toLowerCase().includes(searchTerm.toLowerCase()))
+        appointment.email.toLowerCase().includes(searchTerm.toLowerCase())),
   );
 
   const sortedAppointments = [...filteredAppointments].sort((a, b) => {
@@ -180,19 +177,19 @@ export default function Appointments() {
   const thisWeekStart = new Date(
     today.getFullYear(),
     today.getMonth(),
-    today.getDate() - today.getDay()
+    today.getDate() - today.getDay(),
   );
   const thisMonthStart = new Date(today.getFullYear(), today.getMonth(), 1);
 
   // run the filter in appointments inested of sortedAppointments.
   const appointmentsToday = sortedAppointments.filter(
-    (a) => a.date.toDateString() === today.toDateString()
+    (a) => a.date.toDateString() === today.toDateString(),
   ).length;
   const appointmentsThisWeek = sortedAppointments.filter(
-    (a) => a.date >= thisWeekStart
+    (a) => a.date >= thisWeekStart,
   ).length;
   const appointmentsThisMonth = sortedAppointments.filter(
-    (a) => a.date >= thisMonthStart
+    (a) => a.date >= thisMonthStart,
   ).length;
 
   return (
@@ -284,7 +281,7 @@ export default function Appointments() {
                     React.createElement(
                       sortOptions.find((option) => option.value === sortBy)!
                         .icon,
-                      { className: "mr-2 h-4 w-4" }
+                      { className: "mr-2 h-4 w-4" },
                     )}
                   Sort by{" "}
                   {sortOptions.find((option) => option.value === sortBy)?.label}
@@ -343,17 +340,6 @@ export default function Appointments() {
                 </DropdownMenuCheckboxItem>
               ))}
               <DropdownMenuSeparator />
-              <DropdownMenuLabel>Filter by Address</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              {["123 Main St", "456 Elm St", "789 Oak St"].map((address) => (
-                <DropdownMenuCheckboxItem
-                  key={address}
-                  checked={filters.address.includes(address)}
-                  onCheckedChange={() => handleFilter("address", address)}
-                >
-                  {address}
-                </DropdownMenuCheckboxItem>
-              ))}
             </DropdownMenuContent>
           </DropdownMenu>
           <Button
