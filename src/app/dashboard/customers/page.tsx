@@ -1,7 +1,6 @@
 "use client";
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { today, thisMonthStart, thisWeekStart } from "@/lib/date-calc";
 import {
   Card,
   CardContent,
@@ -52,6 +51,7 @@ import Link from "next/link";
 import { getAllCustomers } from "@/features/actions/customers/actions";
 import { useQuery } from "@tanstack/react-query";
 import LoadingSpinner from "@/app/components/loading-spinner";
+import { filterCustomersByRange } from "@/lib/date-calc";
 
 export default function Customers() {
   const [sortBy, setSortBy] = useState("visaAppliedDate");
@@ -112,15 +112,9 @@ export default function Customers() {
     currentPage * itemsPerPage,
   );
 
-  const createdToday = sortedCustomers.filter(
-    (a) => a.createdAt === today,
-  ).length;
-  const createdThisWeek = sortedCustomers.filter(
-    (a) => a.createdAt >= thisWeekStart,
-  ).length;
-  const createdThisMonth = sortedCustomers.filter(
-    (a) => a.createdAt >= thisMonthStart,
-  ).length;
+  const createdToday = filterCustomersByRange(sortedCustomers, "today");
+  const createdThisWeek = filterCustomersByRange(sortedCustomers, "week");
+  const createdThisMonth = filterCustomersByRange(sortedCustomers, "month");
 
   return (
     <div className="min-h-screen">
@@ -145,7 +139,7 @@ export default function Customers() {
             <Calendar className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{0}</div>
+            <div className="text-2xl font-bold">{createdToday}</div>
             <p className="text-xs text-muted-foreground">
               new {createdToday === 1 ? "connection" : "connections "}
               made today
@@ -160,7 +154,7 @@ export default function Customers() {
             <Calendar className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{0}</div>
+            <div className="text-2xl font-bold">{createdThisWeek}</div>
             <p className="text-xs text-muted-foreground">
               new {createdThisWeek === 1 ? "connection" : "connections "}
               made this week
@@ -175,7 +169,7 @@ export default function Customers() {
             <Calendar className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{0}</div>
+            <div className="text-2xl font-bold">{createdThisMonth}</div>
             <p className="text-xs text-muted-foreground">
               new {createdThisMonth === 1 ? "connection" : "connections "}
               made this month
