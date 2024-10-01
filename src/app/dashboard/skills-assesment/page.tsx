@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { today, thisMonthStart, thisWeekStart } from "@/lib/date-calc";
+import { filterCustomersByRange } from "@/lib/date-calc";
 import {
   Card,
   CardContent,
@@ -301,20 +301,14 @@ export default function SkillsAssesment() {
     currentPage * itemsPerPage,
   );
 
-  const appliedToday = sortedApplications.filter(
-    (a) => a.applicationDate === today,
-  ).length;
-  const appliedThisWeek = sortedApplications.filter(
-    (a) => a.applicationDate >= thisWeekStart,
-  ).length;
-  const appliedThisMonth = sortedApplications.filter(
-    (a) => a.applicationDate >= thisMonthStart,
-  ).length;
+  const appliedToday = filterCustomersByRange(sortedApplications, "today");
+  const appliedThisWeek = filterCustomersByRange(sortedApplications, "week");
+  const appliedThisMonth = filterCustomersByRange(sortedApplications, "month");
 
   return (
     <div className="min-h-screen">
       <CardHeader className="space-y-1 px-0 pt-0">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-betwsortedApplicationseen">
           <CardTitle className="text-2xl font-bold">
             JobReadyProgram Applications
           </CardTitle>

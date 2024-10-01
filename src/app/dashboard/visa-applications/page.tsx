@@ -1,6 +1,7 @@
-"use client";import React, { useState } from "react";
+"use client";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { today, thisMonthStart, thisWeekStart } from "@/lib/date-calc";
+import { filterCustomersByRange } from "@/lib/date-calc";
 import {
   Card,
   CardContent,
@@ -239,12 +240,11 @@ export default function Component() {
   // Filter and search functionality
   const filteredData = mockData.filter(
     (item) =>
-      (statusFilter === "all" ||
-        item.visaStatus === statusFilter) &&
+      (statusFilter === "all" || item.visaStatus === statusFilter) &&
       (visaFilter === "all" || item.visaType === visaFilter) &&
       (item.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
         item.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.passportNumber.toLowerCase().includes(searchTerm.toLowerCase()))
+        item.passportNumber.toLowerCase().includes(searchTerm.toLowerCase())),
   );
 
   const sortOptions = [
@@ -271,18 +271,12 @@ export default function Component() {
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
   const paginatedData = sortedApplications.slice(
     (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
+    currentPage * itemsPerPage,
   );
 
-  const appliedToday = sortedApplications.filter(
-    (a) => a.visaAppliedDate === today
-  ).length;
-  const appliedThisWeek = sortedApplications.filter(
-    (a) => a.visaAppliedDate >= thisWeekStart
-  ).length;
-  const appliedThisMonth = sortedApplications.filter(
-    (a) => a.visaAppliedDate >= thisMonthStart
-  ).length;
+  const appliedToday = filterCustomersByRange(sortedApplications, "today");
+  const appliedThisWeek = filterCustomersByRange(sortedApplications, "week");
+  const appliedThisMonth = filterCustomersByRange(sortedApplications, "month");
 
   return (
     <div className="min-h-screen">
@@ -412,7 +406,7 @@ export default function Component() {
                     React.createElement(
                       sortOptions.find((option) => option.value === sortBy)!
                         .icon,
-                      { className: "mr-2 h-4 w-4" }
+                      { className: "mr-2 h-4 w-4" },
                     )}
                   Sort by{" "}
                   {sortOptions.find((option) => option.value === sortBy)?.label}
@@ -480,7 +474,7 @@ export default function Component() {
             {paginatedData.map((item, index) => (
               <TableRow key={item.id}>
                 <TableCell className="px-4 py-4">
-                  {((currentPage - 1) * itemsPerPage + 1) + index}
+                  {(currentPage - 1) * itemsPerPage + 1 + index}
                 </TableCell>
                 <TableCell className="px-4 py-4">
                   {item.firstName} {item.middleName} {item.lastName}

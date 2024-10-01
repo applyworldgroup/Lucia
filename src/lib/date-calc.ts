@@ -1,9 +1,4 @@
-import { Customer } from "@prisma/client";
-
-export const filterCustomersByRange = (
-  customers: Customer[],
-  range: string,
-) => {
+export const filterCustomersByRange = (customers, range: string) => {
   const today = new Date();
   today.setHours(0, 0, 0, 0); // Reset to midnight
 

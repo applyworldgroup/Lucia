@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { today, thisMonthStart, thisWeekStart } from "@/lib/date-calc";
+import { filterCustomersByRange } from "@/lib/date-calc";
 import {
   Card,
   CardContent,
@@ -289,15 +289,9 @@ export default function JobReadyProgram() {
     currentPage * itemsPerPage,
   );
 
-  const appliedToday = sortedApplications.filter(
-    (a) => a.startDate === today,
-  ).length;
-  const appliedThisWeek = sortedApplications.filter(
-    (a) => a.startDate >= thisWeekStart,
-  ).length;
-  const appliedThisMonth = sortedApplications.filter(
-    (a) => a.startDate >= thisMonthStart,
-  ).length;
+  const appliedToday = filterCustomersByRange(sortedApplications, "today");
+  const appliedThisWeek = filterCustomersByRange(sortedApplications, "week");
+  const appliedThisMonth = filterCustomersByRange(sortedApplications, "month");
 
   return (
     <div className="min-h-screen">
