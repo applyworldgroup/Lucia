@@ -30,6 +30,8 @@ jobs:
       - name: Build production
         run: npm run build
 
-      # - name: Deploy to Vercel
-      #   if: success()
-      #   run: npx vercel --prod --token ${{ secrets.VERCEL_TOKEN }}
+      - name: Deploy to Vercel
+        if: success()  # Only deploy if the previous steps were successful
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}  # Ensure you have this secret set in your GitHub repo
+        run: npx vercel --prod --token $VERCEL_TOKEN
