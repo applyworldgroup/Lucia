@@ -49,6 +49,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
+import { useQuery } from "@tanstack/react-query";
+import { getAllVisaApplication } from "@/features/actions/visa-applications/actions";
+import LoadingSpinner from "@/app/components/loading-spinner";
 
 interface Visa {
   id: number;
@@ -65,169 +68,6 @@ interface Visa {
   overseer: string;
 }
 
-const mockData = [
-  {
-    id: 1,
-    firstName: "John",
-    middleName: "A.",
-    lastName: "Doe",
-    email: "john.doe@example.com",
-    address: "123 Street, City, Country",
-    passportNumber: "AB123456",
-    visaAppliedDate: new Date("2024-01-15"),
-    visaStatus: "PENDING",
-    previousVisa: "SUB_500",
-    visaType: "SUB_482",
-    totalAmount: 2000,
-    totalPaid: 1500,
-    overseer: "Agent Smith",
-  },
-  {
-    id: 2,
-    firstName: "Jane",
-    middleName: "B.",
-    lastName: "Smith",
-    email: "jane.smith@example.com",
-    address: "456 Avenue, City, Country",
-    passportNumber: "XY654321",
-    visaAppliedDate: new Date("2023-12-01"),
-    visaStatus: "APPROVED",
-    previousVisa: "SUB_482",
-    visaType: "SUB_186",
-    totalAmount: 5000,
-    totalPaid: 5000,
-    overseer: "Agent Brown",
-  },
-  {
-    id: 3,
-    firstName: "Michael",
-    middleName: "C.",
-    lastName: "Johnson",
-    email: "michael.johnson@example.com",
-    address: "789 Boulevard, City, Country",
-    passportNumber: "CD789123",
-    visaAppliedDate: new Date("2024-03-10"),
-    visaStatus: "REJECTED",
-    previousVisa: "SUB_407",
-    visaType: "SUB_600",
-    totalAmount: 3000,
-    totalPaid: 2000,
-    overseer: "Agent Cooper",
-  },
-  {
-    id: 4,
-    firstName: "Alice",
-    middleName: "D.",
-    lastName: "Williams",
-    email: "alice.williams@example.com",
-    address: "101 Circle, City, Country",
-    passportNumber: "EF321456",
-    visaAppliedDate: new Date("2023-11-05"),
-    visaStatus: "PENDING",
-    previousVisa: "SUB_189",
-    visaType: "SUB_820",
-    totalAmount: 4000,
-    totalPaid: 3000,
-    overseer: "Agent Moore",
-  },
-  {
-    id: 5,
-    firstName: "Chris",
-    middleName: "E.",
-    lastName: "Brown",
-    email: "chris.brown@example.com",
-    address: "202 Lane, City, Country",
-    passportNumber: "GH654789",
-    visaAppliedDate: new Date("2023-10-20"),
-    visaStatus: "APPROVED",
-    previousVisa: "SUB_186",
-    visaType: "SUB_801",
-    totalAmount: 3500,
-    totalPaid: 3500,
-    overseer: "Agent Clark",
-  },
-  {
-    id: 6,
-    firstName: "David",
-    middleName: "F.",
-    lastName: "Jones",
-    email: "david.jones@example.com",
-    address: "303 Crescent, City, Country",
-    passportNumber: "IJ987654",
-    visaAppliedDate: new Date("2024-05-12"),
-    visaStatus: "PENDING",
-    previousVisa: "SUB_500",
-    visaType: "SUB_482",
-    totalAmount: 2500,
-    totalPaid: 1500,
-    overseer: "Agent Evans",
-  },
-  {
-    id: 7,
-    firstName: "Eve",
-    middleName: "G.",
-    lastName: "Martinez",
-    email: "eve.martinez@example.com",
-    address: "404 Square, City, Country",
-    passportNumber: "KL012345",
-    visaAppliedDate: new Date("2023-09-25"),
-    visaStatus: "REJECTED",
-    previousVisa: "SUB_407",
-    visaType: "SUB_186",
-    totalAmount: 4500,
-    totalPaid: 2500,
-    overseer: "Agent Lewis",
-  },
-  {
-    id: 8,
-    firstName: "Frank",
-    middleName: "H.",
-    lastName: "Garcia",
-    email: "frank.garcia@example.com",
-    address: "505 Parkway, City, Country",
-    passportNumber: "MN654321",
-    visaAppliedDate: new Date("2024-02-18"),
-    visaStatus: "PENDING",
-    previousVisa: "SUB_189",
-    visaType: "SUB_407",
-    totalAmount: 2200,
-    totalPaid: 1700,
-    overseer: "Agent Stewart",
-  },
-  {
-    id: 9,
-    firstName: "Grace",
-    middleName: "I.",
-    lastName: "Rodriguez",
-    email: "grace.rodriguez@example.com",
-    address: "606 Highway, City, Country",
-    passportNumber: "OP123456",
-    visaAppliedDate: new Date("2023-08-15"),
-    visaStatus: "APPROVED",
-    previousVisa: "SUB_482",
-    visaType: "SUB_500",
-    totalAmount: 6000,
-    totalPaid: 4000,
-    overseer: "Agent Carter",
-  },
-  {
-    id: 10,
-    firstName: "Hank",
-    middleName: "J.",
-    lastName: "Lee",
-    email: "hank.lee@example.com",
-    address: "707 Street, City, Country",
-    passportNumber: "QR098765",
-    visaAppliedDate: new Date("2024-04-14"),
-    visaStatus: "PENDING",
-    previousVisa: "SUB_500",
-    visaType: "SUB_820",
-    totalAmount: 1800,
-    totalPaid: 1800,
-    overseer: "Agent Harris",
-  },
-];
-
 export default function Component() {
   const [sortBy, setSortBy] = useState("visaAppliedDate");
   const [sortOrder, setSortOrder] = useState("asc");
@@ -237,14 +77,33 @@ export default function Component() {
   const [visaFilter, setVisaFilter] = useState("all");
   const itemsPerPage = 5;
 
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ["visa-applications"],
+    queryFn: () => getAllVisaApplication(),
+  });
+
+  if (isLoading)
+    return (
+      <div className="h-full flex items-center justify-center">
+        <LoadingSpinner />
+      </div>
+    );
+  if (isError) return <p>Error: {error.message}</p>;
+
+  const visaApplications = data || [];
+
   // Filter and search functionality
-  const filteredData = mockData.filter(
+  const filteredData = visaApplications.filter(
     (item) =>
       (statusFilter === "all" || item.visaStatus === statusFilter) &&
       (visaFilter === "all" || item.visaType === visaFilter) &&
-      (item.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.passportNumber.toLowerCase().includes(searchTerm.toLowerCase())),
+      (item.customer.firstName
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase()) ||
+        item.customer.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.customer.passportNumber
+          ?.toLowerCase()
+          .includes(searchTerm.toLowerCase())),
   );
 
   const sortOptions = [
@@ -477,14 +336,15 @@ export default function Component() {
                   {(currentPage - 1) * itemsPerPage + 1 + index}
                 </TableCell>
                 <TableCell className="px-4 py-4">
-                  {item.firstName} {item.middleName} {item.lastName}
+                  {item.customer.firstName} {item.customer.middleName}{" "}
+                  {item.customer.lastName}
                 </TableCell>
-                <TableCell>{item.email}</TableCell>
-                <TableCell>{item.address}</TableCell>
-                <TableCell>{item.passportNumber}</TableCell>
+                <TableCell>{item.customer.email}</TableCell>
+                <TableCell>{item.customer.address}</TableCell>
+                <TableCell>{item.customer.passportNumber}</TableCell>
                 <TableCell>{item.visaAppliedDate.toDateString()}</TableCell>
                 <TableCell>{item.visaStatus}</TableCell>
-                <TableCell>{item.previousVisa}</TableCell>
+                <TableCell>{item.customer.currentVisa}</TableCell>
                 <TableCell>{item.visaType}</TableCell>
                 <TableCell>${item.totalAmount}</TableCell>
                 <TableCell>${item.totalPaid}</TableCell>

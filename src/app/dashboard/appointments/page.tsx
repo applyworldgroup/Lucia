@@ -49,6 +49,7 @@ import {
 import AppointmentForm from "./components/appointment-form";
 import { Badge } from "@/components/ui/badge";
 import { DropdownMenuLabel } from "@radix-ui/react-dropdown-menu";
+import { createAppointment } from "@/features/actions/appointments/actions";
 
 const appointments = [
   {
@@ -94,7 +95,7 @@ interface Appointment {
   address: string;
   phone: string;
   status: string;
-  date: Date;
+  appointmentDate: Date;
   time: string;
 }
 
@@ -113,9 +114,9 @@ export default function Appointments() {
     setEditingAppointment(appointment);
     setIsEditDialogOpen(true);
   };
-  const handleBookSubmit = (appointmentData) => {
-    // Here you would typically add the new appointment to your database
-    console.log("New appointment booked:", appointmentData);
+  const handleBookSubmit = async (appointmentData) => {
+    console.log(appointmentData);
+    await createAppointment(appointmentData);
     setIsBookDialogOpen(false);
   };
   const handleEditSubmit = (updatedAppointment) => {

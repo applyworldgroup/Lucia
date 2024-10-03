@@ -40,24 +40,16 @@ export const CustomerInputSchema = CustomerBaseSchema.omit({
 const VisaApplicationBaseSchema = z.object({
   id: z.string().uuid(),
   firstName: z.string().min(1, { message: "First name is required" }),
-  middleName: z.string().optional(),
+  middleName: z.string().nullable().optional(),
   lastName: z.string().min(1, { message: "Last name is required" }),
   email: z.string().email({ message: "Invalid email address" }),
   address: z.string().min(1, { message: "Address is required" }),
-  passportNumber: z.string().min(1, { message: "Passport number is required" }),
+  passportNumber: z
+    .string()
+    .min(1, { message: "Passport number is required" })
+    .nullable(),
   visaAppliedDate: z.date(),
   visaStatus: z.enum(["PENDING", "APPROVED", "REJECTED"]),
-  previousVisa: z.enum([
-    "SUB_500",
-    "SUB_482",
-    "SUB_407",
-    "SUB_186",
-    "SUB_189",
-    "SUB_190",
-    "SUB_600",
-    "SUB_820",
-    "SUB_801",
-  ]),
   visaType: z.enum([
     "SUB_500",
     "SUB_482",
@@ -75,8 +67,7 @@ const VisaApplicationBaseSchema = z.object({
   totalPaid: z
     .number()
     .nonnegative({ message: "Total paid must be non-negative" }),
-  overseer: z.string().optional(),
-  customerId: z.string().uuid(),
+  overseer: z.string(),
   createdAt: z.date(),
   updatedAt: z.date(),
 });

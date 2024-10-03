@@ -1,17 +1,16 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { format } from "date-fns";
-import { Calendar as CalendarIcon, Clock } from "lucide-react";
+import { Calendar as CalendarIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -32,6 +31,7 @@ import {
 } from "@/components/ui/select";
 
 const formSchema = z.object({
+  id: z.string().uuid(),
   firstName: z.string().min(2, {
     message: "Name must be at least 2 characters.",
   }),
@@ -44,16 +44,30 @@ const formSchema = z.object({
   address: z.string().min(5, {
     message: "Address must be at least 5 characters.",
   }),
-  phone: z.string().regex(/^\d{10}$/, {
-    message: "Phone number must be 10 digits.",
-  }),
-  status: z.enum(["Confirmed", "Pending", "Cancelled", "Appointed"]),
-  date: z.date({
+  phone: z
+    .string()
+    .regex(
+      /^\+?\d{1,3}?[\s\-\.]?\(?\d{1,4}\)?[\s\-\.]?\d{1,4}[\s\-\.]?\d{1,9}$/,
+      {
+        message: "Phone number must be 10 digits.",
+      },
+    ),
+  status: z.enum(["CONFIRMED", "CANCELLED"]),
+  appointmentDate: z.date({
     required_error: "Please select a date.",
   }),
-  time: z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/, {
+  appointmentTime: z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/, {
     message: "Please enter a valid time in HH:MM format.",
   }),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+});
+
+export const AppointmentSchema = formSchema;
+export const AppointmentInputSchema = formSchema.omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
 });
 
 type AppointmentFormValues = z.infer<typeof formSchema>;
@@ -69,9 +83,6 @@ export default function AppointmentForm({
   onSubmit,
   onCancel,
 }: AppointmentFormProps) {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [date, setDate] = useState<Date>();
-
   const form = useForm<AppointmentFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: appointment || {
@@ -80,20 +91,20 @@ export default function AppointmentForm({
       email: "",
       address: "",
       phone: "",
-      status: "Pending",
-      date: new Date(),
-      time: "",
+      status: "CONFIRMED",
+      appointmentDate: new Date(),
+      appointmentTime: "",
     },
   });
 
   useEffect(() => {
     if (appointment) {
       form.reset(appointment);
-      setDate(appointment.date);
     }
   }, [appointment, form]);
 
-  function onFormSubmit(data: AppointmentFormValues) {
+  async function onFormSubmit(data: AppointmentFormValues) {
+    console.log(data);
     onSubmit(data);
   }
   return (
@@ -184,10 +195,8 @@ export default function AppointmentForm({
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="Confirmed">Confirmed</SelectItem>
-                    <SelectItem value="Pending">Pending</SelectItem>
-                    <SelectItem value="Cancelled">Cancelled</SelectItem>
-                    <SelectItem value="Appointed">Appointed</SelectItem>
+                    <SelectItem value="CONFIRMED">Confirmed</SelectItem>
+                    <SelectItem value="CANCELLED">Cancelled</SelectItem>
                   </SelectContent>
                 </Select>
                 <FormMessage />
@@ -196,7 +205,7 @@ export default function AppointmentForm({
           />
           <FormField
             control={form.control}
-            name="date"
+            name="appointmentDate"
             render={({ field }) => (
               <FormItem className="flex flex-col">
                 <FormLabel>Date</FormLabel>
@@ -207,7 +216,7 @@ export default function AppointmentForm({
                         variant={"outline"}
                         className={cn(
                           "w-full pl-3 text-left font-normal",
-                          !field.value && "text-muted-foreground"
+                          !field.value && "text-muted-foreground",
                         )}
                       >
                         {field.value ? (
@@ -237,19 +246,50 @@ export default function AppointmentForm({
           />
           <FormField
             control={form.control}
-            name="time"
+            name="appointmentTime"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Time</FormLabel>
-                <FormControl>
-                  <div className="relative">
-                    <Input placeholder="14:30" {...field} />
-                    <Clock className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                  </div>
-                </FormControl>
-                <FormDescription>
-                  Enter time in 24-hour format (HH:MM)
-                </FormDescription>
+                <FormLabel>Time Slot</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a time" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="10:00">10:00 AM </SelectItem>
+                    <SelectItem value="10:15">10:15 AM </SelectItem>
+                    <SelectItem value="10:30">10:30 AM </SelectItem>
+                    <SelectItem value="10:45">10:45 AM </SelectItem>
+                    <SelectItem value="11:00">11:00 AM </SelectItem>
+                    <SelectItem value="11:15">11:15 AM </SelectItem>
+                    <SelectItem value="11:30">11:30 AM </SelectItem>
+                    <SelectItem value="11:45">11:45 AM </SelectItem>
+                    <SelectItem value="12:00">12:00 PM </SelectItem>
+                    <SelectItem value="12:15">12:15 PM </SelectItem>
+                    <SelectItem value="12:30">12:30 PM </SelectItem>
+                    <SelectItem value="12:45">12:45 PM </SelectItem>
+                    <SelectItem value="13:00">1:00 PM </SelectItem>
+                    <SelectItem value="13:15">1:15 PM </SelectItem>
+                    <SelectItem value="13:30">1:30 PM </SelectItem>
+                    <SelectItem value="13:45">1:45 PM </SelectItem>
+                    <SelectItem value="14:00">2:00 PM </SelectItem>
+                    <SelectItem value="14:15">2:15 PM </SelectItem>
+                    <SelectItem value="14:30">2:30 PM </SelectItem>
+                    <SelectItem value="14:45">2:45 PM </SelectItem>
+                    <SelectItem value="15:00">3:00 PM </SelectItem>
+                    <SelectItem value="15:15">3:15 PM </SelectItem>
+                    <SelectItem value="15:30">3:30 PM </SelectItem>
+                    <SelectItem value="15:45">3:45 PM </SelectItem>
+                    <SelectItem value="16:00">4:00 PM </SelectItem>
+                    <SelectItem value="16:15">4:15 PM </SelectItem>
+                    <SelectItem value="16:30">4:30 PM </SelectItem>
+                    <SelectItem value="16:45">4:45 PM </SelectItem>
+                  </SelectContent>
+                </Select>
                 <FormMessage />
               </FormItem>
             )}

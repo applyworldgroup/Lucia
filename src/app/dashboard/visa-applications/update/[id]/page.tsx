@@ -1,7 +1,27 @@
-import { FC } from "react";interface UpdateVisaApplicationProps {}
+"use client";
+import { FC } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useParams } from "next/navigation"; // Import useParams for dynamic routes
+import VisaApplicationForm from "../../components/visa-application-form";
+import { getVisaApplication } from "../../../../../features/actions/visa-applications/actions";
 
-const UpdateVisaApplication: FC<UpdateVisaApplicationProps> = ({}) => {
-  return <div> Update Page </div>;
+const UpdateCustomer: FC = () => {
+  const { id } = useParams<{ id: string }>();
+
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["customer", id],
+    queryFn: () => getVisaApplication(id),
+  });
+
+  if (isLoading) return <div>Loading...</div>;
+  if (isError) return <div>Error fetching application</div>;
+  if (!data) return <div>No application found</div>;
+
+  return (
+    <div>
+      <VisaApplicationForm initialData={data} />
+    </div>
+  );
 };
 
-export default UpdateVisaApplication;
+export default UpdateCustomer;
