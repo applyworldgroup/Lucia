@@ -64,12 +64,12 @@ export default function VisaApplicationForm({
     resolver: zodResolver(VisaApplicationInputSchema),
     defaultValues: {
       ...initialData,
-      firstName: initialData?.customer.firstName,
-      middleName: initialData?.customer.middleName,
-      lastName: initialData?.customer.lastName,
-      address: initialData?.customer.address,
-      email: initialData?.customer.email,
-      passportNumber: initialData?.customer.passportNumber,
+      firstName: initialData?.customer?.firstName ?? "",
+      middleName: initialData?.customer?.middleName ?? "",
+      lastName: initialData?.customer?.lastName ?? "",
+      email: initialData?.customer?.email ?? "",
+      address: initialData?.customer?.address ?? "",
+      passportNumber: initialData?.customer?.passportNumber ?? "",
     } || {
       firstName: "",
       middleName: "",
