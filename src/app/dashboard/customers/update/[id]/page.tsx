@@ -1,16 +1,16 @@
 "use client";
 import { FC } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { useParams } from "next/navigation"; // Import useParams for dynamic routes
+import { useParams } from "next/navigation";
 import { getCustomerById } from "@/features/actions/customers/actions";
 import CustomerForm from "../../components/customer-form";
 
 const UpdateCustomer: FC = () => {
-  const { id } = useParams(); // Retrieve the id from the dynamic route params
+  const { id } = useParams();
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ["customer", id],
-    queryFn: () => getCustomerById(id as string), // Make sure id is treated as a string
+    queryFn: () => getCustomerById(id as string),
   });
 
   if (isLoading) return <div>Loading...</div>;

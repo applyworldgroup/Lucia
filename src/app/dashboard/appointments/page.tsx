@@ -94,9 +94,8 @@ export default function Appointments() {
     refetch();
     setIsBookDialogOpen(false);
   };
-  const handleEditSubmit = async (id, data) => {
-    console.log("Updated appointment:", data);
-    await UpdateAppointment(id, data);
+  const handleEditSubmit = async (id, updateData) => {
+    await UpdateAppointment(id, updateData);
     queryClient.invalidateQueries({ queryKey: ["appointments"] });
     setIsEditDialogOpen(false);
   };
@@ -400,9 +399,7 @@ export default function Appointments() {
           {editingAppointment && (
             <AppointmentForm
               appointment={editingAppointment}
-              onSubmit={() =>
-                handleEditSubmit(editingAppointment.id, editingAppointment)
-              }
+              onSubmit={(data) => handleEditSubmit(editingAppointment.id, data)}
               onCancel={handleCancel}
             />
           )}

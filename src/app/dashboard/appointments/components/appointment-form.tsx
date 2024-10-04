@@ -97,7 +97,6 @@ export default function AppointmentForm({
   });
 
   async function onFormSubmit(data: AppointmentFormValues) {
-    console.log(data);
     onSubmit(data);
   }
   return (
