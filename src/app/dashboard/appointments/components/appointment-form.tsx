@@ -1,5 +1,4 @@
 "use client";
-import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -96,12 +95,6 @@ export default function AppointmentForm({
       appointmentTime: "",
     },
   });
-
-  useEffect(() => {
-    if (appointment) {
-      form.reset(appointment);
-    }
-  }, [appointment, form]);
 
   async function onFormSubmit(data: AppointmentFormValues) {
     console.log(data);

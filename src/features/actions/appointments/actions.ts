@@ -18,3 +18,36 @@ export async function createAppointment(data: Appointment) {
     return { success: false, error: "Failed to create appointment" };
   }
 }
+
+export async function UpdateAppointment(
+  id: string,
+  data: Partial<Appointment>,
+) {
+  console.log(data);
+  try {
+    const updatedAppointment = await prisma.appointment.update({
+      where: {
+        id,
+      },
+      data: {
+        ...data,
+      },
+    });
+    revalidatePath("/appointments");
+    console.log(updatedAppointment);
+    return { success: true, data: updatedAppointment };
+  } catch (error) {
+    console.error("Error updating appointment:", error);
+    return { success: false, error: "Failed to update appointment" };
+  }
+}
+
+export async function getAllAppointments(): Promise<Appointment[]> {
+  try {
+    const appointments = await prisma.appointment.findMany({});
+    return appointments;
+  } catch (error) {
+    console.error("Error fetching appointments:", error);
+    throw new Error("Failed to fetch appointments");
+  }
+}
