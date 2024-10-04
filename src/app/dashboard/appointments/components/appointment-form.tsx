@@ -69,10 +69,10 @@ export const AppointmentInputSchema = formSchema.omit({
   updatedAt: true,
 });
 
-type AppointmentFormValues = z.infer<typeof formSchema>;
+type AppointmentFormValues = z.infer<typeof AppointmentInputSchema>;
 
 interface AppointmentFormProps {
-  appointment?: AppointmentFormValues;
+  appointment?: Partial<AppointmentFormValues>;
   onSubmit: (data: AppointmentFormValues) => void;
   onCancel: () => void;
 }
@@ -83,7 +83,7 @@ export default function AppointmentForm({
   onCancel,
 }: AppointmentFormProps) {
   const form = useForm<AppointmentFormValues>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(AppointmentInputSchema),
     defaultValues: appointment || {
       firstName: "",
       lastName: "",

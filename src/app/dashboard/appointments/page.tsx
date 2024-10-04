@@ -49,55 +49,14 @@ import {
 import AppointmentForm from "./components/appointment-form";
 import { Badge } from "@/components/ui/badge";
 import { DropdownMenuLabel } from "@radix-ui/react-dropdown-menu";
-import { createAppointment } from "@/features/actions/appointments/actions";
-
-const appointments = [
-  {
-    id: 1,
-    firstName: "John",
-    lastName: "Doe",
-    email: "john@example.com",
-    address: "123 Main St",
-    phone: "555-1234",
-    status: "Confirmed",
-    date: new Date("2023-06-15"),
-    time: "10:00",
-  },
-  {
-    id: 2,
-    firstName: "Jane",
-    lastName: "Smith",
-    email: "jane@example.com",
-    address: "456 Elm St",
-    phone: "555-5678",
-    status: "Pending",
-    date: new Date("2023-06-16"),
-    time: "14:00",
-  },
-  {
-    id: 3,
-    firstName: "Alice",
-    lastName: "Johnson",
-    email: "alice@example.com",
-    address: "789 Oak St",
-    phone: "555-9012",
-    status: "Cancelled",
-    date: new Date("2023-06-17"),
-    time: "11:30",
-  },
-];
-
-interface Appointment {
-  id: number;
-  firstName: string;
-  lastName: string;
-  email: string;
-  address: string;
-  phone: string;
-  status: string;
-  appointmentDate: Date;
-  time: string;
-}
+import {
+  createAppointment,
+  getAllAppointments,
+  UpdateAppointment,
+} from "@/features/actions/appointments/actions";
+import { Appointment } from "@prisma/client";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import LoadingSpinner from "@/app/components/loading-spinner";
 
 export default function Appointments() {
   const [sortBy, setSortBy] = useState("date");
@@ -105,30 +64,46 @@ export default function Appointments() {
   const [searchTerm, setSearchTerm] = useState("");
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isBookDialogOpen, setIsBookDialogOpen] = useState(false);
-  const [editingAppointment, setEditingAppointment] = useState(null);
+  const [editingAppointment, setEditingAppointment] =
+    useState<Partial<Appointment>>();
   const [filters, setFilters] = React.useState({
     status: [] as string[],
   });
+  const queryClient = useQueryClient();
+  const { data, isLoading, isError, error, refetch } = useQuery({
+    queryKey: ["appointments"],
+    queryFn: () => getAllAppointments(),
+  });
 
-  const handleEditAppointment = (appointment) => {
+  if (isLoading)
+    return (
+      <div className="h-full flex items-center justify-center">
+        <LoadingSpinner />
+      </div>
+    );
+  if (isError) return <p>Error: {error.message}</p>;
+
+  const toggleEdit = (appointment) => {
     setEditingAppointment(appointment);
     setIsEditDialogOpen(true);
   };
   const handleBookSubmit = async (appointmentData) => {
     console.log(appointmentData);
     await createAppointment(appointmentData);
+    queryClient.invalidateQueries({ queryKey: ["appointments"] });
+    refetch();
     setIsBookDialogOpen(false);
   };
-  const handleEditSubmit = (updatedAppointment) => {
-    // Here you would typically update the appointment in your database
-    console.log("Updated appointment:", updatedAppointment);
+  const handleEditSubmit = async (id, data) => {
+    console.log("Updated appointment:", data);
+    await UpdateAppointment(id, data);
+    queryClient.invalidateQueries({ queryKey: ["appointments"] });
     setIsEditDialogOpen(false);
   };
 
   const handleCancel = () => {
     setIsBookDialogOpen(false);
     setIsEditDialogOpen(false);
-    setEditingAppointment(null);
   };
 
   const sortOptions = [
@@ -145,7 +120,7 @@ export default function Appointments() {
       setSortOrder("asc");
     }
   };
-  const handleFilter = (type: "status" | "address", value: string) => {
+  const handleFilter = (type: "status", value: string) => {
     setFilters((prev) => ({
       ...prev,
       [type]: prev[type].includes(value)
@@ -154,7 +129,7 @@ export default function Appointments() {
     }));
   };
 
-  const filteredAppointments = appointments.filter(
+  const filteredAppointments = (data ?? []).filter(
     (appointment) =>
       (filters.status.length === 0 ||
         filters.status.includes(appointment.status)) &&
@@ -163,14 +138,19 @@ export default function Appointments() {
           .toLowerCase()
           .includes(searchTerm.toLowerCase()) ||
         appointment.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        appointment.email.toLowerCase().includes(searchTerm.toLowerCase())),
+        appointment.email?.toLowerCase().includes(searchTerm.toLowerCase())),
   );
 
-  const sortedAppointments = [...filteredAppointments].sort((a, b) => {
-    if (a[sortBy as keyof Appointment] < b[sortBy as keyof Appointment])
-      return sortOrder === "asc" ? -1 : 1;
-    if (a[sortBy as keyof Appointment] > b[sortBy as keyof Appointment])
-      return sortOrder === "asc" ? 1 : -1;
+  const sortedAppointments = [...(filteredAppointments ?? [])].sort((a, b) => {
+    const valueA = a[sortBy as keyof Appointment];
+    const valueB = b[sortBy as keyof Appointment];
+
+    if (valueA == null) return sortOrder === "asc" ? 1 : -1;
+    if (valueB == null) return sortOrder === "asc" ? -1 : 1;
+
+    if (valueA < valueB) return sortOrder === "asc" ? -1 : 1;
+    if (valueA > valueB) return sortOrder === "asc" ? 1 : -1;
+
     return 0;
   });
 
@@ -184,13 +164,13 @@ export default function Appointments() {
 
   // run the filter in appointments inested of sortedAppointments.
   const appointmentsToday = sortedAppointments.filter(
-    (a) => a.date.toDateString() === today.toDateString(),
+    (a) => a.appointmentDate.toDateString() === today.toDateString(),
   ).length;
   const appointmentsThisWeek = sortedAppointments.filter(
-    (a) => a.date >= thisWeekStart,
+    (a) => a.appointmentDate >= thisWeekStart,
   ).length;
   const appointmentsThisMonth = sortedAppointments.filter(
-    (a) => a.date >= thisMonthStart,
+    (a) => a.appointmentDate >= thisMonthStart,
   ).length;
 
   return (
@@ -331,7 +311,7 @@ export default function Appointments() {
             <DropdownMenuContent className="w-56">
               <DropdownMenuLabel>Filter by Status</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              {["Confirmed", "Pending", "Cancelled"].map((status) => (
+              {["CONFIRMED", "CANCELLED", "FINISHED"].map((status) => (
                 <DropdownMenuCheckboxItem
                   key={status}
                   checked={filters.status.includes(status)}
@@ -379,8 +359,10 @@ export default function Appointments() {
                 <TableCell>
                   <Badge variant={"secondary"}>{appointment.status}</Badge>
                 </TableCell>
-                <TableCell>{appointment.date.toLocaleDateString()}</TableCell>
-                <TableCell>{appointment.time}</TableCell>
+                <TableCell>
+                  {appointment.appointmentDate.toLocaleDateString()}
+                </TableCell>
+                <TableCell>{appointment.appointmentTime}</TableCell>
                 <TableCell className="text-right">
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -391,7 +373,7 @@ export default function Appointments() {
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                       <DropdownMenuItem
-                        onSelect={() => handleEditAppointment(appointment)}
+                        onSelect={() => toggleEdit(appointment)}
                       >
                         <Edit className="mr-2 h-4 w-4" />
                         Edit
@@ -418,7 +400,9 @@ export default function Appointments() {
           {editingAppointment && (
             <AppointmentForm
               appointment={editingAppointment}
-              onSubmit={handleEditSubmit}
+              onSubmit={() =>
+                handleEditSubmit(editingAppointment.id, editingAppointment)
+              }
               onCancel={handleCancel}
             />
           )}
