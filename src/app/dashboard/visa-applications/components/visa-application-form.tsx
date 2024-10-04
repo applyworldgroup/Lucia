@@ -60,17 +60,24 @@ export default function VisaApplicationForm({
   const [isEditing] = useState(!!initialData);
   const queryClient = useQueryClient();
 
+  let defaultValue;
+  if (initialData) {
+    defaultValue = {
+      ...initialData,
+      firstName: initialData?.customer?.firstName,
+      middleName: initialData?.customer?.middleName,
+      lastName: initialData?.customer?.lastName,
+      email: initialData?.customer?.email,
+      address: initialData?.customer?.address,
+      passportNumber: initialData?.customer?.passportNumber,
+    };
+  }
+
+  console.log("Initial Data", initialData);
+
   const form = useForm<VisaApplicationInput>({
     resolver: zodResolver(VisaApplicationInputSchema),
-    defaultValues: {
-      ...initialData,
-      firstName: initialData?.customer?.firstName ?? "",
-      middleName: initialData?.customer?.middleName ?? "",
-      lastName: initialData?.customer?.lastName ?? "",
-      email: initialData?.customer?.email ?? "",
-      address: initialData?.customer?.address ?? "",
-      passportNumber: initialData?.customer?.passportNumber ?? "",
-    } || {
+    defaultValues: defaultValue || {
       firstName: "",
       middleName: "",
       lastName: "",
