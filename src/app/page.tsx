@@ -17,7 +17,8 @@ export default function LandingPage() {
 
   return (
     <div
-      className="flex flex-col  min-h-screen bg-gradient-to-b from-background to-muted"
+      // className="flex flex-col  min-h-screen bg-gradient-to-b from-background to-muted"
+      className="flex flex-col min-h-screen bg-gradient-to-b from-background to-muted"
       ref={targetRef}
     >
       <motion.header
@@ -26,14 +27,15 @@ export default function LandingPage() {
         transition={{ duration: 0.5 }}
         className="px-4 lg:px-6 h-16 flex items-center justify-center fixed w-full bg-background/80 backdrop-blur-sm z-50 border-b"
       >
-        <div className="container flex gap-4 ">
+        <div className="container flex gap-4  justify-between ">
           <Link className="flex items-center justify-center" href="#">
-            <GlobeIcon className="h-6 w-6 text-primary" />
-            <span className="ml-2 text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-foreground">
-              VisaMigrate CRM
+            <GlobeIcon className="text-primary h-10 w-10" />
+            {/* <span className="ml-2 text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-foreground"> */}
+            <span className="ml-2 text-2xl font-bold bg-clip-text ">
+              Apply World CRM
             </span>
           </Link>
-          <nav className="ml-auto flex items-center justify-center gap-4 sm:gap-6">
+          {/* <nav className="ml-auto flex items-center justify-center gap-4 sm:gap-6">
             <Link
               className="text-sm font-medium hover:text-primary transition-colors"
               href="#features"
@@ -52,9 +54,16 @@ export default function LandingPage() {
             >
               Testimonials
             </Link>
-          </nav>
-          <Button variant={"ghost"}>Login</Button>
-          <Button>Sign Up</Button>
+          </nav> */}
+          <div className="flex gap-4">
+            <Button variant={"outline"}>
+              <Link href={"/auth/signin"}> Login</Link>
+            </Button>
+            <Button>
+              {" "}
+              <Link href={"/auth/signup"}> Sign Up</Link>
+            </Button>
+          </div>
         </div>
       </motion.header>
       <main className="flex flex-col items-center justify-center pt-16  border-2">
@@ -70,25 +79,26 @@ export default function LandingPage() {
                 transition={{ duration: 0.5, delay: 0.2 }}
                 className="flex flex-col justify-center space-y-4"
               >
-                <div className="space-y-2">
-                  <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
+                <div className="space-y-4">
+                  <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl sm:text-center md:text-left xl:text-6xl/none">
                     Streamline Your Visa & Migration Process
                   </h1>
-                  <p className="max-w-[600px] text-muted-foreground md:text-xl">
+                  <p className="max-w-[600px] text-muted-foreground text-center md:text-left md:text-xl">
                     Our CRM system simplifies visa applications, client
                     management, and migration tracking. Join us to enhance your
                     efficiency and success rates.
                   </p>
                 </div>
-                <div className="flex flex-col gap-2 min-[400px]:flex-row">
+                <div className="flex w-full sm:justify-center md:justify-start  flex-col gap-2 min-[400px]:flex-row">
                   <Button
                     size="lg"
                     className="bg-primary text-primary-foreground hover:bg-primary/90"
                   >
-                    Get Started
+                    <Link href={"/auth/signup"}> Sign Up</Link>
                   </Button>
                   <Button size="lg" variant="outline">
-                    Book a Demo
+                    {" "}
+                    <Link href={"/auth/signin"}> Login</Link>
                   </Button>
                 </div>
               </motion.div>
@@ -142,7 +152,7 @@ export default function LandingPage() {
             </div>
           </div>
         </section>
-        <section
+        {/* <section
           id="benefits"
           className="w-full flex items-center justify-center py-12 md:py-24 lg:py-32"
         >
@@ -223,23 +233,34 @@ export default function LandingPage() {
               </Button>
             </motion.div>
           </div>
-        </section>
+        </section> */}
       </main>
-      <footer className="flex flex-col gap-2 sm:flex-row py-6 w-full shrink-0 items-center px-4 md:px-6 border-t">
-        <p className="text-xs text-muted-foreground">
-          © 2024 VisaMigrate CRM. All rights reserved.
-        </p>
-        <nav className="sm:ml-auto flex gap-4 sm:gap-6">
-          <Link className="text-xs hover:underline underline-offset-4" href="#">
-            Terms of Service
-          </Link>
-          <Link className="text-xs hover:underline underline-offset-4" href="#">
-            Privacy Policy
-          </Link>
-          <Link className="text-xs hover:underline underline-offset-4" href="#">
-            Contact Us
-          </Link>
-        </nav>
+      <footer className="flex items-center justify-center">
+        <div className="container flex flex-col gap-2 sm:flex-row py-6 w-full shrink-0 items-center px-4 md:px-6 border-t">
+          <p className="text-xs text-muted-foreground w-full text-center">
+            © 2024 Apply World Group. All rights reserved.
+          </p>
+          {/* <nav className="sm:ml-auto flex gap-4 sm:gap-6">
+            <Link
+              className="text-xs hover:underline underline-offset-4"
+              href="#"
+            >
+              Terms of Service
+            </Link>
+            <Link
+              className="text-xs hover:underline underline-offset-4"
+              href="#"
+            >
+              Privacy Policy
+            </Link>
+            <Link
+              className="text-xs hover:underline underline-offset-4"
+              href="#"
+            >
+              Contact Us
+            </Link>
+          </nav> */}
+        </div>
       </footer>
     </div>
   );
@@ -260,34 +281,34 @@ function FeatureCard({ icon, title, description }) {
   );
 }
 
-function BenefitCard({ title, description }) {
-  return (
-    <motion.div
-      initial={{ y: 50, opacity: 0 }}
-      whileInView={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.5 }}
-      className="flex flex-col space-y-2 p-6 rounded-lg bg-card shadow-lg"
-    >
-      <h3 className="text-xl font-bold">{title}</h3>
-      <p className="text-muted-foreground">{description}</p>
-    </motion.div>
-  );
-}
+// function BenefitCard({ title, description }) {
+//   return (
+//     <motion.div
+//       initial={{ y: 50, opacity: 0 }}
+//       whileInView={{ y: 0, opacity: 1 }}
+//       transition={{ duration: 0.5 }}
+//       className="flex flex-col space-y-2 p-6 rounded-lg bg-card shadow-lg"
+//     >
+//       <h3 className="text-xl font-bold">{title}</h3>
+//       <p className="text-muted-foreground">{description}</p>
+//     </motion.div>
+//   );
+// }
 
-function TestimonialCard({ quote, author }) {
-  return (
-    <motion.div
-      initial={{ y: 50, opacity: 0 }}
-      whileInView={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.5 }}
-      className="flex flex-col space-y-4 p-6 rounded-lg bg-card shadow-lg"
-    >
-      <QuoteIcon className="h-8 w-8 text-muted-foreground" />
-      <p className="text-lg italic">{quote}</p>
-      <p className="text-sm font-bold">{author}</p>
-    </motion.div>
-  );
-}
+// function TestimonialCard({ quote, author }) {
+//   return (
+//     <motion.div
+//       initial={{ y: 50, opacity: 0 }}
+//       whileInView={{ y: 0, opacity: 1 }}
+//       transition={{ duration: 0.5 }}
+//       className="flex flex-col space-y-4 p-6 rounded-lg bg-card shadow-lg"
+//     >
+//       <QuoteIcon className="h-8 w-8 text-muted-foreground" />
+//       <p className="text-lg italic">{quote}</p>
+//       <p className="text-sm font-bold">{author}</p>
+//     </motion.div>
+//   );
+// }
 
 function GlobeIcon(props) {
   return (
@@ -373,22 +394,22 @@ function BarChartIcon(props) {
   );
 }
 
-function QuoteIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z" />
-      <path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z" />
-    </svg>
-  );
-}
+// function QuoteIcon(props) {
+//   return (
+//     <svg
+//       {...props}
+//       xmlns="http://www.w3.org/2000/svg"
+//       width="24"
+//       height="24"
+//       viewBox="0 0 24 24"
+//       fill="none"
+//       stroke="currentColor"
+//       strokeWidth="2"
+//       strokeLinecap="round"
+//       strokeLinejoin="round"
+//     >
+//       <path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z" />
+//       <path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z" />
+//     </svg>
+//   );
+// }
