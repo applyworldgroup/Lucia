@@ -108,46 +108,58 @@ model VisaApplication {
   updatedAt       DateTime @updatedAt
 }
 
-// Existing code...
 
 model JobReadyProgram {
   id                String    @id @default(uuid())
   customerId        String
-  customer          Customer  @relation(fields: [customerId], references: [id])
+  customer          Customer  @relation(fields: [customerId], references: [id], onDelete: Cascade)
   programType       String
   startDate         DateTime
-  endDate           DateTime
-  status            JRPStatus
+  stage             JRPStage
   workplacement     String?
   employerName      String?
   employerABN       String?
   supervisorName    String?
   supervisorContact String?
   completionDate    DateTime?
-  certificateIssued Boolean   @default(false)
+  outcomeResult     OUTCOME
   createdAt         DateTime  @default(now())
   updatedAt         DateTime  @updatedAt
 }
 
-model SkillsAssessment {
-  id                     String    @id @default(uuid())
-  customerId             String
-  customer               Customer  @relation(fields: [customerId], references: [id])
-  occupation             String
-  assessingAuthority     String
-  applicationDate        DateTime
-  status                 SAStatus
-  documentationSubmitted Boolean
-  skillsAssessmentType   SAType
-  outcomeReceived        Boolean   @default(false)
-  outcomeDate            DateTime?
-  outcomeResult          String?
-  appealSubmitted        Boolean   @default(false)
-  appealDate             DateTime?
-  appealOutcome          String?
-  createdAt              DateTime  @default(now())
-  updatedAt              DateTime  @updatedAt
+enum JRPStage {
+  JRPRE
+  JRE
+  JRWA
+  JRFA
 }
+
+enum SAStage {
+  STAGE_1
+  STAGE_2
+  INTERVIEW
+}
+enum OUTCOME {
+  SUCCESSFUL
+  UNSUCCESSFUL
+  PENDING
+}
+
+
+model SkillsAssessment {
+  id                   String    @id @default(uuid())
+  customerId           String
+  customer             Customer  @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  occupation           String
+  assessingAuthority   String
+  applicationDate      DateTime
+  stage                SAStage
+  outcomeDate          DateTime?
+  outcomeResult        OUTCOME?
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+}
+
 
 enum JRPStatus {
   ENROLLED
@@ -156,6 +168,8 @@ enum JRPStatus {
   WITHDRAWN
 }
 
+
+
 enum SAStatus {
   SUBMITTED
   UNDER_ASSESSMENT
@@ -163,15 +177,6 @@ enum SAStatus {
   COMPLETED
   APPEALED
 }
-
-enum SAType {
-  SKILLS_ASSESSMENT
-  QUALIFICATION_ASSESSMENT
-  PROVISIONAL_SKILLS_ASSESSMENT
-}
-
-// Existing Customer model updated to include relations
-
 enum Role {
   ADMIN
   USER

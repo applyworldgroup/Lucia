@@ -82,18 +82,20 @@ export const VisaApplicationInputSchema = VisaApplicationBaseSchema.omit({
 // JobReadyProgram schema
 const JobReadyProgramBaseSchema = z.object({
   id: z.string().uuid(),
-  customerId: z.string().uuid(),
+  firstName: z.string().min(1, { message: "First name is required" }),
+  middleName: z.string().nullable().optional(),
+  lastName: z.string().min(1, { message: "Last name is required" }),
+  email: z.string().email({ message: "Invalid email address" }),
   programType: z.string().min(1, { message: "Program type is required" }),
   startDate: z.date(),
-  endDate: z.date(),
-  status: z.enum(["ENROLLED", "IN_PROGRESS", "COMPLETED", "WITHDRAWN"]),
+  stage: z.enum(["JRPRE", "JRFA", "JRWA", "JRE"]),
   workplacement: z.string().optional(),
   employerName: z.string().optional(),
   employerABN: z.string().optional(),
   supervisorName: z.string().optional(),
   supervisorContact: z.string().optional(),
   completionDate: z.date().optional(),
-  certificateIssued: z.boolean(),
+  outcomeResult: z.enum(["SUCCESSFUL", "UNSUCCESSFUL", "PENDING"]),
   createdAt: z.date(),
   updatedAt: z.date(),
 });
@@ -108,31 +110,18 @@ export const JobReadyProgramInputSchema = JobReadyProgramBaseSchema.omit({
 // SkillsAssessment schema
 const SkillsAssessmentBaseSchema = z.object({
   id: z.string().uuid(),
-  customerId: z.string().uuid(),
+  firstName: z.string().min(1, { message: "First name is required" }),
+  middleName: z.string().nullable().optional(),
+  lastName: z.string().min(1, { message: "Last name is required" }),
+  email: z.string().email({ message: "Invalid email address" }),
   occupation: z.string().min(1, { message: "Occupation is required" }),
   assessingAuthority: z
     .string()
     .min(1, { message: "Assessing authority is required" }),
   applicationDate: z.date(),
-  status: z.enum([
-    "SUBMITTED",
-    "UNDER_ASSESSMENT",
-    "ADDITIONAL_INFO_REQUIRED",
-    "COMPLETED",
-    "APPEALED",
-  ]),
-  documentationSubmitted: z.boolean(),
-  skillsAssessmentType: z.enum([
-    "SKILLS_ASSESSMENT",
-    "QUALIFICATION_ASSESSMENT",
-    "PROVISIONAL_SKILLS_ASSESSMENT",
-  ]),
-  outcomeReceived: z.boolean(),
+  stage: z.enum(["STAGE_1", "STAGE_2", "INTERVIEW"]),
   outcomeDate: z.date().optional(),
-  outcomeResult: z.string().optional(),
-  appealSubmitted: z.boolean(),
-  appealDate: z.date().optional(),
-  appealOutcome: z.string().optional(),
+  outcomeResult: z.enum(["SUCCESSFUL", "UNSUCCESSFUL", "PENDING"]),
   createdAt: z.date(),
   updatedAt: z.date(),
 });
@@ -143,6 +132,31 @@ export const SkillsAssessmentInputSchema = SkillsAssessmentBaseSchema.omit({
   createdAt: true,
   updatedAt: true,
 });
+
+// const formSchema = z.object({
+//   firstName: z.string().min(2, {
+//     message: "Name must be at least 2 characters.",
+//   }),
+//   lastName: z.string().min(2, {
+//     message: "Name must be at least 2 characters.",
+//   }),
+//   email: z.string().email({
+//     message: "Please enter a valid email address.",
+//   }),
+//   address: z.string().min(5, {
+//     message: "Address must be at least 5 characters.",
+//   }),
+//   phone: z.string().regex(/^\d{10}$/, {
+//     message: "Phone number must be 10 digits.",
+//   }),
+//   status: z.enum(["Confirmed", "Pending", "Cancelled", "Appointed"]),
+//   appointmentDate: z.date({
+//     required_error: "Please select a date.",
+//   }),
+//   appointmentTime: z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/, {
+//     message: "Please enter a valid time in HH:MM format.",
+//   }),
+// });
 
 // Types
 export type Customer = z.infer<typeof CustomerSchema>;

@@ -31,7 +31,6 @@ import {
   ArrowUp,
   ArrowUpIcon,
   Calendar,
-  CheckCircle,
   ChevronDown,
   ChevronLeftIcon,
   ChevronRightIcon,
@@ -50,207 +49,33 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
-
-enum SAStatus {
-  SUBMITTED,
-  UNDER_ASSESSMENT,
-  ADDITIONAL_INFO_REQUIRED,
-  COMPLETED,
-  APPEALED,
-}
-
-enum SAType {
-  SKILLS_ASSESSMENT,
-  QUALIFICATION_ASSESSMENT,
-  PROVISIONAL_SKILLS_ASSESSMENT,
-}
-interface SkillsAssessment {
-  id: number;
-  customerId: number;
-  occupation: string;
-  assessingAuthority: string;
-  applicationDate: Date;
-  status: SAStatus;
-  documentationSubmitted: boolean;
-  skillsAssessmentType: SAType;
-  outcomeReceived: boolean;
-  outcomeDate: Date | null;
-  outcomeResult: string | null;
-  appealSubmitted: boolean;
-  appealDate: Date | null;
-  appealOutcome: string | null;
-  createdAt?: Date;
-  updatedAt?: Date;
-}
-
-enum VisaType {
-  SUB_500,
-  SUB_482,
-  SUB_407,
-  SUB_186,
-  SUB_189,
-  SUB_190,
-  SUB_600,
-  SUB_820,
-  SUB_801,
-}
-
-const mockData = [
-  {
-    id: 1,
-    customer: {
-      id: 201,
-      firstName: "Ava",
-      middleName: "Elizabeth",
-      lastName: "Taylor",
-      email: "ava.taylor@example.com",
-      address: "303 Adelaide St, Adelaide SA 5000",
-      passportNumber: "PA3692581",
-      currentVisa: VisaType.SUB_482,
-      visaExpiry: new Date("2026-09-30"),
-      phone: "+61467890123",
-      createdAt: new Date("2023-06-15"),
-      updatedAt: new Date("2023-06-15"),
-    },
-    occupation: "Chef",
-    assessingAuthority: "TRA (Trades Recognition Australia)",
-    applicationDate: new Date("2024-01-10"),
-    status: SAStatus.UNDER_ASSESSMENT,
-    documentationSubmitted: true,
-    skillsAssessmentType: SAType.SKILLS_ASSESSMENT,
-    outcomeReceived: false,
-    outcomeDate: null,
-    outcomeResult: null,
-    appealSubmitted: false,
-    appealDate: null,
-    appealOutcome: null,
-  },
-  {
-    id: 2,
-    customer: {
-      id: 202,
-      firstName: "Ethan",
-      middleName: "Alexander",
-      lastName: "Nguyen",
-      email: "ethan.nguyen@example.com",
-      address: "404 Darwin Blvd, Darwin NT 0800",
-      passportNumber: "PA7531598",
-      currentVisa: VisaType.SUB_189,
-      visaExpiry: null,
-      phone: "+61478901234",
-      createdAt: new Date("2023-07-20"),
-      updatedAt: new Date("2023-07-20"),
-    },
-    occupation: "Hotel Manager",
-    assessingAuthority: "VETASSESS",
-    applicationDate: new Date("2023-11-15"),
-    status: SAStatus.COMPLETED,
-    documentationSubmitted: true,
-    skillsAssessmentType: SAType.QUALIFICATION_ASSESSMENT,
-    outcomeReceived: true,
-    outcomeDate: new Date("2024-02-20"),
-    outcomeResult: "Positive",
-    appealSubmitted: false,
-    appealDate: null,
-    appealOutcome: null,
-  },
-  {
-    id: 3,
-    customer: {
-      id: 203,
-      firstName: "Mia",
-      middleName: "Sophie",
-      lastName: "Garcia",
-      email: "mia.garcia@example.com",
-      address: "505 Canberra Ave, Canberra ACT 2600",
-      passportNumber: "PA9517534",
-      currentVisa: VisaType.SUB_500,
-      visaExpiry: new Date("2025-07-31"),
-      phone: "+61489012345",
-      createdAt: new Date("2023-08-10"),
-      updatedAt: new Date("2023-08-10"),
-    },
-    occupation: "Restaurant Manager",
-    assessingAuthority: "VETASSESS",
-    applicationDate: new Date("2024-02-01"),
-    status: SAStatus.ADDITIONAL_INFO_REQUIRED,
-    documentationSubmitted: true,
-    skillsAssessmentType: SAType.SKILLS_ASSESSMENT,
-    outcomeReceived: false,
-    outcomeDate: null,
-    outcomeResult: null,
-    appealSubmitted: false,
-    appealDate: null,
-    appealOutcome: null,
-  },
-  {
-    id: 4,
-    customer: {
-      id: 204,
-      firstName: "Noah",
-      middleName: "William",
-      lastName: "Smith",
-      email: "noah.smith@example.com",
-      address: "606 Gold Coast Hwy, Gold Coast QLD 4217",
-      passportNumber: "PA7539514",
-      currentVisa: VisaType.SUB_407,
-      visaExpiry: new Date("2025-10-31"),
-      phone: "+61490123456",
-      createdAt: new Date("2023-09-05"),
-      updatedAt: new Date("2023-09-05"),
-    },
-    occupation: "Sommelier",
-    assessingAuthority: "TRA (Trades Recognition Australia)",
-    applicationDate: new Date("2023-12-01"),
-    status: SAStatus.COMPLETED,
-    documentationSubmitted: true,
-    skillsAssessmentType: SAType.SKILLS_ASSESSMENT,
-    outcomeReceived: true,
-    outcomeDate: new Date("2024-03-15"),
-    outcomeResult: "Positive",
-    appealSubmitted: false,
-    appealDate: null,
-    appealOutcome: null,
-  },
-  {
-    id: 5,
-    customer: {
-      id: 205,
-      firstName: "Isabella",
-      middleName: "Marie",
-      lastName: "Johnson",
-      email: "isabella.johnson@example.com",
-      address: "707 Wollongong Rd, Wollongong NSW 2500",
-      passportNumber: "PA3579512",
-      currentVisa: VisaType.SUB_190,
-      visaExpiry: new Date("2026-04-30"),
-      phone: "+61401234567",
-      createdAt: new Date("2023-10-15"),
-      updatedAt: new Date("2023-10-15"),
-    },
-    occupation: "Event Coordinator",
-    assessingAuthority: "VETASSESS",
-    applicationDate: new Date("2024-03-01"),
-    status: SAStatus.SUBMITTED,
-    documentationSubmitted: true,
-    skillsAssessmentType: SAType.PROVISIONAL_SKILLS_ASSESSMENT,
-    outcomeReceived: false,
-    outcomeDate: null,
-    outcomeResult: null,
-    appealSubmitted: false,
-    appealDate: null,
-    appealOutcome: null,
-  },
-];
+import { useQuery } from "@tanstack/react-query";
+import { getAllSkillsAssessment } from "@/features/actions/skills-assessment/actions";
+import LoadingSpinner from "@/app/components/loading-spinner";
 
 export default function SkillsAssesment() {
   const [sort, setSort] = useState({ by: "applicationDate", order: "asc" });
   const [filters, setFilters] = useState({
-    status: "all",
+    stage: "all",
     search: "",
   });
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const itemsPerPage = 2;
+
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ["skills-assessment"],
+    queryFn: () => getAllSkillsAssessment(),
+  });
+
+  if (isLoading)
+    return (
+      <div className="h-full flex items-center justify-center">
+        <LoadingSpinner />
+      </div>
+    );
+  if (isError) return <p>Error: {error.message}</p>;
+
+  const SkillsAssessment = data || [];
 
   const sortOptions = [
     { label: "Date", value: "applicationDate", icon: Calendar },
@@ -271,23 +96,23 @@ export default function SkillsAssesment() {
     }));
   };
 
-  // Filter data
-  const filteredData = mockData.filter((item) => {
+  const filteredData = SkillsAssessment.filter((item) => {
     const searchText = filters.search.toLowerCase();
     const customer = item.customer;
     return (
-      filters.status === "all" ||
-      (item.status.toLocaleString() === filters.status &&
-        (customer.firstName.toLowerCase().includes(searchText) ||
-          customer.email.toLowerCase().includes(searchText) ||
-          customer.passportNumber.toLowerCase().includes(searchText)))
+      (filters.stage === "all" || item.stage === filters.stage) &&
+      (customer.firstName.toLowerCase().includes(searchText) ||
+        customer.middleName?.toLowerCase().includes(searchText) || // Handle middleName being null
+        customer.lastName.toLowerCase().includes(searchText) ||
+        customer.email.toLowerCase().includes(searchText) ||
+        item.occupation.toLowerCase().includes(searchText))
     );
   });
 
   // Sort data
   const sortedApplications = [...filteredData].sort((a, b) => {
-    const aValue = a[sort.by as keyof SkillsAssessment];
-    const bValue = b[sort.by as keyof SkillsAssessment];
+    const aValue = a[sort.by] ?? "";
+    const bValue = b[sort.by] ?? "";
 
     if (aValue < bValue) return sort.order === "asc" ? -1 : 1;
     if (aValue > bValue) return sort.order === "asc" ? 1 : -1;
@@ -308,9 +133,9 @@ export default function SkillsAssesment() {
   return (
     <div className="min-h-screen">
       <CardHeader className="space-y-1 px-0 pt-0">
-        <div className="flex items-center justify-betwsortedApplicationseen">
+        <div className="flex items-center justify-between">
           <CardTitle className="text-2xl font-bold">
-            JobReadyProgram Applications
+            Skills Assessment Applications
           </CardTitle>
           <Button onClick={() => setCurrentPage(1)}>
             <RefreshCwIcon className="mr-2 h-4 w-4" />
@@ -318,7 +143,7 @@ export default function SkillsAssesment() {
           </Button>
         </div>
         <CardDescription>
-          Manage and track JobReadyProgram applications
+          Manage and track Skills Assessment applications
         </CardDescription>
       </CardHeader>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
@@ -387,21 +212,20 @@ export default function SkillsAssesment() {
           </div>
           <div className="w-full md:w-[12rem]">
             <label htmlFor="status" className="text-sm font-medium">
-              Status
+              Stage
             </label>
             <Select
-              value={filters.status}
-              onValueChange={(value) => handleFilterChange("status", value)}
+              value={filters.stage}
+              onValueChange={(value) => handleFilterChange("stage", value)}
             >
-              <SelectTrigger id="status">
-                <SelectValue placeholder="Select status" />
+              <SelectTrigger id="stage">
+                <SelectValue placeholder="Select stage" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All</SelectItem>
-                <SelectItem value="ENROLLED">ENROLLED</SelectItem>
-                <SelectItem value="IN_PROGRESS">IN_PROGRESS</SelectItem>
-                <SelectItem value="COMPLETED">COMPLETED</SelectItem>
-                <SelectItem value="WITHDRAWN">WITHDRAWN</SelectItem>
+                <SelectItem value="STAGE_1">STAGE_1</SelectItem>
+                <SelectItem value="STAGE_2">STAGE_2</SelectItem>
+                <SelectItem value="INTERVIEW">INTERVIEW</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -464,7 +288,7 @@ export default function SkillsAssesment() {
               <ArrowDownIcon className="h-4 w-4" />
             )}
           </Button>
-          <Link href={"JobReadyProgram-applications/create"}>
+          <Link href={"skills-assessment/create"}>
             <Button className="w-full md:w-auto">Add New Record</Button>
           </Link>
         </div>
@@ -479,15 +303,10 @@ export default function SkillsAssesment() {
               <TableHead>Occupation</TableHead>
               <TableHead>Authority</TableHead>
               <TableHead>Application Date</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Documentation</TableHead>
-              <TableHead>Type</TableHead>
-              <TableHead>Outcome Received</TableHead>
-              <TableHead>Outcome Date</TableHead>
+              <TableHead>Stage</TableHead>
               <TableHead>Outcome Result</TableHead>
-              <TableHead>Appeal Submitted</TableHead>
-              <TableHead>Appeal Date</TableHead>
-              <TableHead>Appeal Outcome</TableHead>
+              <TableHead>Outcome Date</TableHead>
+              <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -504,19 +323,9 @@ export default function SkillsAssesment() {
                 <TableCell>{item.occupation}</TableCell>
                 <TableCell>{item.assessingAuthority}</TableCell>
                 <TableCell>{item.applicationDate.toDateString()}</TableCell>
-                <TableCell>{item.status}</TableCell>
-                <TableCell>
-                  {item.documentationSubmitted && <CheckCircle size={15} />}
-                </TableCell>
-                <TableCell>{item.skillsAssessmentType}</TableCell>
-                <TableCell>
-                  {item.outcomeReceived && <CheckCircle size={15} />}
-                </TableCell>
-                <TableCell>{item.outcomeDate?.toDateString()}</TableCell>
+                <TableCell>{item.stage}</TableCell>
                 <TableCell>{item.outcomeResult}</TableCell>
-                <TableCell>{item.appealSubmitted && <CheckCircle />}</TableCell>
-                <TableCell>{item.appealDate}</TableCell>
-                <TableCell>{item.appealOutcome}</TableCell>
+                <TableCell>{item.outcomeDate?.toDateString()}</TableCell>
                 <TableCell className="text-right">
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>

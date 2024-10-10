@@ -31,7 +31,6 @@ import {
   ArrowUp,
   ArrowUpIcon,
   Calendar,
-  CheckCircle,
   ChevronDown,
   ChevronLeftIcon,
   ChevronRightIcon,
@@ -51,189 +50,15 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
-enum JRPStatus {
-  ENROLLED = "ENROLLED",
-  IN_PROGRESS = "IN_PROGRESS",
-  COMPLETED = "COMPLETED",
-  WITHDRAWN = "WITHDRAWN",
-}
-interface JobReadyProgram {
-  id: number;
-  customerId: number;
-  programType: string;
-  startDate: Date;
-  endDate: Date;
-  status: JRPStatus;
-  workplacement: string | null;
-  employerName: string | null;
-  employerABN: string | null;
-  supervisorName: string | null;
-  supervisorContact: string | null;
-  completionDate: Date | null;
-  certificateIssued: boolean;
-  createdAt?: Date;
-  updatedAt?: Date;
-}
-
-enum JobReadyProgramType {
-  SUB_500,
-  SUB_482,
-  SUB_407,
-  SUB_186,
-  SUB_189,
-  SUB_190,
-  SUB_600,
-  SUB_820,
-  SUB_801,
-}
-const mockData = [
-  {
-    id: 1,
-    customer: {
-      id: 101,
-      firstName: "John",
-      middleName: "Michael",
-      lastName: "Doe",
-      email: "john.doe@example.com",
-      address: "123 Sydney St, Sydney NSW 2000",
-      passportNumber: "PA1234567",
-      currentJobReadyProgram: JobReadyProgramType.SUB_500,
-      JobReadyProgramExpiry: new Date("2025-12-31"),
-      phone: "+61412345678",
-      createdAt: new Date("2023-01-01"),
-      updatedAt: new Date("2023-01-01"),
-    },
-    programType: "Hospitality Management",
-    startDate: new Date("2024-01-15"),
-    endDate: new Date("2024-07-15"),
-    status: JRPStatus.IN_PROGRESS,
-    workplacement: "Hilton Sydney",
-    employerName: "Hilton Hotels & Resorts",
-    employerABN: "36123456789",
-    supervisorName: "Jane Smith",
-    supervisorContact: "jane.smith@hilton.com",
-    completionDate: null,
-    certificateIssued: false,
-  },
-  {
-    id: 2,
-    customer: {
-      id: 102,
-      firstName: "Emma",
-      middleName: "Rose",
-      lastName: "Wilson",
-      email: "emma.wilson@example.com",
-      address: "456 Melbourne Rd, Melbourne VIC 3000",
-      passportNumber: "PA7654321",
-      currentJobReadyProgram: JobReadyProgramType.SUB_482,
-      JobReadyProgramExpiry: new Date("2026-06-30"),
-      phone: "+61423456789",
-      createdAt: new Date("2023-02-15"),
-      updatedAt: new Date("2023-02-15"),
-    },
-    programType: "Culinary Arts",
-    startDate: new Date("2023-09-01"),
-    endDate: new Date("2024-03-01"),
-    status: JRPStatus.COMPLETED,
-    workplacement: "The Rocks Cafe",
-    employerName: "The Rocks Cafe Pty Ltd",
-    employerABN: "98765432109",
-    supervisorName: "Chef Gordon Ramsay",
-    supervisorContact: "gordon@therockscafe.com",
-    completionDate: new Date("2024-03-01"),
-    certificateIssued: true,
-  },
-  {
-    id: 3,
-    customer: {
-      id: 103,
-      firstName: "Oliver",
-      middleName: "James",
-      lastName: "Brown",
-      email: "oliver.brown@example.com",
-      address: "789 Brisbane Ave, Brisbane QLD 4000",
-      passportNumber: "PA9876543",
-      currentJobReadyProgram: JobReadyProgramType.SUB_500,
-      JobReadyProgramExpiry: new Date("2025-08-31"),
-      phone: "+61434567890",
-      createdAt: new Date("2023-03-10"),
-      updatedAt: new Date("2023-03-10"),
-    },
-    programType: "Hotel Management",
-    startDate: new Date("2024-03-01"),
-    endDate: new Date("2024-09-01"),
-    status: JRPStatus.ENROLLED,
-    workplacement: null,
-    employerName: null,
-    employerABN: null,
-    supervisorName: null,
-    supervisorContact: null,
-    completionDate: null,
-    certificateIssued: false,
-  },
-  {
-    id: 4,
-    customer: {
-      id: 104,
-      firstName: "Sophia",
-      middleName: "Grace",
-      lastName: "Chen",
-      email: "sophia.chen@example.com",
-      address: "101 Perth St, Perth WA 6000",
-      passportNumber: "PA1357924",
-      currentJobReadyProgram: JobReadyProgramType.SUB_407,
-      JobReadyProgramExpiry: new Date("2025-11-30"),
-      phone: "+61445678901",
-      createdAt: new Date("2023-04-20"),
-      updatedAt: new Date("2023-04-20"),
-    },
-    programType: "Event Management",
-    startDate: new Date("2023-11-15"),
-    endDate: new Date("2024-05-15"),
-    status: JRPStatus.IN_PROGRESS,
-    workplacement: "Crown Perth",
-    employerName: "Crown Resorts Limited",
-    employerABN: "39111111111",
-    supervisorName: "Mark Johnson",
-    supervisorContact: "m.johnson@crownperth.com.au",
-    completionDate: null,
-    certificateIssued: false,
-  },
-  {
-    id: 5,
-    customer: {
-      id: 105,
-      firstName: "Liam",
-      middleName: "Patrick",
-      lastName: "O'Connor",
-      email: "liam.oconnor@example.com",
-      address: "202 Hobart Pl, Hobart TAS 7000",
-      passportNumber: "PA2468135",
-      currentJobReadyProgram: JobReadyProgramType.SUB_500,
-      JobReadyProgramExpiry: new Date("2026-02-28"),
-      phone: "+61456789012",
-      createdAt: new Date("2023-05-05"),
-      updatedAt: new Date("2023-05-05"),
-    },
-    programType: "Tourism Management",
-    startDate: new Date("2024-02-01"),
-    endDate: new Date("2024-08-01"),
-    status: JRPStatus.ENROLLED,
-    workplacement: null,
-    employerName: null,
-    employerABN: null,
-    supervisorName: null,
-    supervisorContact: null,
-    completionDate: null,
-    certificateIssued: false,
-  },
-];
+import { useQuery } from "@tanstack/react-query";
+import { getAllJrpApplication } from "@/features/actions/job-ready-program/actions";
+import LoadingSpinner from "@/app/components/loading-spinner";
 
 export default function JobReadyProgram() {
   const [sort, setSort] = useState({ by: "startDate", order: "asc" });
   const [filters, setFilters] = useState({
-    status: "all",
-    program: "all",
+    stage: "all",
+    outcome: "all",
     search: "",
   });
   const [currentPage, setCurrentPage] = useState(1);
@@ -259,23 +84,37 @@ export default function JobReadyProgram() {
     }));
   };
 
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ["visa-applications"],
+    queryFn: () => getAllJrpApplication(),
+  });
+
+  if (isLoading)
+    return (
+      <div className="h-full flex items-center justify-center">
+        <LoadingSpinner />
+      </div>
+    );
+  if (isError) return <p>Error: {error.message}</p>;
+
+  const jrpAppplications = data || [];
+
   // Filter data
-  const filteredData = mockData.filter((item) => {
+  const filteredData = jrpAppplications.filter((item) => {
     const searchText = filters.search.toLowerCase();
     const customer = item.customer;
     return (
-      (filters.status === "all" || item.status === filters.status) &&
-      (filters.program === "all" || item.programType === filters.program) &&
+      (filters.stage === "all" || item.stage === filters.stage) &&
+      (filters.outcome === "all" || item.outcomeResult === filters.outcome) &&
       (customer.firstName.toLowerCase().includes(searchText) ||
-        customer.email.toLowerCase().includes(searchText) ||
-        customer.passportNumber.toLowerCase().includes(searchText))
+        customer.email.toLowerCase().includes(searchText))
     );
   });
 
   // Sort data
   const sortedApplications = [...filteredData].sort((a, b) => {
-    const aValue = a[sort.by as keyof JobReadyProgram];
-    const bValue = b[sort.by as keyof JobReadyProgram];
+    const aValue = a[sort.by] ?? "";
+    const bValue = b[sort.by] ?? "";
 
     if (aValue < bValue) return sort.order === "asc" ? -1 : 1;
     if (aValue > bValue) return sort.order === "asc" ? 1 : -1;
@@ -374,22 +213,22 @@ export default function JobReadyProgram() {
             </div>
           </div>
           <div className="w-full md:w-[12rem]">
-            <label htmlFor="status" className="text-sm font-medium">
-              Status
+            <label htmlFor="stage" className="text-sm font-medium">
+              Stage
             </label>
             <Select
-              value={filters.status}
-              onValueChange={(value) => handleFilterChange("status", value)}
+              value={filters.stage}
+              onValueChange={(value) => handleFilterChange("stage", value)}
             >
-              <SelectTrigger id="status">
-                <SelectValue placeholder="Select status" />
+              <SelectTrigger id="stage">
+                <SelectValue placeholder="Select stage" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All</SelectItem>
-                <SelectItem value="ENROLLED">ENROLLED</SelectItem>
-                <SelectItem value="IN_PROGRESS">IN_PROGRESS</SelectItem>
-                <SelectItem value="COMPLETED">COMPLETED</SelectItem>
-                <SelectItem value="WITHDRAWN">WITHDRAWN</SelectItem>
+                <SelectItem value="JRE"> JRE</SelectItem>
+                <SelectItem value="JRWA">JRWA</SelectItem>
+                <SelectItem value="JRFA">JRFA</SelectItem>
+                <SelectItem value="JRPRE">JRPRE</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -453,7 +292,7 @@ export default function JobReadyProgram() {
               <ArrowDownIcon className="h-4 w-4" />
             )}
           </Button>
-          <Link href={"JobReadyProgram-applications/create"}>
+          <Link href={"job-ready-program/create"}>
             <Button className="w-full md:w-auto">Add New Record</Button>
           </Link>
         </div>
@@ -468,14 +307,13 @@ export default function JobReadyProgram() {
               <TableHead>Program Type</TableHead>
               <TableHead>Start Date</TableHead>
               <TableHead>End Date</TableHead>
-              <TableHead>Status</TableHead>
+              <TableHead>Stage</TableHead>
               <TableHead>Work Placement</TableHead>
               <TableHead>Employer Name Type</TableHead>
               <TableHead>ABN</TableHead>
               <TableHead>Supervisor</TableHead>
               <TableHead>Supervisor Contact</TableHead>
               <TableHead>Completion Date</TableHead>
-              <TableHead>Certificate Issued</TableHead>
               <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
@@ -491,18 +329,15 @@ export default function JobReadyProgram() {
                 </TableCell>
                 <TableCell>{item.customer.email}</TableCell>
                 <TableCell>{item.programType}</TableCell>
-                <TableCell>{item.startDate.toDateString()}</TableCell>
-                <TableCell>{item.endDate.toDateString()}</TableCell>
-                <TableCell>{item.status}</TableCell>
+                <TableCell>{item.startDate?.toDateString()}</TableCell>
+                <TableCell>{item.completionDate?.toDateString()}</TableCell>
+                <TableCell>{item.stage}</TableCell>
                 <TableCell>{item.workplacement}</TableCell>
                 <TableCell>{item.employerName}</TableCell>
                 <TableCell>{item.employerABN}</TableCell>
                 <TableCell>{item.supervisorName}</TableCell>
                 <TableCell>{item.supervisorContact}</TableCell>
                 <TableCell>{item.completionDate?.toDateString()}</TableCell>
-                <TableCell>
-                  {item.certificateIssued && <CheckCircle size={15} />}
-                </TableCell>
                 <TableCell className="text-right">
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -514,7 +349,7 @@ export default function JobReadyProgram() {
                     <DropdownMenuContent align="end">
                       <DropdownMenuItem>
                         <Link
-                          href={`JobReadyProgram-applications/update/${item.id}`}
+                          href={`job-ready-program/update/${item.id}`}
                           className="flex items-center"
                         >
                           <Edit className="mr-2 h-4 w-4" />

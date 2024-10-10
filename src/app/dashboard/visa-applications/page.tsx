@@ -342,7 +342,7 @@ export default function Component() {
                 <TableCell>{item.customer.email}</TableCell>
                 <TableCell>{item.customer.address}</TableCell>
                 <TableCell>{item.customer.passportNumber}</TableCell>
-                <TableCell>{item.visaAppliedDate.toDateString()}</TableCell>
+                <TableCell>{item.visaAppliedDate?.toDateString()}</TableCell>
                 <TableCell>{item.visaStatus}</TableCell>
                 <TableCell>{item.customer.currentVisa}</TableCell>
                 <TableCell>{item.visaType}</TableCell>

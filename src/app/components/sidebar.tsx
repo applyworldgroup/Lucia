@@ -34,7 +34,7 @@ export function Sidebar() {
     <div
       className={cn(
         "relative h-screen transition-all duration-300 ease-in-out",
-        isCollapsed ? "w-16" : "w-64"
+        isCollapsed ? "w-16" : "w-64",
       )}
     >
       <div className="flex flex-col justify-between h-screen border-r">
@@ -83,12 +83,12 @@ export function Sidebar() {
                   variant: "ghost",
                   url: "/dashboard/calender",
                 },
-                // {
-                //   title: "Team",
-                //   icon: Users,
-                //   variant: "ghost",
-                //   url: "/dashboard/team",
-                // },
+                {
+                  title: "Team",
+                  icon: Users,
+                  variant: "ghost",
+                  url: "/dashboard/team",
+                },
                 {
                   title: "Customers",
                   icon: Users,
@@ -111,7 +111,7 @@ export function Sidebar() {
                   title: "Skills Assesment",
                   icon: Award,
                   variant: "ghost",
-                  url: "/dashboard/skills-assesment",
+                  url: "/dashboard/skills-assessment",
                 },
               ]}
               isCollapsed={isCollapsed}
