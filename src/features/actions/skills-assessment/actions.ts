@@ -4,11 +4,11 @@ import { revalidatePath } from "next/cache";
 import { getCustomerByEmail } from "../customers/actions";
 import { Customer, SkillsAssessment } from "@prisma/client";
 import { SkillsAssessmentInput } from "@/types/schema";
+import { checkAuth } from "@/lib/checkAuth";
 
 export async function createSkillsAssessment(data: SkillsAssessmentInput) {
   try {
-    console.log(data);
-
+    await checkAuth();
     const customer = await getCustomerByEmail(data.email);
 
     if (!customer || !customer.data) {
@@ -52,6 +52,8 @@ export async function updateSkillsAssessment(
   id: string,
   data: Partial<SkillsAssessmentInput & { customer: Customer }>,
 ) {
+  await checkAuth();
+
   const {
     firstName,
     middleName,
@@ -78,6 +80,8 @@ export async function updateSkillsAssessment(
 export async function getSkillsAssessment(
   id: string,
 ): Promise<(SkillsAssessment & { customer: Customer }) | null> {
+  await checkAuth();
+
   try {
     const application = await prisma.skillsAssessment.findFirst({
       where: {
@@ -96,6 +100,7 @@ export async function getSkillsAssessment(
 export async function getAllSkillsAssessment(): Promise<
   (SkillsAssessment & { customer: Customer })[] | null
 > {
+  await checkAuth();
   try {
     const applications = await prisma.skillsAssessment.findMany({
       include: {

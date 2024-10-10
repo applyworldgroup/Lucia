@@ -4,10 +4,11 @@ import { revalidatePath } from "next/cache";
 import { getCustomerByEmail } from "../customers/actions";
 import { Customer, JobReadyProgram } from "@prisma/client";
 import { JobReadyProgramInput } from "@/types/schema";
+import { checkAuth } from "@/lib/checkAuth";
 
 export async function createJrpApplication(data: JobReadyProgramInput) {
   try {
-    console.log(data);
+    await checkAuth();
 
     // Find the customer by email
     const customer = await getCustomerByEmail(data.email);
@@ -43,6 +44,8 @@ export async function updateJrpApplication(
   id: string,
   data: Partial<JobReadyProgramInput & { customer: Customer }>,
 ) {
+  await checkAuth();
+
   const {
     firstName,
     middleName,
@@ -69,6 +72,8 @@ export async function updateJrpApplication(
 export async function getJrpApplication(
   id: string,
 ): Promise<(JobReadyProgram & { customer: Customer }) | null> {
+  await checkAuth();
+
   try {
     const application = await prisma.jobReadyProgram.findFirst({
       where: {
@@ -87,6 +92,8 @@ export async function getJrpApplication(
 export async function getAllJrpApplication(): Promise<
   (JobReadyProgram & { customer: Customer })[] | null
 > {
+  await checkAuth();
+
   try {
     const applications = await prisma.jobReadyProgram.findMany({
       include: {

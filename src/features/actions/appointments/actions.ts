@@ -1,11 +1,12 @@
 "use server";
 
+import { checkAuth } from "@/lib/checkAuth";
 import prisma from "@/lib/db";
 import { Appointment } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 
 export async function createAppointment(data: Appointment) {
-  console.log(data);
+  await checkAuth();
   try {
     const newAppointment = await prisma.appointment.create({
       data,
@@ -23,7 +24,8 @@ export async function UpdateAppointment(
   id: string,
   data: Partial<Appointment>,
 ) {
-  console.log(data);
+  await checkAuth();
+
   try {
     const updatedAppointment = await prisma.appointment.update({
       where: {
@@ -43,6 +45,8 @@ export async function UpdateAppointment(
 }
 
 export async function getAllAppointments(): Promise<Appointment[]> {
+  await checkAuth();
+
   try {
     const appointments = await prisma.appointment.findMany({});
     return appointments;
