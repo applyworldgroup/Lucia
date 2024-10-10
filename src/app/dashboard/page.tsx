@@ -1,39 +1,3 @@
-// import { Button } from "@/components/ui/button";import { signOut } from "@/features/actions/auth/signout";// import { validateServerProtectedRoute } from "@/lib/validate-server-protected-route";// import React from "react";
-
-// export default async function Dashboard() {
-//   const { user } = await validateServerProtectedRoute();
-//   return (
-//     <div>
-//       <b>Dashboard</b>
-//       <p>{JSON.stringify(user, null, 2)}</p>
-//       <form action={signOut}>
-//         <Button type="submit">Sign out</Button>
-//       </form>
-//     </div>
-//   );
-// }
-
-// "use client";
-
-// import { Button } from "@/components/ui/button";
-// import { signOut } from "@/features/actions/auth/signout";
-// import React from "react";
-// import { ValidateClientProtectedRoute } from "@/lib/validate-client-protected-route";
-
-// export default function Dashboard() {
-//   const {user} = ValidateClientProtectedRoute()
-//   return (
-//     <div>
-//       <b>Dashboard</b>
-//       <p>Hi, this is client page</p>
-//       <p>{JSON.stringify(user, null, 2)}</p>
-//       <Button type="submit" onClick={() => signOut()}>
-//         Sign out
-//       </Button>
-//     </div>
-//   );
-// }
-
 "use client";
 
 import {
@@ -64,6 +28,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { ValidateClientProtectedRoute } from "@/lib/validate-client-protected-route";
 
 const visaStatusData = [
   { name: "Training Visa (407)", value: 30 },
@@ -110,7 +75,8 @@ const customerData = [
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8884d8"];
 
 export default function DashboardContent() {
-  return (
+  ValidateClientProtectedRoute();
+  http: return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">

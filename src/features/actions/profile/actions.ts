@@ -12,7 +12,6 @@ export async function getUserById(id: string) {
       lastName: true,
       email: true,
       email_verified: true,
-      sessions: true,
     },
   });
   return { success: true, data: user };
