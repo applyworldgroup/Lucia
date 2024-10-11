@@ -51,74 +51,9 @@ import Link from "next/link";
 // import { useQuery } from "@tanstack/react-query";
 // import LoadingSpinner from "@/app/components/loading-spinner";
 import { filterCustomersByRange } from "@/lib/date-calc";
-
-const companies = [
-  {
-    id: "3f1b2d8a-4f39-4a1e-a5e8-d72c9a2cb9f8",
-    tradingName: "Tech Innovators Ltd",
-    name: "Tech Innovators",
-    director: "Alice Johnson",
-    email: "alice.johnson@techinnovators.com",
-    phone: "0456781234",
-    abn: 123456789,
-    address: "123 Tech Street, Sydney, NSW 2000",
-    website: "https://techinnovators.com",
-    sbsStatus: "APPROVED",
-    associatedClients: 10,
-  },
-  {
-    id: "a245c00f-69b4-49d9-9e7d-716394d90530",
-    tradingName: "NextGen Solutions",
-    name: "NextGen Solutions Pty Ltd",
-    director: "Bob Richards",
-    email: "bob.richards@nextgensolutions.com",
-    phone: "0467886543",
-    abn: 987654321,
-    address: "45 Enterprise Road, Melbourne, VIC 3000",
-    website: "https://nextgensolutions.com",
-    sbsStatus: "PENDING",
-    associatedClients: 7,
-  },
-  {
-    id: "9d3e9f63-1bf3-46a4-a750-87a8d2e62f95",
-    tradingName: "Global Ventures",
-    name: "Global Ventures Ltd",
-    director: "Catherine Lee",
-    email: "catherine.lee@globalventures.com",
-    phone: "0432567810",
-    abn: 112233445,
-    address: "789 Global Way, Brisbane, QLD 4000",
-    website: "https://globalventures.com",
-    sbsStatus: "NOT_APPROVED",
-    associatedClients: 15,
-  },
-  {
-    id: "53a7c5e8-4f72-4ba6-b03a-02c1ff4df7b3",
-    tradingName: "Innovate IT",
-    name: "Innovate IT Solutions",
-    director: "David Miller",
-    email: "david.miller@innovateit.com",
-    phone: "0478123456",
-    abn: 246810121,
-    address: "500 IT Park, Perth, WA 6000",
-    website: "https://innovateit.com",
-    sbsStatus: "APPROVED",
-    associatedClients: 20,
-  },
-  {
-    id: "6a1f2e74-91f0-48e6-bf8e-1d5c12eabe5e",
-    tradingName: "Alpha Technologies",
-    name: "Alpha Technologies Ltd",
-    director: "Emma Watson",
-    email: "emma.watson@alphatech.com",
-    phone: "0412345678",
-    abn: 314159265,
-    address: "250 Alpha Road, Adelaide, SA 5000",
-    website: "https://alphatech.com",
-    sbsStatus: "PENDING",
-    associatedClients: 5,
-  },
-];
+import { getAllCompanies } from "@/features/actions/company/actions";
+import { useQuery } from "@tanstack/react-query";
+import LoadingSpinner from "@/app/components/loading-spinner";
 
 export default function Customers() {
   const [sort, setSort] = useState({ by: "createdAt", order: "asc" });
@@ -128,6 +63,21 @@ export default function Customers() {
   });
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
+
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ["companies"],
+    queryFn: () => getAllCompanies(),
+  });
+
+  if (isLoading)
+    return (
+      <div className="h-full flex items-center justify-center">
+        <LoadingSpinner />
+      </div>
+    );
+  if (isError) return <p>Error: {error.message}</p>;
+
+  const companies = data || [];
 
   const sortOptions = [
     { label: "Date", value: "startDate", icon: Calendar },
@@ -157,21 +107,6 @@ export default function Customers() {
       [filterKey]: value,
     }));
   };
-
-  //   const { data, isLoading, isError, error } = useQuery({
-  //     queryKey: ["customers"],
-  //     queryFn: () => getAllCustomers(),
-  //   });
-
-  //   if (isLoading)
-  //     return (
-  //       <div className="h-full flex items-center justify-center">
-  //         <LoadingSpinner />
-  //       </div>
-  //     );
-  //   if (isError) return <p>Error: {error.message}</p>;
-
-  //   const customers = data || [];
 
   const sortedCustomers = [...filteredData].sort((a, b) => {
     const aValue = a[sort.by] ?? "";

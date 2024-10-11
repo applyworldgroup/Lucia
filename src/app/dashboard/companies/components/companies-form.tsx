@@ -114,6 +114,7 @@ export default function CompanyForm({ initialData }: CompanyFormProps) {
 
   const handleFormSubmit = useCallback(
     (data: Company) => {
+      console.log(data);
       try {
         if (isEditing && initialData?.id) {
           updateMutation.mutate({ id: initialData.id, data: data });
@@ -158,12 +159,7 @@ export default function CompanyForm({ initialData }: CompanyFormProps) {
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>
-                      Name{" "}
-                      <span className="text-red-500" title="Required">
-                        *
-                      </span>
-                    </FormLabel>
+                    <FormLabel>Name </FormLabel>
                     <FormControl>
                       <Input {...field} value={field.value ?? undefined} />
                     </FormControl>
@@ -176,7 +172,12 @@ export default function CompanyForm({ initialData }: CompanyFormProps) {
                 name="tradingName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Trading Name</FormLabel>
+                    <FormLabel>
+                      Trading Name{" "}
+                      <span className="text-red-500" title="Required">
+                        *
+                      </span>
+                    </FormLabel>
                     <FormControl>
                       <Input {...field} value={field.value} />
                     </FormControl>
@@ -184,25 +185,43 @@ export default function CompanyForm({ initialData }: CompanyFormProps) {
                   </FormItem>
                 )}
               />
-              <FormField
-                control={form.control}
-                name="director"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>
-                      Last Name{" "}
-                      <span className="text-red-500" title="Required">
-                        *
-                      </span>
-                    </FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
             </div>
+            <FormField
+              control={form.control}
+              name="director"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    Director{" "}
+                    <span className="text-red-500" title="Required">
+                      *
+                    </span>
+                  </FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="abn"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    ABN{" "}
+                    <span className="text-red-500" title="Required">
+                      *
+                    </span>
+                  </FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <FormField
               control={form.control}
               name="email"

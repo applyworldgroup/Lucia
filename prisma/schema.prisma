@@ -108,7 +108,6 @@ model VisaApplication {
   updatedAt       DateTime @updatedAt
 }
 
-
 model JobReadyProgram {
   id                String    @id @default(uuid())
   customerId        String
@@ -139,27 +138,26 @@ enum SAStage {
   STAGE_2
   INTERVIEW
 }
+
 enum OUTCOME {
   SUCCESSFUL
   UNSUCCESSFUL
   PENDING
 }
 
-
 model SkillsAssessment {
-  id                   String    @id @default(uuid())
-  customerId           String
-  customer             Customer  @relation(fields: [customerId], references: [id], onDelete: Cascade)
-  occupation           String
-  assessingAuthority   String
-  applicationDate      DateTime
-  stage                SAStage
-  outcomeDate          DateTime?
-  outcomeResult        OUTCOME?
-  createdAt            DateTime  @default(now())
-  updatedAt            DateTime  @updatedAt
+  id                 String    @id @default(uuid())
+  customerId         String
+  customer           Customer  @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  occupation         String
+  assessingAuthority String
+  applicationDate    DateTime
+  stage              SAStage
+  outcomeDate        DateTime?
+  outcomeResult      OUTCOME?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
 }
-
 
 enum JRPStatus {
   ENROLLED
@@ -168,8 +166,6 @@ enum JRPStatus {
   WITHDRAWN
 }
 
-
-
 enum SAStatus {
   SUBMITTED
   UNDER_ASSESSMENT
@@ -177,6 +173,7 @@ enum SAStatus {
   COMPLETED
   APPEALED
 }
+
 enum Role {
   ADMIN
   USER
@@ -205,18 +202,17 @@ enum VisaType {
   SUB_801 // Partner Visa (Permanent)
 }
 
-
 model Company {
-  id               String   @id @default(uuid())
-  tradingName      String   @db.VarChar(256)
-  name             String?  @db.VarChar(56)
-  director         String   @db.VarChar(56)
-  email            String   @db.VarChar(256) @unique
-  phone            String   @db.VarChar(10) @unique
-  abn              String    
-  address          String   @db.Text
-  website          String?  @db.VarChar(256)
-  sbsStatus        SbsStatusEnum @default(NOT_APPROVED)
+  id                String        @id @default(uuid())
+  tradingName       String
+  name              String?
+  director          String
+  email             String        @unique
+  phone             String        @unique
+  abn               String        @unique
+  address           String
+  website           String?
+  sbsStatus         SbsStatusEnum @default(NOT_APPROVED)
   associatedClients Int?
 
   @@map("company")
