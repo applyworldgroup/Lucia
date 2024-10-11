@@ -153,7 +153,7 @@ export default function CompanyForm({ initialData }: CompanyFormProps) {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleFormSubmit)}>
           <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <FormField
                 control={form.control}
                 name="name"
@@ -186,78 +186,82 @@ export default function CompanyForm({ initialData }: CompanyFormProps) {
                 )}
               />
             </div>
-            <FormField
-              control={form.control}
-              name="director"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    Director{" "}
-                    <span className="text-red-500" title="Required">
-                      *
-                    </span>
-                  </FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="abn"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    ABN{" "}
-                    <span className="text-red-500" title="Required">
-                      *
-                    </span>
-                  </FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    Email{" "}
-                    <span className="text-red-500" title="Required">
-                      *
-                    </span>
-                  </FormLabel>
-                  <FormControl>
-                    <Input type="email" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="address"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    Address{" "}
-                    <span className="text-red-500" title="Required">
-                      *
-                    </span>
-                  </FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="director"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      Director{" "}
+                      <span className="text-red-500" title="Required">
+                        *
+                      </span>
+                    </FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="abn"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      ABN{" "}
+                      <span className="text-red-500" title="Required">
+                        *
+                      </span>
+                    </FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      Email{" "}
+                      <span className="text-red-500" title="Required">
+                        *
+                      </span>
+                    </FormLabel>
+                    <FormControl>
+                      <Input type="email" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="address"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      Address{" "}
+                      <span className="text-red-500" title="Required">
+                        *
+                      </span>
+                    </FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <FormField
                 control={form.control}
