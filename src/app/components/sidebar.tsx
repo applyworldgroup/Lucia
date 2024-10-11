@@ -6,6 +6,7 @@ import {
   Award,
   Book,
   Briefcase,
+  Building2,
   Calendar,
   ChevronLeft,
   ChevronRight,
@@ -112,6 +113,12 @@ export function Sidebar() {
                   icon: Award,
                   variant: "ghost",
                   url: "/dashboard/skills-assessment",
+                },
+                {
+                  title: "Companies",
+                  icon: Building2,
+                  variant: "ghost",
+                  url: "/dashboard/companies",
                 },
               ]}
               isCollapsed={isCollapsed}

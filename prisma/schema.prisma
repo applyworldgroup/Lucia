@@ -204,3 +204,26 @@ enum VisaType {
   SUB_820 // Partner Visa (Temporary)
   SUB_801 // Partner Visa (Permanent)
 }
+
+
+model Company {
+  id               String   @id @default(uuid())
+  tradingName      String   @db.VarChar(256)
+  name             String?  @db.VarChar(56)
+  director         String   @db.VarChar(56)
+  email            String   @db.VarChar(256) @unique
+  phone            String   @db.VarChar(10) @unique
+  abn              String    
+  address          String   @db.Text
+  website          String?  @db.VarChar(256)
+  sbsStatus        SbsStatusEnum @default(NOT_APPROVED)
+  associatedClients Int?
+
+  @@map("company")
+}
+
+enum SbsStatusEnum {
+  APPROVED
+  NOT_APPROVED
+  PENDING
+}

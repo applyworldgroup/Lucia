@@ -80,10 +80,10 @@ export default function LandingPage() {
                 className="flex flex-col justify-center space-y-4"
               >
                 <div className="space-y-4">
-                  <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl sm:text-center md:text-left xl:text-6xl/none">
-                    Streamline Your Visa & Migration Process
+                  <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl sm:text-center md:text-left xl:text-5xl/none">
+                    Streamlining Apply World&apos;s Visa and Migration Process
                   </h1>
-                  <p className="max-w-[600px] text-muted-foreground text-center md:text-left md:text-xl">
+                  <p className="max-w-[600px] text-muted-foreground text-center md:text-left ">
                     Our CRM system simplifies visa applications, client
                     management, and migration tracking. Join us to enhance your
                     efficiency and success rates.

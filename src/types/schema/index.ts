@@ -133,30 +133,34 @@ export const SkillsAssessmentInputSchema = SkillsAssessmentBaseSchema.omit({
   updatedAt: true,
 });
 
-// const formSchema = z.object({
-//   firstName: z.string().min(2, {
-//     message: "Name must be at least 2 characters.",
-//   }),
-//   lastName: z.string().min(2, {
-//     message: "Name must be at least 2 characters.",
-//   }),
-//   email: z.string().email({
-//     message: "Please enter a valid email address.",
-//   }),
-//   address: z.string().min(5, {
-//     message: "Address must be at least 5 characters.",
-//   }),
-//   phone: z.string().regex(/^\d{10}$/, {
-//     message: "Phone number must be 10 digits.",
-//   }),
-//   status: z.enum(["Confirmed", "Pending", "Cancelled", "Appointed"]),
-//   appointmentDate: z.date({
-//     required_error: "Please select a date.",
-//   }),
-//   appointmentTime: z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/, {
-//     message: "Please enter a valid time in HH:MM format.",
-//   }),
-// });
+// Enum for SBS Status
+export const SbsStatusEnum = z.enum(["APPROVED", "NOT_APPROVED", "PENDING"]);
+
+// Zod schema for the company
+export const CompanyBaseSchema = z.object({
+  id: z.string().uuid().optional(), // Optional because it may be auto-generated
+  tradingName: z
+    .string()
+    .min(1, { message: "Trading name is required" })
+    .max(256),
+  name: z.string().max(56).optional(), // Optional field
+  director: z.string().min(1, { message: "Director name is required" }).max(56),
+  email: z.string().email({ message: "Invalid email address" }).max(256),
+  phone: z.string().min(1, { message: "Phone number is required" }),
+  abn: z.string().min(1, { message: "ABN is required" }),
+  address: z.string().min(1, { message: "Address is required" }),
+  website: z.string().url().max(256).optional(), // Optional field
+  sbsStatus: SbsStatusEnum.default("NOT_APPROVED"),
+  associatedClients: z.number().optional(), // Optional field
+  createdAt: z.date(),
+  updatedAt: z.date(),
+});
+export const CompanySchema = CompanyBaseSchema;
+export const CompanyInputSchema = CompanyBaseSchema.omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
 
 // Types
 export type Customer = z.infer<typeof CustomerSchema>;
