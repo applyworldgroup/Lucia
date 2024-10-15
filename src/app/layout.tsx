@@ -34,7 +34,7 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body
-        className={` ${inter.className} ${geistSans.variable} ${geistMono.variable} antialiased `}
+        className={` ${inter.className} ${geistSans.variable} ${geistMono.variable} antialiased bg-background`}
       >
         <ThemeProvider
           attribute="class"

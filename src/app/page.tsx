@@ -26,7 +26,7 @@ export default function LandingPage() {
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5 }}
-        className="px-4 lg:px-6 h-16 flex items-center justify-center fixed w-full bg-background/80 backdrop-blur-sm z-50 border-b"
+        className="px-4 lg:px-6 h-16 flex items-center justify-center fixed w-full bg-background/80 backdrop-blur-sm z-50 "
       >
         <div className="container flex gap-4 items-center justify-between ">
           <Link className="flex items-center justify-center" href="#">
