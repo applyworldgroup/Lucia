@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import { ModeToggle } from "./components/theme-toggle";
 
 export default function LandingPage() {
   const targetRef = useRef(null);
@@ -60,6 +61,7 @@ export default function LandingPage() {
             </Link>
           </nav> */}
           <div className="flex gap-4">
+            <ModeToggle />
             <Button variant={"outline"}>
               <Link href={"/auth/signin"}> Login</Link>
             </Button>
@@ -70,7 +72,7 @@ export default function LandingPage() {
           </div>
         </div>
       </motion.header>
-      <main className="flex flex-col items-center justify-center pt-16  border-2">
+      <main className="flex flex-col items-center justify-center pt-16  ">
         <section className=" containerw-full py-12 md:py-24 lg:py-32 xl:py-48 relative overflow-hidden">
           <motion.div
             style={{ opacity, scale }}

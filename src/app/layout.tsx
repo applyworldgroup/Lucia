@@ -6,6 +6,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { validateRequest } from "@/lib/auth";
 import { SessionProvider } from "./components/session-provider";
 import { Inter } from "next/font/google";
+import { ThemeProvider } from "./components/theme-provider";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -35,16 +36,20 @@ export default async function RootLayout({
       <body
         className={` ${inter.className} ${geistSans.variable} ${geistMono.variable} antialiased `}
       >
-        <SessionProvider value={sessionData}>
-          <Providers>
-            {children}
-            <Toaster />
-          </Providers>
-        </SessionProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <SessionProvider value={sessionData}>
+            <Providers>
+              {children}
+              <Toaster />
+            </Providers>
+          </SessionProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
 }
-
-
-

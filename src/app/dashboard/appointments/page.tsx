@@ -191,7 +191,7 @@ export default function Appointments() {
       </CardHeader>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
         <Card>
-          <CardHeader className="flex w-full flex-row items-center justify-between space-y-0 pb-2">
+          <CardHeader className="flex w-full flex-row items-center justify-between space-y-0 pb-2 border-muted">
             <CardTitle className="text-sm font-medium">
               Today&apos;s Appointments
             </CardTitle>

@@ -22,12 +22,7 @@ import { cn } from "@/lib/utils";
 import { useCollapse } from "@/store/useCollapse";
 
 export function Sidebar() {
-  // const [isCollapsed, setIsCollapsed] = React.useState(false);
   const pathname = usePathname();
-
-  // const toggleSidebar = () => setIsCollapsed(!isCollapsed);
-  // const isCollapsed = useCollapse((state) => state.isCollapsed)
-
   const { isCollapsed, setIsCollapsed } = useCollapse();
 
   return (
@@ -37,7 +32,7 @@ export function Sidebar() {
         isCollapsed ? "w-16" : "w-64",
       )}
     >
-      <div className="flex flex-col justify-between h-screen border-r">
+      <div className="flex flex-col justify-between h-screen border-r border-muted bg-">
         <div className="flex flex-col justify-between h-full">
           <div className="">
             <div className="flex items-center p-4 justify-center">
