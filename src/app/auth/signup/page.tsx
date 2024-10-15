@@ -75,7 +75,7 @@ export default function SignIn() {
           "We have sent an verification email, please verify your email before signing in.",
       });
       reset();
-      router.push("/signin");
+      router.push("/auth/signin");
     }
   }
   return (
