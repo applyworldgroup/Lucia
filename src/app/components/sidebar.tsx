@@ -41,19 +41,19 @@ export function Sidebar() {
       <div className="flex flex-col justify-between h-screen border-r">
         <div className="flex flex-col justify-between h-full">
           <div className="">
-            <div className="flex items-center p-4">
+            <div className="flex items-center p-4 justify-center">
               <Image
-                width={40}
-                height={40}
-                src="/icons8-literature-50.png"
+                width={80}
+                height={60}
+                src="/our-company.png"
                 alt="Logo"
                 className="transition-all duration-300 ease-in-out"
               />
-              {!isCollapsed && (
+              {/* {!isCollapsed && (
                 <span className="ml-2 font-bold text-lg transition-opacity duration-300 ease-in-out">
-                  HARMONY
+                  CRM
                 </span>
-              )}
+              )} */}
             </div>
             <Separator />
           </div>

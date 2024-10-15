@@ -27,13 +27,17 @@ export default function LandingPage() {
         transition={{ duration: 0.5 }}
         className="px-4 lg:px-6 h-16 flex items-center justify-center fixed w-full bg-background/80 backdrop-blur-sm z-50 border-b"
       >
-        <div className="container flex gap-4  justify-between ">
+        <div className="container flex gap-4 items-center justify-between ">
           <Link className="flex items-center justify-center" href="#">
-            <GlobeIcon className="text-primary h-10 w-10" />
-            {/* <span className="ml-2 text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-foreground"> */}
-            <span className="ml-2 text-2xl font-bold bg-clip-text ">
-              Apply World CRM
-            </span>
+            <div className="flex items-center p-4 justify-center">
+              <Image
+                width={100}
+                height={80}
+                src="/our-company.png"
+                alt="Logo"
+                className="transition-all duration-300 ease-in-out"
+              />
+            </div>
           </Link>
           {/* <nav className="ml-auto flex items-center justify-center gap-4 sm:gap-6">
             <Link
@@ -309,27 +313,6 @@ function FeatureCard({ icon, title, description }) {
 //     </motion.div>
 //   );
 // }
-
-function GlobeIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <circle cx="12" cy="12" r="10" />
-      <line x1="2" y1="12" x2="22" y2="12" />
-      <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
-    </svg>
-  );
-}
 
 function ClipboardIcon(props) {
   return (
