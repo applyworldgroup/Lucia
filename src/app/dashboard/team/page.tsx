@@ -28,7 +28,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { PlusIcon, UserIcon, PhoneIcon, MailIcon, MapPin } from "lucide-react";
-import { countPeopleByLocation } from "@/lib/extractAddress";
+import { countPeopleByLocation } from "@/lib/address";
 
 // Mock data for team members
 const initialTeamMembers = [
