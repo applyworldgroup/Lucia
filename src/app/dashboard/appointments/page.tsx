@@ -60,6 +60,7 @@ import LoadingSpinner from "@/app/components/loading-spinner";
 
 export default function Appointments() {
   const [sortBy, setSortBy] = useState("date");
+  const [appointmentState, setAppointmentState] = useState(false);
   const [sortOrder, setSortOrder] = useState("asc");
   const [searchTerm, setSearchTerm] = useState("");
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
@@ -70,7 +71,7 @@ export default function Appointments() {
     status: [] as string[],
   });
   const queryClient = useQueryClient();
-  const { data, isLoading, isError, error, refetch } = useQuery({
+  const { data, isLoading, isError, error } = useQuery({
     queryKey: ["appointments"],
     queryFn: () => getAllAppointments(),
   });
@@ -88,15 +89,18 @@ export default function Appointments() {
     setIsEditDialogOpen(true);
   };
   const handleBookSubmit = async (appointmentData) => {
+    setAppointmentState(true);
     console.log(appointmentData);
     await createAppointment(appointmentData);
     queryClient.invalidateQueries({ queryKey: ["appointments"] });
-    refetch();
+    setAppointmentState(false);
     setIsBookDialogOpen(false);
   };
   const handleEditSubmit = async (id, updateData) => {
+    setAppointmentState(true);
     await UpdateAppointment(id, updateData);
     queryClient.invalidateQueries({ queryKey: ["appointments"] });
+    setAppointmentState(false);
     setIsEditDialogOpen(false);
   };
 
@@ -401,6 +405,7 @@ export default function Appointments() {
               appointment={editingAppointment}
               onSubmit={(data) => handleEditSubmit(editingAppointment.id, data)}
               onCancel={handleCancel}
+              isLoading={appointmentState}
             />
           )}
         </DialogContent>
@@ -420,6 +425,7 @@ export default function Appointments() {
             <AppointmentForm
               onSubmit={handleBookSubmit}
               onCancel={handleCancel}
+              isLoading={appointmentState}
             />
           )}
         </DialogContent>

@@ -75,12 +75,14 @@ interface AppointmentFormProps {
   appointment?: Partial<AppointmentFormValues>;
   onSubmit: (data: AppointmentFormValues) => void;
   onCancel: () => void;
+  isLoading: boolean;
 }
 
 export default function AppointmentForm({
   appointment,
   onSubmit,
   onCancel,
+  isLoading,
 }: AppointmentFormProps) {
   const form = useForm<AppointmentFormValues>({
     resolver: zodResolver(AppointmentInputSchema),
@@ -291,7 +293,9 @@ export default function AppointmentForm({
           <Button type="button" variant="outline" onClick={onCancel}>
             Cancel
           </Button>
-          <Button type="submit">Submit Appointment</Button>
+          <Button type="submit" disabled={isLoading}>
+            Submit Appointment
+          </Button>
         </div>
       </form>
     </Form>
