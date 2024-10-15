@@ -30,13 +30,14 @@
 //     </div>
 //   );
 // }
+
 "use client";
 
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { Loader2, Save, X } from "lucide-react";
+import { Bell, Loader2, Save, User } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -65,39 +66,34 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
-import { Separator } from "@radix-ui/react-dropdown-menu";
-import { ValidateClientProtectedRoute } from "@/lib/validate-client-protected-route";
+import { Separator } from "@/components/ui/separator";
 
-const formSchema = z.object({
-  fullName: z.string().min(2, {
-    message: "Name must be at least 2 characters.",
-  }),
-  email: z.string().email({
-    message: "Please enter a valid email address.",
-  }),
-  phone: z.string().min(10, {
-    message: "Phone number must be at least 10 digits.",
-  }),
-  address: z.string().min(5, {
-    message: "Address must be at least 5 characters.",
-  }),
+const profileSchema = z.object({
+  fullName: z
+    .string()
+    .min(2, { message: "Name must be at least 2 characters." }),
+  email: z.string().email({ message: "Please enter a valid email address." }),
+  phone: z
+    .string()
+    .min(10, { message: "Phone number must be at least 10 digits." }),
+  address: z
+    .string()
+    .min(5, { message: "Address must be at least 5 characters." }),
   role: z.string(),
-  bio: z.string().max(500, {
-    message: "Bio must not exceed 500 characters.",
-  }),
+  bio: z.string().max(500, { message: "Bio must not exceed 500 characters." }),
 });
 
-export default function UserProfile() {
+const notificationSchema = z.object({
+  emailNotifications: z.boolean(),
+  pushNotifications: z.boolean(),
+  smsNotifications: z.boolean(),
+});
+
+export default function UserProfileSettings() {
   const [isLoading, setIsLoading] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
   const { toast } = useToast();
 
   const [userInfo, setUserInfo] = useState({
@@ -109,20 +105,26 @@ export default function UserProfile() {
     bio: "Experienced migration agent with a passion for helping people achieve their dreams of studying and living abroad.",
   });
 
-  ValidateClientProtectedRoute();
-
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const profileForm = useForm<z.infer<typeof profileSchema>>({
+    resolver: zodResolver(profileSchema),
     defaultValues: userInfo,
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  const notificationForm = useForm<z.infer<typeof notificationSchema>>({
+    resolver: zodResolver(notificationSchema),
+    defaultValues: {
+      emailNotifications: true,
+      pushNotifications: false,
+      smsNotifications: true,
+    },
+  });
+
+  function onProfileSubmit(values: z.infer<typeof profileSchema>) {
     setIsLoading(true);
     // Simulate API call
     setTimeout(() => {
       setIsLoading(false);
       setUserInfo(values);
-      setIsOpen(false);
       toast({
         title: "Profile updated",
         description: "Your profile has been successfully updated.",
@@ -130,171 +132,163 @@ export default function UserProfile() {
     }, 2000);
   }
 
-  return (
-    <Card className="w-full border-0 shadow-none">
-      <CardHeader>
-        <div className="flex items-center space-x-4">
-          <Avatar className="w-20 h-20">
-            <AvatarImage
-              src="/placeholder.svg?height=80&width=80"
-              alt="Profile picture"
-            />
-            <AvatarFallback>JD</AvatarFallback>
-          </Avatar>
+  function onNotificationSubmit(values: z.infer<typeof notificationSchema>) {
+    console.log(values);
+    toast({
+      title: "Notification settings updated",
+      description: "Your notification preferences have been saved.",
+    });
+  }
 
-          <div>
-            <CardTitle className="text-2xl">{userInfo.fullName}</CardTitle>
-            <CardDescription>{userInfo.role}</CardDescription>
+  return (
+    <div className=" mx-auto ">
+      <Card className="w-full border-0 shadow-none">
+        <CardHeader>
+          <div className="flex items-center space-x-4">
+            <Avatar className="w-20 h-20">
+              <AvatarImage
+                src="/placeholder.svg?height=80&width=80"
+                alt="Profile picture"
+              />
+              <AvatarFallback>JD</AvatarFallback>
+            </Avatar>
+            <div>
+              <CardTitle className="text-2xl">{userInfo.fullName}</CardTitle>
+              <CardDescription>{userInfo.role}</CardDescription>
+            </div>
           </div>
-        </div>
-      </CardHeader>
-      <Separator />
-      <CardContent className="space-y-4">
-        <div>
-          <h3 className="font-semibold">Email</h3>
-          <p className="text-sm text-muted-foreground">{userInfo.email}</p>
-        </div>
-        <div>
-          <h3 className="font-semibold">Phone</h3>
-          <p className="text-sm text-muted-foreground">{userInfo.phone}</p>
-        </div>
-        <div>
-          <h3 className="font-semibold">Address</h3>
-          <p className="text-sm text-muted-foreground">{userInfo.address}</p>
-        </div>
-        <div>
-          <h3 className="font-semibold">Bio</h3>
-          <p className="text-sm text-muted-foreground">{userInfo.bio}</p>
-        </div>
-        <Sheet open={isOpen} onOpenChange={setIsOpen}>
-          <SheetTrigger asChild>
-            <Button>Edit Profile</Button>
-          </SheetTrigger>
-          <SheetContent className="w-[400px] sm:w-[540px]">
-            <SheetHeader>
-              <SheetTitle>Edit Profile</SheetTitle>
-            </SheetHeader>
-            <Form {...form}>
-              <form
-                onSubmit={form.handleSubmit(onSubmit)}
-                className="space-y-8 mt-4"
-              >
-                <FormField
-                  control={form.control}
-                  name="fullName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Full Name</FormLabel>
-                      <FormControl>
-                        <Input placeholder="John Doe" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="email"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Email</FormLabel>
-                      <FormControl>
-                        <Input placeholder="john.doe@example.com" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="phone"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Phone Number</FormLabel>
-                      <FormControl>
-                        <Input placeholder="+1234567890" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="address"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Address</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="123 Main St, City, Country"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="role"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Role</FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
+        </CardHeader>
+        <Separator />
+        <CardContent>
+          <Tabs defaultValue="profile" className="w-full mt-6">
+            <TabsList className="grid w-full grid-cols-2 mb-6  ">
+              <TabsTrigger value="profile" className="flex items-center">
+                <User className="mr-2 h-4 w-4" /> Profile
+              </TabsTrigger>
+              <TabsTrigger value="notifications" className="flex items-center">
+                <Bell className="mr-2 h-4 w-4" /> Notifications
+              </TabsTrigger>
+            </TabsList>
+            <TabsContent value="profile">
+              <Form {...profileForm}>
+                <form
+                  onSubmit={profileForm.handleSubmit(onProfileSubmit)}
+                  className="space-y-8"
+                >
+                  <FormField
+                    control={profileForm.control}
+                    name="fullName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Full Name</FormLabel>
                         <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select a role" />
-                          </SelectTrigger>
+                          <Input placeholder="John Doe" {...field} />
                         </FormControl>
-                        <SelectContent>
-                          <SelectItem value="Migration Agent">
-                            Migration Agent
-                          </SelectItem>
-                          <SelectItem value="Education Counselor">
-                            Education Counselor
-                          </SelectItem>
-                          <SelectItem value="Admin">Admin</SelectItem>
-                          <SelectItem value="Support Staff">
-                            Support Staff
-                          </SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormDescription>
-                        Your role determines your permissions within the CRM.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="bio"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Bio</FormLabel>
-                      <FormControl>
-                        <Textarea
-                          placeholder="Tell us a little about yourself"
-                          className="resize-none"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormDescription>
-                        This will be displayed on your public profile. Max 500
-                        characters.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <div className="flex justify-end space-x-4">
-                  <Button variant="outline" onClick={() => setIsOpen(false)}>
-                    <X className="mr-2 h-4 w-4" />
-                    Cancel
-                  </Button>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={profileForm.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Email</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="john.doe@example.com"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={profileForm.control}
+                    name="phone"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Phone Number</FormLabel>
+                        <FormControl>
+                          <Input placeholder="+1234567890" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={profileForm.control}
+                    name="address"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Address</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="123 Main St, City, Country"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={profileForm.control}
+                    name="role"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Role</FormLabel>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select a role" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="Migration Agent">
+                              Migration Agent
+                            </SelectItem>
+                            <SelectItem value="Education Counselor">
+                              Education Counselor
+                            </SelectItem>
+                            <SelectItem value="Admin">Admin</SelectItem>
+                            <SelectItem value="Support Staff">
+                              Support Staff
+                            </SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormDescription>
+                          Your role determines your permissions within the CRM.
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={profileForm.control}
+                    name="bio"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Bio</FormLabel>
+                        <FormControl>
+                          <Textarea
+                            placeholder="Tell us a little about yourself"
+                            className="resize-none"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormDescription>
+                          This will be displayed on your public profile. Max 500
+                          characters.
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                   <Button type="submit" disabled={isLoading}>
                     {isLoading ? (
                       <>
@@ -308,12 +302,88 @@ export default function UserProfile() {
                       </>
                     )}
                   </Button>
-                </div>
-              </form>
-            </Form>
-          </SheetContent>
-        </Sheet>
-      </CardContent>
-    </Card>
+                </form>
+              </Form>
+            </TabsContent>
+            <TabsContent value="notifications">
+              <Form {...notificationForm}>
+                <form
+                  onSubmit={notificationForm.handleSubmit(onNotificationSubmit)}
+                  className="space-y-8"
+                >
+                  <FormField
+                    control={notificationForm.control}
+                    name="emailNotifications"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                        <div className="space-y-0.5">
+                          <FormLabel className="text-base">
+                            Email Notifications
+                          </FormLabel>
+                          <FormDescription>
+                            Receive notifications via email.
+                          </FormDescription>
+                        </div>
+                        <FormControl>
+                          <Switch
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                          />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={notificationForm.control}
+                    name="pushNotifications"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                        <div className="space-y-0.5">
+                          <FormLabel className="text-base">
+                            Push Notifications
+                          </FormLabel>
+                          <FormDescription>
+                            Receive push notifications on your device.
+                          </FormDescription>
+                        </div>
+                        <FormControl>
+                          <Switch
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                          />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={notificationForm.control}
+                    name="smsNotifications"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                        <div className="space-y-0.5">
+                          <FormLabel className="text-base">
+                            SMS Notifications
+                          </FormLabel>
+                          <FormDescription>
+                            Receive notifications via SMS.
+                          </FormDescription>
+                        </div>
+                        <FormControl>
+                          <Switch
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                          />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
+                  <Button type="submit">Save Notification Preferences</Button>
+                </form>
+              </Form>
+            </TabsContent>
+          </Tabs>
+        </CardContent>
+      </Card>
+    </div>
   );
 }

@@ -40,7 +40,6 @@ export function UserNav() {
           <DropdownMenuItem>
             <Link href={`/dashboard/profile/${user?.id}`}>Profile</Link>
           </DropdownMenuItem>
-          <DropdownMenuItem>Settings</DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>

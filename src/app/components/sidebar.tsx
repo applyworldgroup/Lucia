@@ -12,7 +12,6 @@ import {
   ChevronRight,
   DownloadCloud,
   Inbox,
-  Settings,
   Users,
 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
@@ -128,12 +127,6 @@ export function Sidebar() {
               <Separator />
               <NavItems
                 links={[
-                  {
-                    title: "Settings",
-                    icon: Settings,
-                    variant: "ghost",
-                    url: "/dashboard/settings",
-                  },
                   {
                     title: "Updates",
                     icon: AlertCircle,
