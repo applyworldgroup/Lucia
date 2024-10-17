@@ -338,7 +338,39 @@ export default function VisaApplicationForm({
                   </FormItem>
                 )}
               />
+              <FormField
+                control={form.control}
+                name="visaType"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Applied - Visa Type</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select applied Visa" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="SUB_500">500</SelectItem>
+                        <SelectItem value="SUB_482">482</SelectItem>
+                        <SelectItem value="SUB_407">407</SelectItem>
+                        <SelectItem value="SUB_186">186</SelectItem>
+                        <SelectItem value="SUB_189">189</SelectItem>
+                        <SelectItem value="SUB_190">190</SelectItem>
+                        <SelectItem value="SUB_600">600</SelectItem>
+                        <SelectItem value="SUB_820">820</SelectItem>
+                        <SelectItem value="SUB_801">801</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <FormField
                 control={form.control}
@@ -376,7 +408,7 @@ export default function VisaApplicationForm({
                 name="overseer"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Overseer</FormLabel>
+                    <FormLabel>Record Created By</FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
