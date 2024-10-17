@@ -58,6 +58,7 @@ const formSchema = z.object({
   appointmentTime: z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/, {
     message: "Please enter a valid time in HH:MM format.",
   }),
+  reasonOfVisit: z.string().max(500, "Max word limit reached"),
   createdAt: z.date(),
   updatedAt: z.date(),
 });
@@ -95,6 +96,7 @@ export default function AppointmentForm({
       status: "CONFIRMED",
       appointmentDate: new Date(),
       appointmentTime: "",
+      reasonOfVisit: "",
     },
   });
 
