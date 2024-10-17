@@ -192,12 +192,7 @@ export default function CompanyForm({ initialData }: CompanyFormProps) {
                 name="director"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>
-                      Director{" "}
-                      <span className="text-red-500" title="Required">
-                        *
-                      </span>
-                    </FormLabel>
+                    <FormLabel>Director </FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
@@ -298,7 +293,7 @@ export default function CompanyForm({ initialData }: CompanyFormProps) {
                 name="sbsStatus"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Current Visa</FormLabel>
+                    <FormLabel>TAS-SBA Status</FormLabel>
                     <Select
                       onValueChange={field.onChange}
                       defaultValue={field.value ?? undefined}
