@@ -28,6 +28,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 
 const formSchema = z.object({
   id: z.string().uuid(),
@@ -290,7 +291,27 @@ export default function AppointmentForm({
               </FormItem>
             )}
           />
+          <FormField
+            control={form.control}
+            name="reasonOfVisit"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Reason of Visit</FormLabel>
+                <FormControl>
+                  <Textarea
+                    placeholder="eg: consultation, 407 enquiry, 482 enquiry, etc."
+                    className="resize-none"
+                    {...field}
+                    value={appointment?.reasonOfVisit ?? ""}
+                  />
+                </FormControl>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
         </div>
+
         <div className="flex justify-end space-x-4 pt-6">
           <Button type="button" variant="outline" onClick={onCancel}>
             Cancel

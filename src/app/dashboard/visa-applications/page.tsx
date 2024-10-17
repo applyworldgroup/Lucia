@@ -310,7 +310,7 @@ export default function Component() {
           </Link>
         </div>
       </CardContent>
-      <div className="rounded-lg border bg-white overflow-hidden">
+      <div className="rounded-lg border overflow-hidden">
         <Table>
           <TableHeader>
             <TableRow className="bg-secondary">

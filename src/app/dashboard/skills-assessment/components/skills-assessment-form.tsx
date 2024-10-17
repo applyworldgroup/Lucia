@@ -82,8 +82,10 @@ export default function SkillsAssessmentForm({
       assessingAuthority: "",
       applicationDate: "",
       stage: "STAGE_1",
+      rpl: "",
       outcomeDate: undefined,
       outcomeResult: "PENDING",
+      remarks: "",
     },
   });
 
@@ -289,6 +291,19 @@ export default function SkillsAssessmentForm({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <FormField
                 control={form.control}
+                name="rpl"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>RPL</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
                 name="applicationDate"
                 render={({ field }) => (
                   <FormItem>
@@ -328,6 +343,8 @@ export default function SkillsAssessmentForm({
                   </FormItem>
                 )}
               />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <FormField
                 control={form.control}
                 name="outcomeDate"
@@ -369,8 +386,6 @@ export default function SkillsAssessmentForm({
                   </FormItem>
                 )}
               />
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <FormField
                 control={form.control}
                 name="outcomeResult"

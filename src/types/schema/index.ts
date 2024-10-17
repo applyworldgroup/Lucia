@@ -122,6 +122,10 @@ const SkillsAssessmentBaseSchema = z.object({
   stage: z.enum(["STAGE_1", "STAGE_2", "INTERVIEW"]),
   outcomeDate: z.date().optional(),
   outcomeResult: z.enum(["SUCCESSFUL", "UNSUCCESSFUL", "PENDING"]),
+  remarks: z
+    .string()
+    .max(250, { message: "Maximum character limit exceeded." }),
+  rpl: z.string().max(250, { message: "Maximum character limit exceeded." }),
   createdAt: z.date(),
   updatedAt: z.date(),
 });
