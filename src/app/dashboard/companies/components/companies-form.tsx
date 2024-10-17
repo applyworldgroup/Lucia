@@ -293,7 +293,7 @@ export default function CompanyForm({ initialData }: CompanyFormProps) {
                 name="sbsStatus"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>TAS-SBA Status</FormLabel>
+                    <FormLabel>TAS-SBS Status</FormLabel>
                     <Select
                       onValueChange={field.onChange}
                       defaultValue={field.value ?? undefined}
