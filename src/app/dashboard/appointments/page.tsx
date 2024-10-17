@@ -45,6 +45,7 @@ import {
   Filter,
   RefreshCwIcon,
   SearchIcon,
+  Trash,
 } from "lucide-react";
 import AppointmentForm from "./components/appointment-form";
 import { Badge } from "@/components/ui/badge";
@@ -53,6 +54,7 @@ import {
   createAppointment,
   getAllAppointments,
   UpdateAppointment,
+  deleteAppointment,
 } from "@/features/actions/appointments/actions";
 import { Appointment } from "@prisma/client";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -102,6 +104,10 @@ export default function Appointments() {
     queryClient.invalidateQueries({ queryKey: ["appointments"] });
     setAppointmentState(false);
     setIsEditDialogOpen(false);
+  };
+  const handleDeleteSubmit = async (id) => {
+    await deleteAppointment(id);
+    queryClient.invalidateQueries({ queryKey: ["appointments"] });
   };
 
   const handleCancel = () => {
@@ -349,6 +355,7 @@ export default function Appointments() {
               <TableHead>Status</TableHead>
               <TableHead>Date</TableHead>
               <TableHead>Time</TableHead>
+              <TableHead>Reason of Visit</TableHead>
               <TableHead className="text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
@@ -366,6 +373,7 @@ export default function Appointments() {
                   {appointment.appointmentDate.toLocaleDateString()}
                 </TableCell>
                 <TableCell>{appointment.appointmentTime}</TableCell>
+                <TableCell>{appointment.reasonOfVisit}</TableCell>
                 <TableCell className="text-right">
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -380,6 +388,12 @@ export default function Appointments() {
                       >
                         <Edit className="mr-2 h-4 w-4" />
                         Edit
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onSelect={() => handleDeleteSubmit(appointment.id)}
+                      >
+                        <Trash className="mr-2 h-4 w-4" />
+                        Delete
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>

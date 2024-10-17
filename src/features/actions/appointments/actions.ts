@@ -55,3 +55,12 @@ export async function getAllAppointments(): Promise<Appointment[]> {
     throw new Error("Failed to fetch appointments");
   }
 }
+export async function deleteAppointment(appointmentId: string) {
+  await checkAuth();
+  try {
+    await prisma.appointment.delete({ where: { id: appointmentId } });
+  } catch (error) {
+    console.error("Error deleting appointments:", error);
+    throw new Error("Failed to delete appointments");
+  }
+}
