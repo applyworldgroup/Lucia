@@ -6,12 +6,12 @@ import {
   Award,
   Book,
   Briefcase,
+  Building2,
   Calendar,
   ChevronLeft,
   ChevronRight,
   DownloadCloud,
   Inbox,
-  Settings,
   Users,
 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
@@ -22,37 +22,32 @@ import { cn } from "@/lib/utils";
 import { useCollapse } from "@/store/useCollapse";
 
 export function Sidebar() {
-  // const [isCollapsed, setIsCollapsed] = React.useState(false);
   const pathname = usePathname();
-
-  // const toggleSidebar = () => setIsCollapsed(!isCollapsed);
-  // const isCollapsed = useCollapse((state) => state.isCollapsed)
-
   const { isCollapsed, setIsCollapsed } = useCollapse();
 
   return (
     <div
       className={cn(
         "relative h-screen transition-all duration-300 ease-in-out",
-        isCollapsed ? "w-16" : "w-64"
+        isCollapsed ? "w-16" : "w-64",
       )}
     >
-      <div className="flex flex-col justify-between h-screen border-r">
+      <div className="flex flex-col justify-between h-screen border-r border-muted bg-">
         <div className="flex flex-col justify-between h-full">
           <div className="">
-            <div className="flex items-center p-4">
+            <div className="flex items-center p-4 justify-center">
               <Image
-                width={40}
-                height={40}
-                src="/icons8-literature-50.png"
+                width={80}
+                height={60}
+                src="/our-company.png"
                 alt="Logo"
                 className="transition-all duration-300 ease-in-out"
               />
-              {!isCollapsed && (
+              {/* {!isCollapsed && (
                 <span className="ml-2 font-bold text-lg transition-opacity duration-300 ease-in-out">
-                  HARMONY
+                  CRM
                 </span>
-              )}
+              )} */}
             </div>
             <Separator />
           </div>
@@ -83,12 +78,12 @@ export function Sidebar() {
                   variant: "ghost",
                   url: "/dashboard/calender",
                 },
-                // {
-                //   title: "Team",
-                //   icon: Users,
-                //   variant: "ghost",
-                //   url: "/dashboard/team",
-                // },
+                {
+                  title: "Team",
+                  icon: Users,
+                  variant: "ghost",
+                  url: "/dashboard/team",
+                },
                 {
                   title: "Customers",
                   icon: Users,
@@ -111,7 +106,13 @@ export function Sidebar() {
                   title: "Skills Assesment",
                   icon: Award,
                   variant: "ghost",
-                  url: "/dashboard/skills-assesment",
+                  url: "/dashboard/skills-assessment",
+                },
+                {
+                  title: "Companies",
+                  icon: Building2,
+                  variant: "ghost",
+                  url: "/dashboard/companies",
                 },
               ]}
               isCollapsed={isCollapsed}
@@ -121,12 +122,6 @@ export function Sidebar() {
               <Separator />
               <NavItems
                 links={[
-                  {
-                    title: "Settings",
-                    icon: Settings,
-                    variant: "ghost",
-                    url: "/dashboard/settings",
-                  },
                   {
                     title: "Updates",
                     icon: AlertCircle,

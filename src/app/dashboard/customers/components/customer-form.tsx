@@ -43,11 +43,15 @@ import {
 } from "@/features/actions/customers/actions";
 import Link from "next/link";
 import { Customer } from "@prisma/client";
+import { useRouter } from "next/navigation";
+import { useToast } from "@/hooks/use-toast";
 interface CustomerFormProps {
   initialData?: Customer;
 }
 
 export default function CustomerForm({ initialData }: CustomerFormProps) {
+  const router = useRouter();
+  const { toast } = useToast();
   const [isEditing] = useState(!!initialData);
   const queryClient = useQueryClient();
 
@@ -70,25 +74,69 @@ export default function CustomerForm({ initialData }: CustomerFormProps) {
     mutationFn: createCustomer,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["customers"] });
+      toast({
+        variant: "default",
+        title: `Registered`,
+        description: "Customer Registered successfully",
+      });
       form.reset();
+      router.push("/dashboard/customers");
+    },
+    onError: (error) => {
+      toast({
+        variant: "destructive",
+        title: `Registration`,
+        description: `${error.message}`,
+      });
+      form.reset();
+      router.push("/dashboard/customers");
     },
   });
+
+  const { isPending } = createMutation;
 
   const updateMutation = useMutation({
     mutationFn: (params: { id: string; data: Partial<Customer> }) =>
       updateCustomer(params.id, params.data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["customers"] });
+      toast({
+        variant: "default",
+        title: `Updated`,
+        description: "Customer Updated successfully",
+      });
       form.reset();
+      router.push("/dashboard/customers");
+    },
+    onError: (error) => {
+      toast({
+        variant: "destructive",
+        title: `Registration`,
+        description: `${error.message}`,
+      });
+      form.reset();
+      router.push("/dashboard/customers");
     },
   });
 
   const handleFormSubmit = useCallback(
     (data: Customer) => {
-      if (isEditing && initialData?.id) {
-        updateMutation.mutate({ id: initialData.id, data: data });
-      } else {
-        createMutation.mutate(data);
+      try {
+        if (isEditing && initialData?.id) {
+          updateMutation.mutate({ id: initialData.id, data: data });
+        } else {
+          createMutation.mutate(data);
+        }
+      } catch (error) {
+        if (error instanceof Error) {
+          return {
+            error: error.message,
+          };
+        } else {
+          return {
+            error: "An unknown error occurred",
+          };
+        }
       }
     },
     [isEditing, initialData, updateMutation, createMutation],
@@ -304,7 +352,7 @@ export default function CustomerForm({ initialData }: CustomerFormProps) {
             </div>
           </CardContent>
           <CardFooter>
-            <Button type="submit" className="w-full py-2">
+            <Button type="submit" className="w-full py-2" disabled={isPending}>
               {isEditing ? "Update Customer" : "Register Customer"}
             </Button>
           </CardFooter>

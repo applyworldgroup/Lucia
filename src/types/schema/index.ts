@@ -40,24 +40,16 @@ export const CustomerInputSchema = CustomerBaseSchema.omit({
 const VisaApplicationBaseSchema = z.object({
   id: z.string().uuid(),
   firstName: z.string().min(1, { message: "First name is required" }),
-  middleName: z.string().optional(),
+  middleName: z.string().nullable().optional(),
   lastName: z.string().min(1, { message: "Last name is required" }),
   email: z.string().email({ message: "Invalid email address" }),
   address: z.string().min(1, { message: "Address is required" }),
-  passportNumber: z.string().min(1, { message: "Passport number is required" }),
+  passportNumber: z
+    .string()
+    .min(1, { message: "Passport number is required" })
+    .nullable(),
   visaAppliedDate: z.date(),
   visaStatus: z.enum(["PENDING", "APPROVED", "REJECTED"]),
-  previousVisa: z.enum([
-    "SUB_500",
-    "SUB_482",
-    "SUB_407",
-    "SUB_186",
-    "SUB_189",
-    "SUB_190",
-    "SUB_600",
-    "SUB_820",
-    "SUB_801",
-  ]),
   visaType: z.enum([
     "SUB_500",
     "SUB_482",
@@ -75,8 +67,7 @@ const VisaApplicationBaseSchema = z.object({
   totalPaid: z
     .number()
     .nonnegative({ message: "Total paid must be non-negative" }),
-  overseer: z.string().optional(),
-  customerId: z.string().uuid(),
+  overseer: z.string(),
   createdAt: z.date(),
   updatedAt: z.date(),
 });
@@ -91,18 +82,20 @@ export const VisaApplicationInputSchema = VisaApplicationBaseSchema.omit({
 // JobReadyProgram schema
 const JobReadyProgramBaseSchema = z.object({
   id: z.string().uuid(),
-  customerId: z.string().uuid(),
+  firstName: z.string().min(1, { message: "First name is required" }),
+  middleName: z.string().nullable().optional(),
+  lastName: z.string().min(1, { message: "Last name is required" }),
+  email: z.string().email({ message: "Invalid email address" }),
   programType: z.string().min(1, { message: "Program type is required" }),
   startDate: z.date(),
-  endDate: z.date(),
-  status: z.enum(["ENROLLED", "IN_PROGRESS", "COMPLETED", "WITHDRAWN"]),
+  stage: z.enum(["JRPRE", "JRFA", "JRWA", "JRE"]),
   workplacement: z.string().optional(),
   employerName: z.string().optional(),
   employerABN: z.string().optional(),
   supervisorName: z.string().optional(),
   supervisorContact: z.string().optional(),
   completionDate: z.date().optional(),
-  certificateIssued: z.boolean(),
+  outcomeResult: z.enum(["SUCCESSFUL", "UNSUCCESSFUL", "PENDING"]),
   createdAt: z.date(),
   updatedAt: z.date(),
 });
@@ -117,37 +110,53 @@ export const JobReadyProgramInputSchema = JobReadyProgramBaseSchema.omit({
 // SkillsAssessment schema
 const SkillsAssessmentBaseSchema = z.object({
   id: z.string().uuid(),
-  customerId: z.string().uuid(),
+  firstName: z.string().min(1, { message: "First name is required" }),
+  middleName: z.string().nullable().optional(),
+  lastName: z.string().min(1, { message: "Last name is required" }),
+  email: z.string().email({ message: "Invalid email address" }),
   occupation: z.string().min(1, { message: "Occupation is required" }),
   assessingAuthority: z
     .string()
     .min(1, { message: "Assessing authority is required" }),
   applicationDate: z.date(),
-  status: z.enum([
-    "SUBMITTED",
-    "UNDER_ASSESSMENT",
-    "ADDITIONAL_INFO_REQUIRED",
-    "COMPLETED",
-    "APPEALED",
-  ]),
-  documentationSubmitted: z.boolean(),
-  skillsAssessmentType: z.enum([
-    "SKILLS_ASSESSMENT",
-    "QUALIFICATION_ASSESSMENT",
-    "PROVISIONAL_SKILLS_ASSESSMENT",
-  ]),
-  outcomeReceived: z.boolean(),
+  stage: z.enum(["STAGE_1", "STAGE_2", "INTERVIEW"]),
   outcomeDate: z.date().optional(),
-  outcomeResult: z.string().optional(),
-  appealSubmitted: z.boolean(),
-  appealDate: z.date().optional(),
-  appealOutcome: z.string().optional(),
+  outcomeResult: z.enum(["SUCCESSFUL", "UNSUCCESSFUL", "PENDING"]),
   createdAt: z.date(),
   updatedAt: z.date(),
 });
 
 export const SkillsAssessmentSchema = SkillsAssessmentBaseSchema;
 export const SkillsAssessmentInputSchema = SkillsAssessmentBaseSchema.omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+// Enum for SBS Status
+export const SbsStatusEnum = z.enum(["APPROVED", "NOT_APPROVED", "PENDING"]);
+
+// Zod schema for the company
+export const CompanyBaseSchema = z.object({
+  id: z.string().uuid().optional(), // Optional because it may be auto-generated
+  tradingName: z
+    .string()
+    .min(1, { message: "Trading name is required" })
+    .max(256),
+  name: z.string().max(56).optional(), // Optional field
+  director: z.string().min(1, { message: "Director name is required" }).max(56),
+  email: z.string().email({ message: "Invalid email address" }).max(256),
+  phone: z.string().min(1, { message: "Phone number is required" }),
+  abn: z.string().min(1, { message: "ABN is required" }),
+  address: z.string().min(1, { message: "Address is required" }),
+  website: z.string().url().max(256).optional(), // Optional field
+  sbsStatus: SbsStatusEnum.default("NOT_APPROVED"),
+  associatedClients: z.number().optional(), // Optional field
+  createdAt: z.date(),
+  updatedAt: z.date(),
+});
+export const CompanySchema = CompanyBaseSchema;
+export const CompanyInputSchema = CompanyBaseSchema.omit({
   id: true,
   createdAt: true,
   updatedAt: true,

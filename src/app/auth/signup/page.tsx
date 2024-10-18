@@ -1,4 +1,5 @@
-"use client";import {
+"use client";
+import {
   Card,
   CardHeader,
   CardTitle,
@@ -43,7 +44,7 @@ export default function SignIn() {
     register,
     handleSubmit,
     reset,
-    formState: { errors , isSubmitting},
+    formState: { errors, isSubmitting },
   } = useForm<SignUpInput>({
     defaultValues: {
       firstName: "",
@@ -74,7 +75,7 @@ export default function SignIn() {
           "We have sent an verification email, please verify your email before signing in.",
       });
       reset();
-      router.push("/dashboard");
+      router.push("/auth/signin");
     }
   }
   return (
@@ -156,8 +157,12 @@ export default function SignIn() {
                   )}
                 </div>
               </div>
-              <Button type="submit" className="w-full flex gap-4" disabled={isSubmitting}>
-              {isSubmitting && <LoadingSpinner />}  Sign Up
+              <Button
+                type="submit"
+                className="w-full flex gap-4"
+                disabled={isSubmitting}
+              >
+                {isSubmitting && <LoadingSpinner />} Sign Up
               </Button>
             </div>
           </form>

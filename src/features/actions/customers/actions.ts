@@ -4,8 +4,11 @@
 import { revalidatePath } from "next/cache";
 import prisma from "@/lib/db";
 import { Customer } from "@prisma/client";
+import { checkAuth } from "@/lib/checkAuth";
 
 export async function createCustomer(data: Customer) {
+  await checkAuth();
+
   try {
     const newCustomer = await prisma.customer.create({
       data,
@@ -19,6 +22,8 @@ export async function createCustomer(data: Customer) {
 }
 
 export async function updateCustomer(id: string, data: Partial<Customer>) {
+  await checkAuth();
+
   try {
     const updatedCustomer = await prisma.customer.update({
       where: { id },
@@ -34,6 +39,8 @@ export async function updateCustomer(id: string, data: Partial<Customer>) {
 }
 
 export async function getAllCustomers(): Promise<Customer[]> {
+  await checkAuth();
+
   try {
     const customers = await prisma.customer.findMany();
     return customers;
@@ -44,6 +51,8 @@ export async function getAllCustomers(): Promise<Customer[]> {
 }
 
 export async function getCustomerById(id: string) {
+  await checkAuth();
+
   const customer = await prisma.customer.findUnique({ where: { id } });
   return { success: true, data: customer };
 }

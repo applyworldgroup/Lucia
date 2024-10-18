@@ -5,7 +5,8 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-1.1.x", "debian-openssl-3.0.x", "rhel-openssl-3.0.x"]
 }
 
 datasource db {
@@ -73,66 +74,89 @@ model Customer {
   updatedAt         DateTime           @updatedAt
 }
 
-model VisaApplication {
-  id              String   @id @default(uuid())
+model Appointment {
+  id              String            @id @default(uuid())
   firstName       String
   middleName      String?
   lastName        String
-  email           String   @unique
+  email           String
   address         String
-  passportNumber  String   @unique
+  phone           String
+  appointmentDate DateTime
+  appointmentTime String
+  status          AppointmentStatus
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+}
+
+enum AppointmentStatus {
+  CONFIRMED
+  CANCELLED
+}
+
+model VisaApplication {
+  id              String   @id @default(uuid())
   visaAppliedDate DateTime @default(now())
   visaStatus      Status
-  previousVisa    VisaType
   visaType        VisaType
   totalAmount     Float    @default(0.0)
   totalPaid       Float    @default(0.0)
-  overseer        String?
+  overseer        String
   customerId      String
-  customer        Customer @relation(fields: [customerId], references: [id])
+  customer        Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 }
 
-// Existing code...
-
 model JobReadyProgram {
   id                String    @id @default(uuid())
   customerId        String
-  customer          Customer  @relation(fields: [customerId], references: [id])
+  customer          Customer  @relation(fields: [customerId], references: [id], onDelete: Cascade)
   programType       String
   startDate         DateTime
-  endDate           DateTime
-  status            JRPStatus
+  stage             JRPStage
   workplacement     String?
   employerName      String?
   employerABN       String?
   supervisorName    String?
   supervisorContact String?
   completionDate    DateTime?
-  certificateIssued Boolean   @default(false)
+  outcomeResult     OUTCOME
   createdAt         DateTime  @default(now())
   updatedAt         DateTime  @updatedAt
 }
 
+enum JRPStage {
+  JRPRE
+  JRE
+  JRWA
+  JRFA
+}
+
+enum SAStage {
+  STAGE_1
+  STAGE_2
+  INTERVIEW
+}
+
+enum OUTCOME {
+  SUCCESSFUL
+  UNSUCCESSFUL
+  PENDING
+}
+
 model SkillsAssessment {
-  id                     String    @id @default(uuid())
-  customerId             String
-  customer               Customer  @relation(fields: [customerId], references: [id])
-  occupation             String
-  assessingAuthority     String
-  applicationDate        DateTime
-  status                 SAStatus
-  documentationSubmitted Boolean
-  skillsAssessmentType   SAType
-  outcomeReceived        Boolean   @default(false)
-  outcomeDate            DateTime?
-  outcomeResult          String?
-  appealSubmitted        Boolean   @default(false)
-  appealDate             DateTime?
-  appealOutcome          String?
-  createdAt              DateTime  @default(now())
-  updatedAt              DateTime  @updatedAt
+  id                 String    @id @default(uuid())
+  customerId         String
+  customer           Customer  @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  occupation         String
+  assessingAuthority String
+  applicationDate    DateTime
+  stage              SAStage
+  outcomeDate        DateTime?
+  outcomeResult      OUTCOME?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
 }
 
 enum JRPStatus {
@@ -149,14 +173,6 @@ enum SAStatus {
   COMPLETED
   APPEALED
 }
-
-enum SAType {
-  SKILLS_ASSESSMENT
-  QUALIFICATION_ASSESSMENT
-  PROVISIONAL_SKILLS_ASSESSMENT
-}
-
-// Existing Customer model updated to include relations
 
 enum Role {
   ADMIN
@@ -184,4 +200,26 @@ enum VisaType {
   SUB_600 // Visitor Visa (Tourist)
   SUB_820 // Partner Visa (Temporary)
   SUB_801 // Partner Visa (Permanent)
+}
+
+model Company {
+  id                String        @id @default(uuid())
+  tradingName       String
+  name              String?
+  director          String
+  email             String        @unique
+  phone             String        @unique
+  abn               String        @unique
+  address           String
+  website           String?
+  sbsStatus         SbsStatusEnum @default(NOT_APPROVED)
+  associatedClients Int?
+
+  @@map("company")
+}
+
+enum SbsStatusEnum {
+  APPROVED
+  NOT_APPROVED
+  PENDING
 }

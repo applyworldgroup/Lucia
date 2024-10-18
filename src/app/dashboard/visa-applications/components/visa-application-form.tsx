@@ -1,5 +1,5 @@
 "use client";
-import { useState, useCallback } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
@@ -35,27 +35,49 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { VisaApplication, VisaApplicationSchema } from "@/types/schema";
+import {
+  VisaApplicationInput,
+  VisaApplicationInputSchema,
+} from "@/types/schema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   createVisaApplication,
   updateVisaApplication,
 } from "@/features/actions/visa-applications/actions";
 import Link from "next/link";
+import { toast } from "@/hooks/use-toast";
+import { useRouter } from "next/navigation";
+import { Customer, VisaApplication } from "@prisma/client";
 
 interface VisaApplicationFormProps {
-  initialData?: VisaApplication;
+  initialData?: VisaApplication & { customer: Customer };
 }
 
 export default function VisaApplicationForm({
   initialData,
 }: VisaApplicationFormProps) {
+  const router = useRouter();
   const [isEditing] = useState(!!initialData);
   const queryClient = useQueryClient();
 
-  const form = useForm<VisaApplication>({
-    resolver: zodResolver(VisaApplicationSchema),
-    defaultValues: initialData || {
+  let defaultValue;
+  if (initialData) {
+    defaultValue = {
+      ...initialData,
+      firstName: initialData?.customer?.firstName,
+      middleName: initialData?.customer?.middleName,
+      lastName: initialData?.customer?.lastName,
+      email: initialData?.customer?.email,
+      address: initialData?.customer?.address,
+      passportNumber: initialData?.customer?.passportNumber,
+    };
+  }
+
+  console.log("Initial Data", initialData);
+
+  const form = useForm<VisaApplicationInput>({
+    resolver: zodResolver(VisaApplicationInputSchema),
+    defaultValues: defaultValue || {
       firstName: "",
       middleName: "",
       lastName: "",
@@ -64,7 +86,6 @@ export default function VisaApplicationForm({
       passportNumber: "",
       visaAppliedDate: new Date(),
       visaStatus: "PENDING",
-      previousVisa: undefined,
       visaType: undefined,
       totalAmount: 0,
       totalPaid: 0,
@@ -74,32 +95,73 @@ export default function VisaApplicationForm({
 
   const createMutation = useMutation({
     mutationFn: createVisaApplication,
-    onSuccess: ({ success }) => {
+    onSuccess: ({ success, error }) => {
       queryClient.invalidateQueries({ queryKey: ["visaApplications"] });
-      alert(success);
+      if (success) {
+        toast({
+          title: "Success",
+          description: "Visa application successfully recorded.",
+        });
+      } else if (!success) {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: error || "Failed to create visa application",
+        });
+      }
       form.reset();
+      router.push("/dashboard/visa-applications");
+    },
+    onError: (error) => {
+      toast({
+        title: "Error",
+        description: error.message || "Unknown error occoured",
+      });
+      form.reset();
+      router.push("/dashboard/visa-applications");
     },
   });
 
   const updateMutation = useMutation({
     mutationFn: (params: { id: string; data: Partial<VisaApplication> }) =>
       updateVisaApplication(params.id, params.data),
-    onSuccess: ({ success }) => {
+    onSuccess: ({ success, error }) => {
       queryClient.invalidateQueries({ queryKey: ["visaApplications"] });
-      alert(success);
+      if (success) {
+        toast({
+          title: "Success",
+          description: "Visa application successfully recorded.",
+        });
+      } else if (!success) {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: error || "Failed to create visa application",
+        });
+      }
+      form.reset();
+      router.push("/dashboard/visa-applications");
+    },
+    onError: (error) => {
+      toast({
+        title: "Error",
+        description: error.message || "Unknown error occoured",
+      });
+      form.reset();
+      router.push("/dashboard/visa-applications");
     },
   });
 
-  const handleFormSubmit = useCallback(
-    (data: VisaApplication) => {
-      if (isEditing && initialData?.id) {
-        updateMutation.mutate({ id: initialData.id, data });
-      } else {
-        createMutation.mutate(data);
-      }
-    },
-    [isEditing, initialData, updateMutation, createMutation],
-  );
+  const handleFormSubmit = (data: VisaApplicationInput) => {
+    console.log("Form Submitted", data);
+    form.reset();
+    if (isEditing && initialData?.id) {
+      updateMutation.mutate({ id: initialData.id, data });
+    } else {
+      createMutation.mutate(data);
+    }
+  };
+
   return (
     <div className="w-full">
       <CardHeader className="pt-0">
@@ -141,7 +203,7 @@ export default function VisaApplicationForm({
                   <FormItem>
                     <FormLabel>Middle Name</FormLabel>
                     <FormControl>
-                      <Input {...field} />
+                      <Input {...field} value={field.value ?? undefined} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -197,7 +259,12 @@ export default function VisaApplicationForm({
                   <FormItem>
                     <FormLabel>Passport Number</FormLabel>
                     <FormControl>
-                      <Input {...field} />
+                      <Input
+                        {...field}
+                        value={
+                          initialData?.customer.passportNumber || undefined
+                        }
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -265,37 +332,6 @@ export default function VisaApplicationForm({
                         <SelectItem value="PENDING">PENDING</SelectItem>
                         <SelectItem value="APPROVED">APPROVED</SelectItem>
                         <SelectItem value="REJECTED">REJECTED</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="previousVisa"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Previous Visa</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select previous Visa" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="SUB_500">500</SelectItem>
-                        <SelectItem value="SUB_482">482</SelectItem>
-                        <SelectItem value="SUB_407">407</SelectItem>
-                        <SelectItem value="SUB_186">186</SelectItem>
-                        <SelectItem value="SUB_189">189</SelectItem>
-                        <SelectItem value="SUB_190">190</SelectItem>
-                        <SelectItem value="SUB_600">600</SelectItem>
-                        <SelectItem value="SUB_820">820</SelectItem>
-                        <SelectItem value="SUB_801">801</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
