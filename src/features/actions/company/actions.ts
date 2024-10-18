@@ -23,7 +23,7 @@ export async function createCompany(data: Company) {
 export async function updateCompany(id: string, data: Partial<Company>) {
   await checkAuth();
   try {
-    const updatedCustomer = await prisma.customer.update({
+    const updatedCustomer = await prisma.company.update({
       where: { id },
       data,
     });

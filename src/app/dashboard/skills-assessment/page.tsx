@@ -293,19 +293,23 @@ export default function SkillsAssesment() {
           </Link>
         </div>
       </CardContent>
-      <div className="rounded-lg border bg-white overflow-hidden">
+      <div className="rounded-lg border  overflow-hidden">
         <Table>
           <TableHeader>
             <TableRow className="bg-secondary">
               <TableHead className="px-4 py-4">S.N</TableHead>
               <TableHead className="px-4 py-4">Name</TableHead>
               <TableHead>Email</TableHead>
+              <TableHead>Visa</TableHead>
+              <TableHead>Visa Expiry</TableHead>
               <TableHead>Occupation</TableHead>
               <TableHead>Authority</TableHead>
               <TableHead>Application Date</TableHead>
               <TableHead>Stage</TableHead>
+              <TableHead>RPL</TableHead>
               <TableHead>Outcome Result</TableHead>
               <TableHead>Outcome Date</TableHead>
+              <TableHead>Remarks</TableHead>
               <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
@@ -320,12 +324,18 @@ export default function SkillsAssesment() {
                   {item.customer.lastName}
                 </TableCell>
                 <TableCell>{item.customer.email}</TableCell>
+                <TableCell>{item.customer.currentVisa}</TableCell>
+                <TableCell>
+                  {item.customer.visaExpiry?.toDateString()}
+                </TableCell>
                 <TableCell>{item.occupation}</TableCell>
                 <TableCell>{item.assessingAuthority}</TableCell>
                 <TableCell>{item.applicationDate.toDateString()}</TableCell>
                 <TableCell>{item.stage}</TableCell>
+                <TableCell>{item.rpl}</TableCell>
                 <TableCell>{item.outcomeResult}</TableCell>
                 <TableCell>{item.outcomeDate?.toDateString()}</TableCell>
+                <TableCell>{item.remarks}</TableCell>
                 <TableCell className="text-right">
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>

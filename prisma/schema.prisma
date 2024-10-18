@@ -1,39 +1,32 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider      = "prisma-client-js"
   binaryTargets = ["native", "debian-openssl-1.1.x", "debian-openssl-3.0.x", "rhel-openssl-3.0.x"]
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider          = "postgresql"
+  url               = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
 model User {
   id                    String                 @id @default(uuid())
-  firstName             String
-  lastName              String
   email                 String
   hashedPassword        String
-  role                  Role                   @default(USER)
   email_verified        Boolean
-  sessions              Session[]
+  firstName             String
+  lastName              String
+  role                  Role                   @default(USER)
   emailVerificationCode EmailVerificationCode?
   ResetToken            ResetToken[]
+  sessions              Session[]
 }
 
 model Session {
   id        String   @id
   userId    String
   expiresAt DateTime
-
-  // Relationships
-  user User @relation(references: [id], fields: [userId], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model EmailVerificationCode {
@@ -43,17 +36,15 @@ model EmailVerificationCode {
   email     String
   expiresAt DateTime
   sentAt    DateTime
-
-  // Relationships
-  user User @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
 }
 
 model ResetToken {
   id        String   @id @default(uuid())
+  userId    String
   code      String   @unique
   expiresAt DateTime
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    String
 }
 
 model Customer {
@@ -67,11 +58,11 @@ model Customer {
   currentVisa       VisaType?
   visaExpiry        DateTime?
   phone             String             @unique
-  visaApplications  VisaApplication[]
-  jobReadyPrograms  JobReadyProgram[]
-  skillsAssessments SkillsAssessment[]
   createdAt         DateTime           @default(now())
   updatedAt         DateTime           @updatedAt
+  jobReadyPrograms  JobReadyProgram[]
+  skillsAssessments SkillsAssessment[]
+  visaApplications  VisaApplication[]
 }
 
 model Appointment {
@@ -87,11 +78,7 @@ model Appointment {
   status          AppointmentStatus
   createdAt       DateTime          @default(now())
   updatedAt       DateTime          @updatedAt
-}
-
-enum AppointmentStatus {
-  CONFIRMED
-  CANCELLED
+  reasonOfVisit   String
 }
 
 model VisaApplication {
@@ -103,27 +90,64 @@ model VisaApplication {
   totalPaid       Float    @default(0.0)
   overseer        String
   customerId      String
-  customer        Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
+  customer        Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
 }
 
 model JobReadyProgram {
   id                String    @id @default(uuid())
   customerId        String
-  customer          Customer  @relation(fields: [customerId], references: [id], onDelete: Cascade)
   programType       String
   startDate         DateTime
-  stage             JRPStage
   workplacement     String?
   employerName      String?
   employerABN       String?
   supervisorName    String?
   supervisorContact String?
   completionDate    DateTime?
-  outcomeResult     OUTCOME
   createdAt         DateTime  @default(now())
   updatedAt         DateTime  @updatedAt
+  outcomeResult     OUTCOME
+  stage             JRPStage
+  customer          Customer  @relation(fields: [customerId], references: [id], onDelete: Cascade)
+}
+
+model SkillsAssessment {
+  id                 String    @id @default(uuid())
+  customerId         String
+  occupation         String
+  assessingAuthority String
+  applicationDate    DateTime
+  outcomeDate        DateTime?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+  stage              SAStage
+  rpl                String
+  outcomeResult      OUTCOME?
+  remarks            String
+  customer           Customer  @relation(fields: [customerId], references: [id], onDelete: Cascade)
+}
+
+model Company {
+  id                String        @id @default(uuid())
+  tradingName       String
+  name              String?
+  director          String
+  email             String        @unique
+  phone             String        @unique
+  abn               String        @unique
+  address           String
+  website           String?
+  sbsStatus         SbsStatusEnum @default(NOT_APPROVED)
+  associatedClients Int?
+
+  @@map("company")
+}
+
+enum AppointmentStatus {
+  CONFIRMED
+  CANCELLED
 }
 
 enum JRPStage {
@@ -143,20 +167,6 @@ enum OUTCOME {
   SUCCESSFUL
   UNSUCCESSFUL
   PENDING
-}
-
-model SkillsAssessment {
-  id                 String    @id @default(uuid())
-  customerId         String
-  customer           Customer  @relation(fields: [customerId], references: [id], onDelete: Cascade)
-  occupation         String
-  assessingAuthority String
-  applicationDate    DateTime
-  stage              SAStage
-  outcomeDate        DateTime?
-  outcomeResult      OUTCOME?
-  createdAt          DateTime  @default(now())
-  updatedAt          DateTime  @updatedAt
 }
 
 enum JRPStatus {
@@ -191,31 +201,15 @@ enum Status {
 }
 
 enum VisaType {
-  SUB_500 // Student Visa
-  SUB_482 // Temporary Skill Shortage (TSS) Visa
-  SUB_407 // Training Visa
-  SUB_186 // Employer Nomination Scheme (ENS) Visa
-  SUB_189 // Skilled Independent Visa
-  SUB_190 // Skilled Nominated Visa
-  SUB_600 // Visitor Visa (Tourist)
-  SUB_820 // Partner Visa (Temporary)
-  SUB_801 // Partner Visa (Permanent)
-}
-
-model Company {
-  id                String        @id @default(uuid())
-  tradingName       String
-  name              String?
-  director          String
-  email             String        @unique
-  phone             String        @unique
-  abn               String        @unique
-  address           String
-  website           String?
-  sbsStatus         SbsStatusEnum @default(NOT_APPROVED)
-  associatedClients Int?
-
-  @@map("company")
+  SUB_500
+  SUB_482
+  SUB_407
+  SUB_186
+  SUB_189
+  SUB_190
+  SUB_600
+  SUB_820
+  SUB_801
 }
 
 enum SbsStatusEnum {
