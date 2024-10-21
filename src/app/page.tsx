@@ -5,6 +5,7 @@ import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ModeToggle } from "./components/theme-toggle";
+import { ValidateClientProtectedRoute } from "@/lib/validate-client-protected-route";
 
 export default function LandingPage() {
   const targetRef = useRef(null);
@@ -15,7 +16,7 @@ export default function LandingPage() {
 
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
   const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.8]);
-
+  const { session } = ValidateClientProtectedRoute();
   return (
     <div
       // className="flex flex-col  min-h-screen bg-gradient-to-b from-background to-muted"
@@ -95,18 +96,25 @@ export default function LandingPage() {
                     efficiency and success rates.
                   </p>
                 </div>
-                <div className="flex w-full sm:justify-center md:justify-start  flex-col gap-2 min-[400px]:flex-row">
-                  <Button
-                    size="lg"
-                    className="bg-primary text-primary-foreground hover:bg-primary/90"
-                  >
-                    <Link href={"/auth/signup"}> Sign Up</Link>
-                  </Button>
-                  <Button size="lg" variant="outline">
+                {session ? (
+                  <Button size="lg" className="w-fit">
                     {" "}
-                    <Link href={"/auth/signin"}> Login</Link>
+                    <Link href={"/dashboard"}> Go to Dashboard</Link>
                   </Button>
-                </div>
+                ) : (
+                  <div className="flex w-full sm:justify-center md:justify-start  flex-col gap-2 min-[400px]:flex-row">
+                    <Button
+                      size="lg"
+                      className="bg-primary text-primary-foreground hover:bg-primary/90"
+                    >
+                      <Link href={"/auth/signup"}> Sign Up</Link>
+                    </Button>
+                    <Button size="lg" variant="outline">
+                      {" "}
+                      <Link href={"/auth/signin"}> Login</Link>
+                    </Button>
+                  </div>
+                )}
               </motion.div>
               <motion.div
                 initial={{ scale: 0.8, opacity: 0 }}

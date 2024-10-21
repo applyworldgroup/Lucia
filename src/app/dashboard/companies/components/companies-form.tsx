@@ -172,12 +172,7 @@ export default function CompanyForm({ initialData }: CompanyFormProps) {
                 name="tradingName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>
-                      Trading Name{" "}
-                      <span className="text-red-500" title="Required">
-                        *
-                      </span>
-                    </FormLabel>
+                    <FormLabel>Trading Name </FormLabel>
                     <FormControl>
                       <Input {...field} value={field.value} />
                     </FormControl>
@@ -194,7 +189,7 @@ export default function CompanyForm({ initialData }: CompanyFormProps) {
                   <FormItem>
                     <FormLabel>Director </FormLabel>
                     <FormControl>
-                      <Input {...field} />
+                      <Input {...field} value={field.value || ""} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -205,14 +200,9 @@ export default function CompanyForm({ initialData }: CompanyFormProps) {
                 name="abn"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>
-                      ABN{" "}
-                      <span className="text-red-500" title="Required">
-                        *
-                      </span>
-                    </FormLabel>
+                    <FormLabel>ABN </FormLabel>
                     <FormControl>
-                      <Input {...field} />
+                      <Input {...field} value={field.value || ""} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -225,14 +215,13 @@ export default function CompanyForm({ initialData }: CompanyFormProps) {
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>
-                      Email{" "}
-                      <span className="text-red-500" title="Required">
-                        *
-                      </span>
-                    </FormLabel>
+                    <FormLabel>Email </FormLabel>
                     <FormControl>
-                      <Input type="email" {...field} />
+                      <Input
+                        type="email"
+                        {...field}
+                        value={field.value || ""}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -243,14 +232,9 @@ export default function CompanyForm({ initialData }: CompanyFormProps) {
                 name="address"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>
-                      Address{" "}
-                      <span className="text-red-500" title="Required">
-                        *
-                      </span>
-                    </FormLabel>
+                    <FormLabel>Address </FormLabel>
                     <FormControl>
-                      <Input {...field} />
+                      <Input {...field} value={field.value || ""} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -267,7 +251,7 @@ export default function CompanyForm({ initialData }: CompanyFormProps) {
                       Phone <span className="text-red-500">*</span>
                     </FormLabel>
                     <FormControl>
-                      <Input {...field} />
+                      <Input {...field} value={field.value || ""} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

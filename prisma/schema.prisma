@@ -133,11 +133,11 @@ model Company {
   id                String        @id @default(uuid())
   tradingName       String
   name              String?
-  director          String
-  email             String        @unique
-  phone             String        @unique
-  abn               String        @unique
-  address           String
+  director          String?
+  email             String?
+  phone             String?
+  abn               String?
+  address           String?
   website           String?
   sbsStatus         SbsStatusEnum @default(NOT_APPROVED)
   associatedClients Int?

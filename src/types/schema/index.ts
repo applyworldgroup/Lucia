@@ -141,24 +141,48 @@ export const SkillsAssessmentInputSchema = SkillsAssessmentBaseSchema.omit({
 export const SbsStatusEnum = z.enum(["APPROVED", "NOT_APPROVED", "PENDING"]);
 
 // Zod schema for the company
+// export const CompanyBaseSchema = z.object({
+//   id: z.string().uuid().optional(), // Optional because it may be auto-generated
+//   tradingName: z
+//     .string()
+//     .min(1, { message: "Trading name is required" })
+//     .max(256).optional(),
+//   name: z.string().max(56).optional(), // Optional field
+//   director: z.string().min(1, { message: "Director name is required" }).max(56).optional(),
+//   email: z.string().email({ message: "Invalid email address" }).max(256).optional(),
+//   phone: z.string().min(1, { message: "Phone number is required" }).optional(),
+//   abn: z.string().min(1, { message: "ABN is required" }).optional(),
+//   address: z.string().min(1, { message: "Address is required" }).optional(),
+//   website: z.string().url().max(256).optional(), // Optional field
+//   sbsStatus: SbsStatusEnum.default("NOT_APPROVED"),
+//   associatedClients: z.number().optional(), // Optional field
+//   createdAt: z.date(),
+//   updatedAt: z.date(),
+// });
+// export const CompanySchema = CompanyBaseSchema;
+// export const CompanyInputSchema = CompanyBaseSchema.omit({
+//   id: true,
+//   createdAt: true,
+//   updatedAt: true,
+// });
+
+// Zod schema for the company
 export const CompanyBaseSchema = z.object({
-  id: z.string().uuid().optional(), // Optional because it may be auto-generated
-  tradingName: z
-    .string()
-    .min(1, { message: "Trading name is required" })
-    .max(256),
-  name: z.string().max(56).optional(), // Optional field
-  director: z.string().min(1, { message: "Director name is required" }).max(56),
-  email: z.string().email({ message: "Invalid email address" }).max(256),
-  phone: z.string().min(1, { message: "Phone number is required" }),
-  abn: z.string().min(1, { message: "ABN is required" }),
-  address: z.string().min(1, { message: "Address is required" }),
-  website: z.string().url().max(256).optional(), // Optional field
+  id: z.string().uuid().optional(),
+  tradingName: z.string().min(3, "Trading Name is required").max(256),
+  name: z.string().max(56).min(3, "Name is required"),
+  director: z.string().max(56).optional().nullable(),
+  email: z.string().max(256).optional().nullable(),
+  phone: z.string().optional().nullable(),
+  abn: z.string().optional().nullable(),
+  address: z.string().optional().nullable(),
+  website: z.string().max(256).optional().nullable(),
   sbsStatus: SbsStatusEnum.default("NOT_APPROVED"),
-  associatedClients: z.number().optional(), // Optional field
+  associatedClients: z.number().optional().nullable(),
   createdAt: z.date(),
   updatedAt: z.date(),
 });
+
 export const CompanySchema = CompanyBaseSchema;
 export const CompanyInputSchema = CompanyBaseSchema.omit({
   id: true,
