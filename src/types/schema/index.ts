@@ -175,6 +175,8 @@ export const CompanyBaseSchema = z.object({
   email: z.string().max(256).optional().nullable(),
   phone: z.string().optional().nullable(),
   abn: z.string().optional().nullable(),
+  approvalDate: z.date().optional().nullable(),
+  expiryDate: z.date().optional().nullable(),
   address: z.string().optional().nullable(),
   website: z.string().max(256).optional().nullable(),
   sbsStatus: SbsStatusEnum.default("NOT_APPROVED"),

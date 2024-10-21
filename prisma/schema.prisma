@@ -139,6 +139,8 @@ model Company {
   abn               String?
   address           String?
   website           String?
+  approvalDate      DateTime?
+  expiryDate        DateTime?
   sbsStatus         SbsStatusEnum @default(NOT_APPROVED)
   associatedClients Int?
 
