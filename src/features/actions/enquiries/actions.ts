@@ -10,9 +10,6 @@ export async function getAllEnquiries(): Promise<GeneralEnquiry[]> {
 
   try {
     const enquiries = await prisma.generalEnquiry.findMany();
-    console.log("Fetched enquiries:", enquiries); // Check the structure
-
-    // Map the results to ensure followUpDates are strings
     const result = enquiries.map((enquiry) => ({
       ...enquiry,
       followUpDates: enquiry.follow_up_dates.map(
