@@ -18,14 +18,7 @@ export async function createSkillsAssessment(data: SkillsAssessmentInput) {
       };
     }
     /* eslint-disable @typescript-eslint/no-unused-vars */
-    const {
-      firstName,
-      middleName,
-      lastName,
-      email,
-
-      ...applicationData
-    } = data;
+    const { firstName, middleName, lastName, email, ...applicationData } = data;
     // Create the visa application and connect it to the existing customer
     const application = await prisma.skillsAssessment.create({
       data: {

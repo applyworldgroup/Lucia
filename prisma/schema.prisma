@@ -123,9 +123,9 @@ model SkillsAssessment {
   createdAt          DateTime  @default(now())
   updatedAt          DateTime  @updatedAt
   stage              SAStage
-  rpl                String
   outcomeResult      OUTCOME?
   remarks            String
+  rpl                String
   customer           Customer  @relation(fields: [customerId], references: [id], onDelete: Cascade)
 }
 
@@ -139,12 +139,28 @@ model Company {
   abn               String?
   address           String?
   website           String?
-  approvalDate      DateTime?
-  expiryDate        DateTime?
   sbsStatus         SbsStatusEnum @default(NOT_APPROVED)
   associatedClients Int?
+  approvalDate      DateTime?
+  expiryDate        DateTime?
 
   @@map("company")
+}
+
+model GeneralEnquiry {
+  id                 String                  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  full_name          String                  @db.VarChar(255)
+  email              String                  @db.VarChar(255)
+  country            String                  @db.VarChar(255)
+  phone_number       String                  @db.VarChar(50)
+  purpose_of_enquiry purpose_of_enquiry_enum
+  follow_up_dates    DateTime[]              @default([]) @db.Date
+  remarks            String?                 @db.VarChar(500)
+  created_at         DateTime                @default(now()) @db.Timestamp(6)
+  updated_at         DateTime                @default(now()) @db.Timestamp(6)
+  followed_up_by     String?                 @db.VarChar(255)
+
+  @@map("general_enquiry")
 }
 
 enum AppointmentStatus {
@@ -218,4 +234,17 @@ enum SbsStatusEnum {
   APPROVED
   NOT_APPROVED
   PENDING
+}
+
+enum purpose_of_enquiry_enum {
+  Visa_482             @map("482 Visa")
+  Visa_407             @map("407 Visa")
+  Student_Visa         @map("Student Visa")
+  Skills_Assessment    @map("Skills Assessment")
+  Student_Enquiry      @map("Student Enquiry")
+  Migration_Enquiry    @map("Migration Enquiry")
+  Visa_186             @map("186 Visa")
+  General_Consultation @map("General Consultation")
+  PR_Pathways          @map("PR Pathways")
+  Other
 }
