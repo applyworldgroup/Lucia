@@ -60,7 +60,7 @@ export default function SkillsAssesment() {
     search: "",
   });
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 2;
+  const itemsPerPage = 10;
 
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["skills-assessment"],
