@@ -347,7 +347,7 @@ export default function SkillsAssesment() {
                     <DropdownMenuContent align="end">
                       <DropdownMenuItem>
                         <Link
-                          href={`JobReadyProgram-applications/update/${item.id}`}
+                          href={`skills-assessment/update/${item.id}`}
                           className="flex items-center"
                         >
                           <Edit className="mr-2 h-4 w-4" />
