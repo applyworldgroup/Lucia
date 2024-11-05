@@ -15,10 +15,11 @@ const signUpUser = async (
 
   try {
     const allowedDomain = "@applyworldgroup.com.au";
-    const specialEmail = "sisir.phca@gmail.com";
-  if (!email.endsWith(allowedDomain) && email !== specialEmail) {
-  throw new Error(`Sign-up is restricted to people outside our company.`);
-}
+    const specialEmails = ["sisir.phca@gmail.com", "banswikriti123@gmail.com"]; 
+
+    if (!email.endsWith(allowedDomain) && !specialEmails.includes(email)) {
+      throw new Error(`Sign-up is restricted to specific company domains or special emails.`);
+    }
     const emailInUse = await prisma.user.findFirst({
       where: {
         email,
