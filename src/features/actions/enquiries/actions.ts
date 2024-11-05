@@ -10,19 +10,23 @@ export async function getAllEnquiries(): Promise<GeneralEnquiry[]> {
 
   try {
     const enquiries = await prisma.generalEnquiry.findMany();
-    const result = enquiries.map((enquiry) => ({
-      ...enquiry,
-      followUpDates: enquiry.follow_up_dates.map(
-        (date) => (date instanceof Date ? date.toISOString() : date), // Convert Date to string
-      ),
-    }));
-    console.log(result);
-    return result; // No need for casting now
+    const sortedEnquiries = enquiries
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()) 
+      .map((enquiry) => ({
+        ...enquiry,
+        followUpDates: enquiry.follow_up_dates.map(
+          (date) => (date instanceof Date ? date.toISOString() : date), 
+        ),
+      }));
+
+    console.log(sortedEnquiries);
+    return sortedEnquiries; // Return sorted result
   } catch (error) {
     console.error("Error fetching enquiries:", error);
     throw new Error("Failed to fetch enquiries");
   }
 }
+
 
 export async function updateEnquiry(
   id: string,
