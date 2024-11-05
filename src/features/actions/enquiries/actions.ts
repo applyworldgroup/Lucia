@@ -11,7 +11,7 @@ export async function getAllEnquiries(): Promise<GeneralEnquiry[]> {
   try {
     const enquiries = await prisma.generalEnquiry.findMany();
     const sortedEnquiries = enquiries
-      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()) 
+      .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()) 
       .map((enquiry) => ({
         ...enquiry,
         followUpDates: enquiry.follow_up_dates.map(
