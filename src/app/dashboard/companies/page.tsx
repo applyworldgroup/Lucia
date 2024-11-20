@@ -97,7 +97,7 @@ export default function Customers() {
     return (
       (filters.status === "all" || item.sbsStatus === filters.status) &&
       (item.tradingName.toLowerCase().includes(searchText) ||
-        item.email.toLowerCase().includes(searchText))
+        item.email?.toLowerCase().includes(searchText))
     );
   });
 

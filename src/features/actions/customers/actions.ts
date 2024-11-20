@@ -56,7 +56,15 @@ export async function getCustomerById(id: string) {
   const customer = await prisma.customer.findUnique({ where: { id } });
   return { success: true, data: customer };
 }
+
 export async function getCustomerByEmail(email: string) {
   const customer = await prisma.customer.findUnique({ where: { email } });
+  return { success: true, data: customer };
+}
+
+export async function getCustomerByPassportNumber(passportNumber: string) {
+  const customer = await prisma.customer.findUnique({
+    where: { passportNumber },
+  });
   return { success: true, data: customer };
 }

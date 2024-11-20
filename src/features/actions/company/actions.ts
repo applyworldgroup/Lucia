@@ -55,6 +55,6 @@ export async function getCompanyById(id: string): Promise<Company | null> {
   return company;
 }
 export async function getCompanyByEmail(email: string) {
-  const company = await prisma.company.findUnique({ where: { email } });
+  const company = await prisma.company.findFirst({ where: { email } });
   return { success: true, data: company };
 }

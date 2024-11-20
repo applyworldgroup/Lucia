@@ -10,6 +10,7 @@ import {
   Calendar,
   ChevronLeft,
   ChevronRight,
+  CircleHelp,
   DownloadCloud,
   Inbox,
   Users,
@@ -66,12 +67,12 @@ export function Sidebar() {
                   variant: "ghost",
                   url: "/dashboard/appointments",
                 },
-                // {
-                //   title: "Visitors",
-                //   icon: Users,
-                //   variant: "ghost",
-                //   url: "/dashboard/visitors",
-                // },
+                {
+                  title: "Enquiries",
+                  icon: CircleHelp,
+                  variant: "ghost",
+                  url: "/dashboard/enquiries",
+                },
                 {
                   title: "Calender",
                   icon: Calendar,

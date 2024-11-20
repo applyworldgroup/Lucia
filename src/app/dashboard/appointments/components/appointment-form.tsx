@@ -302,7 +302,7 @@ export default function AppointmentForm({
                     placeholder="eg: consultation, 407 enquiry, 482 enquiry, etc."
                     className="resize-none"
                     {...field}
-                    value={appointment?.reasonOfVisit ?? ""}
+                    value={appointment?.reasonOfVisit ?? field.value}
                   />
                 </FormControl>
 

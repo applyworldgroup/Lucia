@@ -2,7 +2,7 @@
 import { useState, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, CalendarIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -37,6 +37,14 @@ import {
   createCompany,
   updateCompany,
 } from "@/features/actions/company/actions";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { format } from "date-fns";
+import { Calendar } from "@/components/ui/calendar";
+import { cn } from "@/lib/utils";
 
 interface CompanyFormProps {
   initialData?: Company;
@@ -56,6 +64,8 @@ export default function CompanyForm({ initialData }: CompanyFormProps) {
       director: "",
       phone: "",
       abn: "",
+      approvalDate: undefined,
+      expiryDate: undefined,
       address: "",
       website: "",
       sbsStatus: "NOT_APPROVED",
@@ -172,12 +182,7 @@ export default function CompanyForm({ initialData }: CompanyFormProps) {
                 name="tradingName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>
-                      Trading Name{" "}
-                      <span className="text-red-500" title="Required">
-                        *
-                      </span>
-                    </FormLabel>
+                    <FormLabel>Trading Name </FormLabel>
                     <FormControl>
                       <Input {...field} value={field.value} />
                     </FormControl>
@@ -194,7 +199,7 @@ export default function CompanyForm({ initialData }: CompanyFormProps) {
                   <FormItem>
                     <FormLabel>Director </FormLabel>
                     <FormControl>
-                      <Input {...field} />
+                      <Input {...field} value={field.value || ""} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -205,15 +210,86 @@ export default function CompanyForm({ initialData }: CompanyFormProps) {
                 name="abn"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>
-                      ABN{" "}
-                      <span className="text-red-500" title="Required">
-                        *
-                      </span>
-                    </FormLabel>
+                    <FormLabel>ABN/TRN </FormLabel>
                     <FormControl>
-                      <Input {...field} />
+                      <Input {...field} value={field.value || ""} />
                     </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="approvalDate"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Approved Date (SBS/TAS) </FormLabel>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <FormControl>
+                          <Button
+                            variant={"outline"}
+                            className={cn(
+                              "w-full pl-3 text-left font-normal",
+                              !field.value && "text-muted-foreground",
+                            )}
+                          >
+                            {field.value ? (
+                              format(field.value, "PPP")
+                            ) : (
+                              <span>Pick a date</span>
+                            )}
+                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                          </Button>
+                        </FormControl>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0" align="start">
+                        <Calendar
+                          mode="single"
+                          onSelect={field.onChange}
+                          initialFocus
+                        />
+                      </PopoverContent>
+                    </Popover>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="expiryDate"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Expiry Date (SBS/TAS) </FormLabel>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <FormControl>
+                          <Button
+                            variant={"outline"}
+                            className={cn(
+                              "w-full pl-3 text-left font-normal",
+                              !field.value && "text-muted-foreground",
+                            )}
+                          >
+                            {field.value ? (
+                              format(field.value, "PPP")
+                            ) : (
+                              <span>Pick a date</span>
+                            )}
+                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                          </Button>
+                        </FormControl>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0" align="start">
+                        <Calendar
+                          mode="single"
+                          onSelect={field.onChange}
+                          initialFocus
+                        />
+                      </PopoverContent>
+                    </Popover>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -225,14 +301,13 @@ export default function CompanyForm({ initialData }: CompanyFormProps) {
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>
-                      Email{" "}
-                      <span className="text-red-500" title="Required">
-                        *
-                      </span>
-                    </FormLabel>
+                    <FormLabel>Email </FormLabel>
                     <FormControl>
-                      <Input type="email" {...field} />
+                      <Input
+                        type="email"
+                        {...field}
+                        value={field.value || ""}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -243,14 +318,9 @@ export default function CompanyForm({ initialData }: CompanyFormProps) {
                 name="address"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>
-                      Address{" "}
-                      <span className="text-red-500" title="Required">
-                        *
-                      </span>
-                    </FormLabel>
+                    <FormLabel>Address </FormLabel>
                     <FormControl>
-                      <Input {...field} />
+                      <Input {...field} value={field.value || ""} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -263,11 +333,9 @@ export default function CompanyForm({ initialData }: CompanyFormProps) {
                 name="phone"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>
-                      Phone <span className="text-red-500">*</span>
-                    </FormLabel>
+                    <FormLabel>Phone</FormLabel>
                     <FormControl>
-                      <Input {...field} />
+                      <Input {...field} value={field.value || ""} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

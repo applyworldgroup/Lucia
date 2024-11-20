@@ -60,7 +60,7 @@ export default function SkillsAssesment() {
     search: "",
   });
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 2;
+  const itemsPerPage = 10;
 
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["skills-assessment"],
@@ -347,7 +347,7 @@ export default function SkillsAssesment() {
                     <DropdownMenuContent align="end">
                       <DropdownMenuItem>
                         <Link
-                          href={`JobReadyProgram-applications/update/${item.id}`}
+                          href={`skills-assessment/update/${item.id}`}
                           className="flex items-center"
                         >
                           <Edit className="mr-2 h-4 w-4" />
