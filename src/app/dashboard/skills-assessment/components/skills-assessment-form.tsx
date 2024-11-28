@@ -170,12 +170,14 @@ export default function SkillsAssessmentForm({
           </Button>
         </Link>
         <CardTitle>
-          {isEditing ? "Edit JRP Application" : "Create JRP Application"}
+          {isEditing
+            ? "Edit Skills Assessment Application"
+            : "Create Skills Assessment Application"}
         </CardTitle>
         <CardDescription>
           {isEditing
             ? "Update the details of the JRP application."
-            : "Fill in the details to create a new JRP application."}
+            : "Fill in the details to create a new Skills Assessment application."}
         </CardDescription>
       </CardHeader>
       <Form {...form}>
