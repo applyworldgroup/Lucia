@@ -294,7 +294,7 @@ export default function JRPFrom({ initialData }: JRPProps) {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="JRPRE">JRPRE</SelectItem>
+                        <SelectItem value="PSA">PSA</SelectItem>
                         <SelectItem value="JRE">JRE</SelectItem>
                         <SelectItem value="JRWA">JRWA</SelectItem>
                         <SelectItem value="JRFA">JRFA</SelectItem>

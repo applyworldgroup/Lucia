@@ -288,13 +288,12 @@ export default function CustomerForm({ initialData }: CustomerFormProps) {
                       <SelectContent>
                         <SelectItem value="SUB_500">500</SelectItem>
                         <SelectItem value="SUB_482">482</SelectItem>
+                        <SelectItem value="SUB_485">485</SelectItem>
                         <SelectItem value="SUB_407">407</SelectItem>
                         <SelectItem value="SUB_186">186</SelectItem>
                         <SelectItem value="SUB_189">189</SelectItem>
                         <SelectItem value="SUB_190">190</SelectItem>
                         <SelectItem value="SUB_600">600</SelectItem>
-                        <SelectItem value="SUB_820">820</SelectItem>
-                        <SelectItem value="SUB_801">801</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />

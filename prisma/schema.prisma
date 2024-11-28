@@ -169,7 +169,7 @@ enum AppointmentStatus {
 }
 
 enum JRPStage {
-  JRPRE
+  PSA
   JRE
   JRWA
   JRFA
@@ -221,6 +221,7 @@ enum Status {
 enum VisaType {
   SUB_500
   SUB_482
+  SUB_485
   SUB_407
   SUB_186
   SUB_189
