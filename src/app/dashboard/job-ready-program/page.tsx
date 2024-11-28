@@ -228,7 +228,7 @@ export default function JobReadyProgram() {
                 <SelectItem value="JRE"> JRE</SelectItem>
                 <SelectItem value="JRWA">JRWA</SelectItem>
                 <SelectItem value="JRFA">JRFA</SelectItem>
-                <SelectItem value="JRPRE">JRPRE</SelectItem>
+                <SelectItem value="PSA">PSA</SelectItem>
               </SelectContent>
             </Select>
           </div>

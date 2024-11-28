@@ -13,6 +13,7 @@ const CustomerBaseSchema = z.object({
     .enum([
       "SUB_500",
       "SUB_482",
+      "SUB_485",
       "SUB_407",
       "SUB_186",
       "SUB_189",
@@ -53,6 +54,7 @@ const VisaApplicationBaseSchema = z.object({
   visaType: z.enum([
     "SUB_500",
     "SUB_482",
+    "SUB_485",
     "SUB_407",
     "SUB_186",
     "SUB_189",
@@ -88,7 +90,7 @@ const JobReadyProgramBaseSchema = z.object({
   email: z.string().email({ message: "Invalid email address" }),
   programType: z.string().min(1, { message: "Program type is required" }),
   startDate: z.date(),
-  stage: z.enum(["JRPRE", "JRFA", "JRWA", "JRE"]),
+  stage: z.enum(["PSA", "JRFA", "JRWA", "JRE"]),
   workplacement: z.string().optional(),
   employerName: z.string().optional(),
   employerABN: z.string().optional(),
