@@ -83,7 +83,7 @@ model Appointment {
 
 model VisaApplication {
   id              String   @id @default(uuid())
-  visaAppliedDate DateTime @default(now())
+  visaAppliedDate DateTime 
   visaStatus      Status
   visaType        VisaType
   totalAmount     Float    @default(0.0)

@@ -69,7 +69,7 @@ export async function updateVisaApplication(
   } = data;
 
   try {
-    const updatedApplication = await prisma.jobReadyProgram.update({
+    const updatedApplication = await prisma.visaApplication.update({
       where: { id },
       data: {
         ...applicationData,

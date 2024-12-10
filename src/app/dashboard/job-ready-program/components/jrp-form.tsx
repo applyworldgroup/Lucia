@@ -78,6 +78,8 @@ export default function JRPFrom({ initialData }: JRPProps) {
           question1: initialData.question1 ?? undefined,
           question2: initialData.question2 ?? undefined,
           question3: initialData.question3 ?? undefined,
+          totalAmount: initialData.totalAmount,
+          totalPaid: initialData.totalPaid,
         }
       : {
           firstName: "",
@@ -103,6 +105,8 @@ export default function JRPFrom({ initialData }: JRPProps) {
           question1: undefined,
           question2: undefined,
           question3: undefined,
+          totalAmount: 0,
+          totalPaid: 0,
         },
   });
 
