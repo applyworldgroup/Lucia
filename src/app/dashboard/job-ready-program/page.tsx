@@ -181,21 +181,21 @@ export default function JobReadyProgram() {
           </Button>
         </div>
         <CardDescription>
-          Manage and track JobReadyProgram applications
+          Manage and track JobReady Program applications
         </CardDescription>
       </CardHeader>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
         <Card>
           <CardHeader className="flex w-full flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-              Today&apos;s Appointments
+              Today&apos;s Applications
             </CardTitle>
             <Calendar className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{0}</div>
             <p className="text-xs text-muted-foreground">
-              {appliedToday === 1 ? "appointment" : "appointments "}
+              {appliedToday === 1 ? "application" : "applications"}
               scheduled for today
             </p>
           </CardContent>
@@ -203,14 +203,14 @@ export default function JobReadyProgram() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-              This Week&apos;s Appointments
+              This Week&apos;s Applications
             </CardTitle>
             <Calendar className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{0}</div>
             <p className="text-xs text-muted-foreground">
-              {appliedThisWeek === 1 ? "appointment" : "appointments"} scheduled
+              {appliedThisWeek === 1 ? "application" : "applications"} {""}
               this week
             </p>
           </CardContent>
@@ -225,8 +225,8 @@ export default function JobReadyProgram() {
           <CardContent>
             <div className="text-2xl font-bold">{0}</div>
             <p className="text-xs text-muted-foreground">
-              {appliedThisMonth === 1 ? "appointment" : "appointments"}{" "}
-              scheduled this month
+              {appliedThisMonth === 1 ? "application" : "applications"} {""}
+              this month
             </p>
           </CardContent>
         </Card>

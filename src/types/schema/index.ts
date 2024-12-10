@@ -63,7 +63,6 @@ const VisaApplicationBaseSchema = z.object({
     .optional(),
   visaExpiry: z.date().nullable().optional(),
   phone: z.string().min(1, { message: "Phone number is required" }),
-
   visaAppliedDate: z.date(),
   visaStatus: z.enum(["PENDING", "APPROVED", "REJECTED"]),
   visaType: z.enum([
@@ -84,7 +83,6 @@ const VisaApplicationBaseSchema = z.object({
   totalPaid: z
     .number()
     .nonnegative({ message: "Total paid must be non-negative" }),
-  overseer: z.string(),
   createdAt: z.date(),
   updatedAt: z.date(),
 });
@@ -136,6 +134,12 @@ const JobReadyProgramBaseSchema = z.object({
   question1: z.string().optional(),
   question2: z.string().optional(),
   question3: z.string().optional(),
+  totalAmount: z
+    .number()
+    .nonnegative({ message: "Total amount must be non-negative" }),
+  totalPaid: z
+    .number()
+    .nonnegative({ message: "Total paid must be non-negative" }),
   createdAt: z.date(),
   updatedAt: z.date(),
 });
@@ -185,6 +189,12 @@ const SkillsAssessmentBaseSchema = z.object({
     .string()
     .max(250, { message: "Maximum character limit exceeded." }),
   rpl: z.string().max(250, { message: "Maximum character limit exceeded." }),
+  totalAmount: z
+    .number()
+    .nonnegative({ message: "Total amount must be non-negative" }),
+  totalPaid: z
+    .number()
+    .nonnegative({ message: "Total paid must be non-negative" }),
   createdAt: z.date(),
   updatedAt: z.date(),
 });

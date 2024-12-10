@@ -88,7 +88,6 @@ model VisaApplication {
   visaType        VisaType
   totalAmount     Float    @default(0.0)
   totalPaid       Float    @default(0.0)
-  overseer        String
   customerId      String
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
@@ -114,6 +113,8 @@ model JobReadyProgram {
   question1         String?
   question2         String?
   question3         String?
+  totalAmount       Float     @default(0.0)
+  totalPaid         Float     @default(0.0)
   customer          Customer  @relation(fields: [customerId], references: [id], onDelete: Cascade)
 }
 
@@ -128,8 +129,9 @@ model SkillsAssessment {
   updatedAt          DateTime  @updatedAt
   stage              SAStage
   outcomeResult      OUTCOME?
-  remarks            String
   rpl                String
+  totalAmount        Float     @default(0.0)
+  totalPaid          Float     @default(0.0)
   customer           Customer  @relation(fields: [customerId], references: [id], onDelete: Cascade)
 }
 
@@ -152,17 +154,17 @@ model Company {
 }
 
 model GeneralEnquiry {
-  id                 String                  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  full_name          String                  @db.VarChar(255)
-  email              String                  @db.VarChar(255)
-  country            String                  @db.VarChar(255)
-  phone_number       String                  @db.VarChar(50)
+  id                 String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  full_name          String     @db.VarChar(255)
+  email              String     @db.VarChar(255)
+  country            String     @db.VarChar(255)
+  phone_number       String     @db.VarChar(50)
   purpose_of_enquiry String
-  follow_up_dates    DateTime[]              @default([]) @db.Date
-  remarks            String?                 @db.VarChar(500)
-  created_at         DateTime                @default(now()) @db.Timestamp(6)
-  updated_at         DateTime                @default(now()) @db.Timestamp(6)
-  followed_up_by     String?                 @db.VarChar(255)
+  follow_up_dates    DateTime[] @default([]) @db.Date
+  remarks            String?    @db.VarChar(500)
+  created_at         DateTime   @default(now()) @db.Timestamp(6)
+  updated_at         DateTime   @default(now()) @db.Timestamp(6)
+  followed_up_by     String?    @db.VarChar(255)
 
   @@map("general_enquiry")
 }
