@@ -39,6 +39,7 @@ import {
   MoreHorizontal,
   RefreshCwIcon,
   SearchIcon,
+  Trash,
   User,
 } from "lucide-react";
 import {
@@ -50,11 +51,16 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
-import { useQuery } from "@tanstack/react-query";
-import { getAllJrpApplication } from "@/features/actions/job-ready-program/actions";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  deleteJrpApplication,
+  getAllJrpApplication,
+} from "@/features/actions/job-ready-program/actions";
 import LoadingSpinner from "@/app/components/loading-spinner";
+import { toast } from "@/hooks/use-toast";
 
 export default function JobReadyProgram() {
+  const queryClient = useQueryClient();
   const [sort, setSort] = useState({ by: "startDate", order: "asc" });
   const [filters, setFilters] = useState({
     stage: "all",
@@ -83,9 +89,39 @@ export default function JobReadyProgram() {
       [filterKey]: value,
     }));
   };
+  //handle delete
+  const mutation = useMutation({
+    mutationFn: deleteJrpApplication,
+    onSuccess: ({ success, error }) => {
+      queryClient.invalidateQueries({ queryKey: ["jrpApplications"] });
+      if (success) {
+        toast({
+          title: "Success",
+          description: "JRP application successfully deleted.",
+        });
+      } else if (!success) {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: error || "Failed to create delete application",
+        });
+      }
+    },
+    onError: (error) => {
+      toast({
+        title: "Error",
+        description: error.message || "Unknown error occoured",
+      });
+    },
+  });
+
+  // Handle delete
+  const handleDelete = (id: string) => {
+    mutation.mutate(id);
+  };
 
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: ["visa-applications"],
+    queryKey: ["jrpApplications"],
     queryFn: () => getAllJrpApplication(),
   });
 
@@ -304,7 +340,6 @@ export default function JobReadyProgram() {
               <TableHead className="px-4 py-4">S.N</TableHead>
               <TableHead className="px-4 py-4">Name</TableHead>
               <TableHead>Email</TableHead>
-              <TableHead>Program Type</TableHead>
               <TableHead>Start Date</TableHead>
               <TableHead>End Date</TableHead>
               <TableHead>Stage</TableHead>
@@ -328,7 +363,6 @@ export default function JobReadyProgram() {
                   {item.customer.lastName}
                 </TableCell>
                 <TableCell>{item.customer.email}</TableCell>
-                <TableCell>{item.programType}</TableCell>
                 <TableCell>{item.startDate?.toDateString()}</TableCell>
                 <TableCell>{item.completionDate?.toDateString()}</TableCell>
                 <TableCell>{item.stage}</TableCell>
@@ -355,6 +389,10 @@ export default function JobReadyProgram() {
                           <Edit className="mr-2 h-4 w-4" />
                           Edit
                         </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => handleDelete(item.id)}>
+                        <Trash className="mr-2 h-4 w-4" />
+                        Delete
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>

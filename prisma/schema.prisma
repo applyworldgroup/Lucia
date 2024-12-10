@@ -98,7 +98,6 @@ model VisaApplication {
 model JobReadyProgram {
   id                String    @id @default(uuid())
   customerId        String
-  programType       String
   startDate         DateTime
   workplacement     String?
   employerName      String?
@@ -110,6 +109,11 @@ model JobReadyProgram {
   updatedAt         DateTime  @updatedAt
   outcomeResult     OUTCOME
   stage             JRPStage
+  jrpUserId         String?
+  jrpPassword       String?
+  question1         String?
+  question2         String?
+  question3         String?
   customer          Customer  @relation(fields: [customerId], references: [id], onDelete: Cascade)
 }
 

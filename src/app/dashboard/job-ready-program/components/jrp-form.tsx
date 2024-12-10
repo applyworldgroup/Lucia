@@ -52,36 +52,58 @@ export default function JRPFrom({ initialData }: JRPProps) {
   const [isEditing] = useState(!!initialData);
   const queryClient = useQueryClient();
 
-  let defaultValue;
-  if (initialData) {
-    defaultValue = {
-      ...initialData,
-      firstName: initialData?.customer?.firstName,
-      middleName: initialData?.customer?.middleName,
-      lastName: initialData?.customer?.lastName,
-      email: initialData?.customer?.email,
-    };
-  }
-
   const form = useForm<JobReadyProgramInput>({
     resolver: zodResolver(JobReadyProgramInputSchema),
-    defaultValues: defaultValue || {
-      firstName: "",
-      middleName: "",
-      lastName: "",
-      email: "",
-      programType: "",
-      startDate: undefined,
-      endDate: "",
-      stage: "JRPRE",
-      workplacement: "",
-      employerName: "",
-      employerABN: "",
-      supervisorName: "",
-      supervisorContact: "",
-      completionDate: undefined,
-      outcomeResult: "PENDING",
-    },
+    defaultValues: initialData
+      ? {
+          ...initialData,
+          firstName: initialData.customer.firstName ?? "",
+          middleName: initialData.customer.middleName ?? "",
+          lastName: initialData.customer.lastName ?? "",
+          email: initialData.customer.email ?? "",
+          address: initialData.customer.address ?? "",
+          passportNumber: initialData.customer.passportNumber ?? "",
+          currentVisa: initialData.customer.currentVisa ?? undefined,
+          visaExpiry: initialData.customer.visaExpiry ?? undefined,
+          phone: initialData.customer.phone ?? "",
+          workplacement: initialData.workplacement ?? undefined,
+          employerName: initialData.employerName ?? undefined,
+          employerABN: initialData.employerABN ?? undefined,
+          supervisorName: initialData.supervisorName ?? undefined,
+          supervisorContact: initialData.supervisorContact ?? undefined,
+          startDate: initialData.startDate ?? undefined,
+          completionDate: initialData.completionDate ?? undefined,
+          jrpUserId: initialData.jrpUserId ?? undefined,
+          jrpPassword: initialData.jrpPassword ?? undefined,
+          question1: initialData.question1 ?? undefined,
+          question2: initialData.question2 ?? undefined,
+          question3: initialData.question3 ?? undefined,
+        }
+      : {
+          firstName: "",
+          middleName: "",
+          lastName: "",
+          email: "",
+          address: "",
+          passportNumber: "",
+          currentVisa: undefined,
+          visaExpiry: undefined,
+          phone: "",
+          startDate: undefined,
+          stage: "JRE",
+          workplacement: undefined,
+          employerName: undefined,
+          employerABN: undefined,
+          supervisorName: undefined,
+          supervisorContact: undefined,
+          completionDate: undefined,
+          outcomeResult: "PENDING",
+          jrpUserId: undefined,
+          jrpPassword: undefined,
+          question1: undefined,
+          question2: undefined,
+          question3: undefined,
+        },
   });
 
   const createMutation = useMutation({
@@ -91,7 +113,7 @@ export default function JRPFrom({ initialData }: JRPProps) {
       if (success) {
         toast({
           title: "Success",
-          description: "Visa application successfully recorded.",
+          description: "JRP application successfully recorded.",
         });
       } else if (!success) {
         toast({
@@ -230,10 +252,10 @@ export default function JRPFrom({ initialData }: JRPProps) {
               />
               <FormField
                 control={form.control}
-                name="programType"
+                name="address"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Program</FormLabel>
+                    <FormLabel>Address</FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
@@ -245,10 +267,67 @@ export default function JRPFrom({ initialData }: JRPProps) {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <FormField
                 control={form.control}
+                name="phone"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Phone</FormLabel>
+                    <FormControl>
+                      <Input {...field} value={field.value ?? ""} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="passportNumber"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Passport Number</FormLabel>
+                    <FormControl>
+                      <Input {...field} value={field.value ?? ""} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="currentVisa"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Current Visa</FormLabel>
+                    <Select onValueChange={field.onChange}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select applied Visa" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="SUB_500">500</SelectItem>
+                        <SelectItem value="SUB_482">482</SelectItem>
+                        <SelectItem value="SUB_485">485</SelectItem>
+                        <SelectItem value="SUB_407">407</SelectItem>
+                        <SelectItem value="SUB_186">186</SelectItem>
+                        <SelectItem value="SUB_189">189</SelectItem>
+                        <SelectItem value="SUB_190">190</SelectItem>
+                        <SelectItem value="SUB_600">600</SelectItem>
+                        <SelectItem value="SUB_820">820</SelectItem>
+                        <SelectItem value="SUB_801">801</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
                 name="startDate"
                 render={({ field }) => (
                   <FormItem className="flex flex-col self-end">
-                    <FormLabel>Start Date</FormLabel>
+                    <FormLabel>JRP Start Date</FormLabel>
                     <FormControl>
                       <CustomCalendar
                         date={field.value ?? new Date()}
@@ -259,6 +338,8 @@ export default function JRPFrom({ initialData }: JRPProps) {
                   </FormItem>
                 )}
               />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <FormField
                 control={form.control}
                 name="completionDate"
@@ -275,9 +356,6 @@ export default function JRPFrom({ initialData }: JRPProps) {
                   </FormItem>
                 )}
               />
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <FormField
                 control={form.control}
                 name="stage"
@@ -304,6 +382,9 @@ export default function JRPFrom({ initialData }: JRPProps) {
                   </FormItem>
                 )}
               />
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <FormField
                 control={form.control}
                 name="workplacement"
@@ -317,21 +398,20 @@ export default function JRPFrom({ initialData }: JRPProps) {
                   </FormItem>
                 )}
               />
+              <FormField
+                control={form.control}
+                name="employerABN"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Employer ABN</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
-            <FormField
-              control={form.control}
-              name="employerABN"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Employer ABN</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <FormField
                 control={form.control}
@@ -359,6 +439,8 @@ export default function JRPFrom({ initialData }: JRPProps) {
                   </FormItem>
                 )}
               />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <FormField
                 control={form.control}
                 name="supervisorContact"
@@ -400,6 +482,75 @@ export default function JRPFrom({ initialData }: JRPProps) {
                 )}
               />
             </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="jrpUserId"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>JRP User Id</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="jrpPassword"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Credentials</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="question1"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Question and Answer 1</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="question2"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Question and Answer 2</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <FormField
+              control={form.control}
+              name="question3"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Question and Answer 3</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </CardContent>
           <CardFooter>
             <Button type="submit" className="w-full py-2">
