@@ -68,7 +68,7 @@ export async function updateJrpApplication(
     currentVisa,
     ...jrpData
   } = data;
-  /* eslint-enable @typescript-eslint/no-unused-vars */
+
   try {
     const updatedApplication = await prisma.jobReadyProgram.update({
       where: { id },

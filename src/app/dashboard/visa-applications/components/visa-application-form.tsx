@@ -86,6 +86,9 @@ export default function VisaApplicationForm({
           visaType: undefined,
           totalAmount: 0,
           totalPaid: 0,
+          currentVisa: undefined,
+          visaExpiry: new Date(),
+          phone: "",
         },
   });
 

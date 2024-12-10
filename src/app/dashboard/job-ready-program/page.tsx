@@ -349,6 +349,8 @@ export default function JobReadyProgram() {
               <TableHead>Supervisor</TableHead>
               <TableHead>Supervisor Contact</TableHead>
               <TableHead>Completion Date</TableHead>
+              <TableHead>User Id</TableHead>
+              <TableHead>Credentials</TableHead>
               <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
@@ -372,6 +374,8 @@ export default function JobReadyProgram() {
                 <TableCell>{item.supervisorName}</TableCell>
                 <TableCell>{item.supervisorContact}</TableCell>
                 <TableCell>{item.completionDate?.toDateString()}</TableCell>
+                <TableCell>{item.jrpUserId}</TableCell>
+                <TableCell>{item.jrpPassword}</TableCell>
                 <TableCell className="text-right">
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
