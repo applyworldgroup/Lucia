@@ -138,7 +138,7 @@ export default function SkillsAssessmentForm({
       data: Partial<SkillsAssessmentInput>;
     }) => updateSkillsAssessment(params.id, params.data),
     onSuccess: ({ success, error }) => {
-      queryClient.invalidateQueries({ queryKey: ["visaApplications"] });
+      queryClient.invalidateQueries({ queryKey: ["skills-assessment"] });
       if (success) {
         toast({
           title: "Success",
@@ -166,8 +166,6 @@ export default function SkillsAssessmentForm({
   });
 
   const handleFormSubmit = (data: SkillsAssessmentInput) => {
-    console.log("Form Submitted", data);
-    form.reset();
     if (isEditing && initialData?.id) {
       updateMutation.mutate({ id: initialData.id, data });
     } else {

@@ -170,8 +170,6 @@ export default function JRPFrom({ initialData }: JRPProps) {
   });
 
   const handleFormSubmit = (data: JobReadyProgramInput) => {
-    console.log("Form Submitted", data);
-    form.reset();
     if (isEditing && initialData?.id) {
       updateMutation.mutate({ id: initialData.id, data });
     } else {

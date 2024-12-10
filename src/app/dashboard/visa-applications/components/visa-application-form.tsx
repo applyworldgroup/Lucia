@@ -152,8 +152,6 @@ export default function VisaApplicationForm({
   });
 
   const handleFormSubmit = (data: VisaApplicationInput) => {
-    console.log("Form Submitted", data);
-    form.reset();
     if (isEditing && initialData?.id) {
       updateMutation.mutate({ id: initialData.id, data });
     } else {
