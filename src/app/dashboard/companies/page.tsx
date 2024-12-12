@@ -56,6 +56,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Loading from "@/app/components/loading";
 import { DeleteConfirmDialog } from "@/app/components/delete-confirm-dialog";
 import { toast } from "@/hooks/use-toast";
+import { exportToCSV } from "@/lib/export-to-csv";
 
 export default function Customers() {
   const queryClient = useQueryClient();
@@ -113,7 +114,7 @@ export default function Customers() {
           description: "No data available to export.",
         });
       } else {
-        exportToCSV(data, "user_data.csv");
+        exportToCSV(data, "companies.csv");
       }
     }
   };
