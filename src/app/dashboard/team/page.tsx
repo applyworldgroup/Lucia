@@ -27,7 +27,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { PlusIcon, UserIcon, PhoneIcon, MailIcon, MapPin } from "lucide-react";
+import { UserIcon, PhoneIcon, MailIcon, MapPin } from "lucide-react";
 import { countPeopleByLocation } from "@/lib/address";
 
 // Mock data for team members
@@ -88,6 +88,16 @@ const initialTeamMembers = [
     role: "Receptionist",
     email: "akemi@applyworldgroup.com.au",
     phone: "+61 431 885 769",
+    address: "Level 5 Suite 55 104 Bathrust street, Sydney 2000 NSW ",
+    avatar: "/placeholder.svg?height=40&width=40",
+    department: "Front Desk",
+  },
+  {
+    id: 6,
+    name: "Swikriti Ban",
+    role: "Receptionist",
+    email: "swikriti@applyworldgroup.com.au",
+    phone: "+61 449 700 824",
     address: "Level 5 Suite 55 104 Bathrust street, Sydney 2000 NSW ",
     avatar: "/placeholder.svg?height=40&width=40",
     department: "Front Desk",
@@ -232,9 +242,9 @@ export default function TeamPage() {
         <h2 className="text-2xl font-semibold">Team Members</h2>
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
-            <Button>
+            {/* <Button>
               <PlusIcon className="mr-2 h-4 w-4" /> Add New Member
-            </Button>
+            </Button> */}
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
