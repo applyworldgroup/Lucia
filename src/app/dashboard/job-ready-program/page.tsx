@@ -36,7 +36,6 @@ import {
   ChevronRightIcon,
   DownloadIcon,
   Edit,
-  MoreHorizontal,
   RefreshCwIcon,
   SearchIcon,
   User,
@@ -50,13 +49,18 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
-import { useQuery } from "@tanstack/react-query";
-import { getAllJrpApplication } from "@/features/actions/job-ready-program/actions";
-import LoadingSpinner from "@/app/components/loading-spinner";
-import { exportToCSV } from "@/lib/export-to-csv";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  deleteJrpApplication,
+  getAllJrpApplication,
+} from "@/features/actions/job-ready-program/actions";
 import { toast } from "@/hooks/use-toast";
+import Loading from "@/app/components/loading";
+import { DeleteConfirmDialog } from "@/app/components/delete-confirm-dialog";
+import { exportToCSV } from "@/lib/export-to-csv";
 
 export default function JobReadyProgram() {
+  const queryClient = useQueryClient();
   const [sort, setSort] = useState({ by: "startDate", order: "asc" });
   const [filters, setFilters] = useState({
     stage: "all",
@@ -85,9 +89,39 @@ export default function JobReadyProgram() {
       [filterKey]: value,
     }));
   };
+  //handle delete
+  const mutation = useMutation({
+    mutationFn: deleteJrpApplication,
+    onSuccess: ({ success, error }) => {
+      queryClient.invalidateQueries({ queryKey: ["job-ready-program"] });
+      if (success) {
+        toast({
+          title: "Success",
+          description: "JRP application successfully deleted.",
+        });
+      } else if (!success) {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: error || "Failed to create delete application",
+        });
+      }
+    },
+    onError: (error) => {
+      toast({
+        title: "Error",
+        description: error.message || "Unknown error occoured",
+      });
+    },
+  });
+
+  // Handle delete
+  const handleDelete = (id: string) => {
+    mutation.mutate(id);
+  };
 
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: ["visa-applications"],
+    queryKey: ["job-ready-program"],
     queryFn: () => getAllJrpApplication(),
   });
   const handleExportToCSV = () => {
@@ -100,16 +134,11 @@ export default function JobReadyProgram() {
           description: "No data available to export.",
         });
       } else {
-        exportToCSV(data, "jrp.csv");
+        exportToCSV(data, "user_data.csv");
       }
     }
   };
-  if (isLoading)
-    return (
-      <div className="h-full flex items-center justify-center">
-        <LoadingSpinner />
-      </div>
-    );
+  if (isLoading) return <Loading />;
   if (isError) return <p>Error: {error.message}</p>;
 
   const jrpAppplications = data || [];
@@ -160,21 +189,21 @@ export default function JobReadyProgram() {
           </Button>
         </div>
         <CardDescription>
-          Manage and track JobReadyProgram applications
+          Manage and track JobReady Program applications
         </CardDescription>
       </CardHeader>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
         <Card>
           <CardHeader className="flex w-full flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-              Today&apos;s Appointments
+              Today&apos;s Applications
             </CardTitle>
             <Calendar className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{0}</div>
             <p className="text-xs text-muted-foreground">
-              {appliedToday === 1 ? "appointment" : "appointments "}
+              {appliedToday === 1 ? "application" : "applications"}
               scheduled for today
             </p>
           </CardContent>
@@ -182,14 +211,14 @@ export default function JobReadyProgram() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-              This Week&apos;s Appointments
+              This Week&apos;s Applications
             </CardTitle>
             <Calendar className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{0}</div>
             <p className="text-xs text-muted-foreground">
-              {appliedThisWeek === 1 ? "appointment" : "appointments"} scheduled
+              {appliedThisWeek === 1 ? "application" : "applications"} {""}
               this week
             </p>
           </CardContent>
@@ -204,8 +233,8 @@ export default function JobReadyProgram() {
           <CardContent>
             <div className="text-2xl font-bold">{0}</div>
             <p className="text-xs text-muted-foreground">
-              {appliedThisMonth === 1 ? "appointment" : "appointments"}{" "}
-              scheduled this month
+              {appliedThisMonth === 1 ? "application" : "applications"} {""}
+              this month
             </p>
           </CardContent>
         </Card>
@@ -319,7 +348,6 @@ export default function JobReadyProgram() {
               <TableHead className="px-4 py-4">S.N</TableHead>
               <TableHead className="px-4 py-4">Name</TableHead>
               <TableHead>Email</TableHead>
-              <TableHead>Program Type</TableHead>
               <TableHead>Start Date</TableHead>
               <TableHead>End Date</TableHead>
               <TableHead>Stage</TableHead>
@@ -329,6 +357,8 @@ export default function JobReadyProgram() {
               <TableHead>Supervisor</TableHead>
               <TableHead>Supervisor Contact</TableHead>
               <TableHead>Completion Date</TableHead>
+              <TableHead>User Id</TableHead>
+              <TableHead>Credentials</TableHead>
               <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
@@ -343,7 +373,6 @@ export default function JobReadyProgram() {
                   {item.customer.lastName}
                 </TableCell>
                 <TableCell>{item.customer.email}</TableCell>
-                <TableCell>{item.programType}</TableCell>
                 <TableCell>{item.startDate?.toDateString()}</TableCell>
                 <TableCell>{item.completionDate?.toDateString()}</TableCell>
                 <TableCell>{item.stage}</TableCell>
@@ -353,26 +382,21 @@ export default function JobReadyProgram() {
                 <TableCell>{item.supervisorName}</TableCell>
                 <TableCell>{item.supervisorContact}</TableCell>
                 <TableCell>{item.completionDate?.toDateString()}</TableCell>
-                <TableCell className="text-right">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" className="h-8 w-8 p-0">
-                        <span className="sr-only">Open menu</span>
-                        <MoreHorizontal className="h-4 w-4" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuItem>
-                        <Link
-                          href={`job-ready-program/update/${item.id}`}
-                          className="flex items-center"
-                        >
-                          <Edit className="mr-2 h-4 w-4" />
-                          Edit
-                        </Link>
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                <TableCell>{item.jrpUserId}</TableCell>
+                <TableCell>{item.jrpPassword}</TableCell>
+                <TableCell className="flex gap-2">
+                  <Button variant={"ghost"} className="p-2">
+                    <Link
+                      href={`job-ready-program/update/${item.id}`}
+                      className="flex items-center"
+                    >
+                      <Edit className=" h-4 w-4" />
+                    </Link>
+                  </Button>
+                  <DeleteConfirmDialog
+                    onDelete={handleDelete}
+                    itemId={item.id}
+                  />
                 </TableCell>
               </TableRow>
             ))}

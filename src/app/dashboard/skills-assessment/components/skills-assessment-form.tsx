@@ -53,35 +53,56 @@ export default function SkillsAssessmentForm({
   const [isEditing] = useState(!!initialData);
   const queryClient = useQueryClient();
 
-  let defaultValue;
-  if (initialData) {
-    defaultValue = {
-      ...initialData,
-      firstName: initialData?.customer?.firstName,
-      middleName: initialData?.customer?.middleName,
-      lastName: initialData?.customer?.lastName,
-      email: initialData?.customer?.email,
-    };
-  }
-
   const form = useForm<SkillsAssessmentInput>({
     resolver: zodResolver(SkillsAssessmentInputSchema),
-    defaultValues: defaultValue || {
-      firstName: "",
-      middleName: "",
-      lastName: "",
-      email: "",
-      occupation: "",
-      assessingAuthority: "",
-      applicationDate: "",
-      stage: "STAGE_1",
-      rpl: "",
-      outcomeDate: undefined,
-      outcomeResult: "PENDING",
-      remarks: "",
-    },
+    defaultValues: initialData
+      ? {
+          firstName: initialData.customer.firstName,
+          middleName: initialData.customer.middleName,
+          lastName: initialData.customer.lastName,
+          email: initialData.customer.email,
+          address: initialData.customer.address,
+          phone: initialData.customer.phone,
+          currentVisa: initialData.customer.currentVisa,
+          visaExpiry: initialData.customer.visaExpiry
+            ? new Date(initialData.customer.visaExpiry)
+            : null,
+          passportNumber: initialData.customer.passportNumber,
+          applicationDate: initialData.applicationDate
+            ? new Date(initialData.applicationDate)
+            : undefined,
+          assessingAuthority: initialData.assessingAuthority,
+          stage: initialData.stage,
+          outcomeDate: initialData.outcomeDate
+            ? new Date(initialData.outcomeDate)
+            : undefined,
+          occupation: initialData.occupation,
+          outcomeResult: initialData.outcomeResult ?? "PENDING",
+          totalAmount: initialData.totalAmount,
+          totalPaid: initialData.totalPaid,
+          rpl: initialData.rpl,
+        }
+      : {
+          firstName: "",
+          middleName: "",
+          lastName: "",
+          email: "",
+          address: "",
+          phone: "",
+          currentVisa: null,
+          passportNumber: "",
+          totalAmount: 0,
+          totalPaid: 0,
+          occupation: "",
+          assessingAuthority: "",
+          applicationDate: new Date(),
+          stage: "STAGE_1",
+          outcomeResult: "PENDING",
+          outcomeDate: undefined,
+          rpl: "",
+          visaExpiry: undefined,
+        },
   });
-
   const createMutation = useMutation({
     mutationFn: createSkillsAssessment,
     onSuccess: ({ success, error }) => {
@@ -117,7 +138,7 @@ export default function SkillsAssessmentForm({
       data: Partial<SkillsAssessmentInput>;
     }) => updateSkillsAssessment(params.id, params.data),
     onSuccess: ({ success, error }) => {
-      queryClient.invalidateQueries({ queryKey: ["visaApplications"] });
+      queryClient.invalidateQueries({ queryKey: ["skills-assessment"] });
       if (success) {
         toast({
           title: "Success",
@@ -145,8 +166,6 @@ export default function SkillsAssessmentForm({
   });
 
   const handleFormSubmit = (data: SkillsAssessmentInput) => {
-    console.log("Form Submitted", data);
-    form.reset();
     if (isEditing && initialData?.id) {
       updateMutation.mutate({ id: initialData.id, data });
     } else {
@@ -233,10 +252,10 @@ export default function SkillsAssessmentForm({
               />
               <FormField
                 control={form.control}
-                name="occupation"
+                name="address"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Occupation</FormLabel>
+                    <FormLabel>Address</FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
@@ -244,6 +263,86 @@ export default function SkillsAssessmentForm({
                   </FormItem>
                 )}
               />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="phone"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Phone</FormLabel>
+                    <FormControl>
+                      <Input {...field} value={field.value ?? ""} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="passportNumber"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Passport Number</FormLabel>
+                    <FormControl>
+                      <Input {...field} value={field.value ?? ""} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="currentVisa"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Current Visa</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value ?? undefined}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select current Visa" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="SUB_500">500</SelectItem>
+                        <SelectItem value="SUB_482">482</SelectItem>
+                        <SelectItem value="SUB_485">485</SelectItem>
+                        <SelectItem value="SUB_407">407</SelectItem>
+                        <SelectItem value="SUB_186">186</SelectItem>
+                        <SelectItem value="SUB_189">189</SelectItem>
+                        <SelectItem value="SUB_190">190</SelectItem>
+                        <SelectItem value="SUB_600">600</SelectItem>
+                        <SelectItem value="SUB_820">820</SelectItem>
+                        <SelectItem value="SUB_801">801</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="visaExpiry"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col self-end">
+                    <FormLabel>Current Visa Expiry</FormLabel>
+                    <FormControl>
+                      <CustomCalendar
+                        date={field.value ?? new Date()}
+                        setDate={field.onChange}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <FormField
                 control={form.control}
                 name="assessingAuthority"
@@ -286,6 +385,37 @@ export default function SkillsAssessmentForm({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <FormField
                 control={form.control}
+                name="occupation"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Occupation</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="applicationDate"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col self-end">
+                    <FormLabel>Applied Date</FormLabel>
+                    <FormControl>
+                      <CustomCalendar
+                        date={field.value ?? undefined}
+                        setDate={field.onChange}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
                 name="rpl"
                 render={({ field }) => (
                   <FormItem>
@@ -302,7 +432,7 @@ export default function SkillsAssessmentForm({
                 name="outcomeDate"
                 render={({ field }) => (
                   <FormItem className="flex flex-col self-end">
-                    <FormLabel>End Date</FormLabel>
+                    <FormLabel>Outcome Date</FormLabel>
                     <FormControl>
                       <CustomCalendar
                         date={field.value ?? undefined}
@@ -315,22 +445,6 @@ export default function SkillsAssessmentForm({
               />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <FormField
-                control={form.control}
-                name="outcomeDate"
-                render={({ field }) => (
-                  <FormItem className="flex flex-col self-end">
-                    <FormLabel>End Date</FormLabel>
-                    <FormControl>
-                      <CustomCalendar
-                        date={field.value ?? undefined}
-                        setDate={field.onChange}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
               <FormField
                 control={form.control}
                 name="outcomeResult"

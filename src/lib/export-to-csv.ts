@@ -1,3 +1,53 @@
+// import Papa from 'papaparse';
+
+// // Utility function to export data to CSV
+// export const exportToCSV = (
+//     data: any[],
+//     filename: string = 'exported_data.csv',
+//     columns?: string[]
+// ) => {
+//     // If no specific columns are provided, use all keys from the first object
+//     const effectiveColumns = columns ||
+//         (data.length > 0 ? Object.keys(data[0]) : []);
+
+//     // Prepare the data for export, selecting only specified columns
+//     const dataToExport = data.map(item =>
+//         effectiveColumns.reduce((acc, col) => {
+//             // Handle nested objects and potential undefined values
+//             acc[col] = item[col] !== undefined ?
+//                 (typeof item[col] === 'object' ?
+//                     JSON.stringify(item[col]) :
+//                     item[col])
+//                 : '';
+//             return acc;
+//         }, {} as any)
+//     );
+
+//     // Convert to CSV
+//     const csv = Papa.unparse({
+//         fields: effectiveColumns,
+//         data: dataToExport.map(item =>
+//             effectiveColumns.map(col => item[col])
+//         )
+//     });
+
+//     // Create and trigger file download
+//     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+//     const link = document.createElement('a');
+
+//     if (link.download !== undefined) {
+//         const url = URL.createObjectURL(blob);
+//         link.setAttribute('href', url);
+//         link.setAttribute('download', filename);
+//         link.style.visibility = 'hidden';
+//         document.body.appendChild(link);
+//         link.click();
+//         document.body.removeChild(link);
+//     }
+// };
+
+// =============================== Above code exports nested objects also ===============================
+
 import Papa from "papaparse";
 
 /**

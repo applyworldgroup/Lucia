@@ -68,3 +68,19 @@ export async function getCustomerByPassportNumber(passportNumber: string) {
   });
   return { success: true, data: customer };
 }
+
+export async function deleteCustomer(id: string) {
+  await checkAuth();
+  try {
+    await prisma.customer.delete({
+      where: {
+        id,
+      },
+    });
+    revalidatePath("/customers");
+    return { success: true };
+  } catch (error) {
+    console.error("Error deleting customer data :", error);
+    return { success: false, error: "Failed to delete customer data" };
+  }
+}

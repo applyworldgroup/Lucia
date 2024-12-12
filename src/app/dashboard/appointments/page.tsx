@@ -46,9 +46,9 @@ import {
   RefreshCwIcon,
   SearchIcon,
   Trash,
-  ChevronLeftIcon,
   ChevronRightIcon,
   DownloadIcon,
+  ChevronLeftIcon,
 } from "lucide-react";
 import AppointmentForm from "./components/appointment-form";
 import { Badge } from "@/components/ui/badge";
@@ -61,7 +61,7 @@ import {
 } from "@/features/actions/appointments/actions";
 import { Appointment } from "@prisma/client";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import LoadingSpinner from "@/app/components/loading-spinner";
+import Loading from "@/app/components/loading";
 import { exportToCSV } from "@/lib/export-to-csv";
 import { toast } from "@/hooks/use-toast";
 
@@ -77,6 +77,7 @@ export default function Appointments() {
   const [filters, setFilters] = React.useState({
     status: [] as string[],
   });
+
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   const queryClient = useQueryClient();
@@ -85,12 +86,7 @@ export default function Appointments() {
     queryFn: () => getAllAppointments(),
   });
 
-  if (isLoading)
-    return (
-      <div className="h-full flex items-center justify-center">
-        <LoadingSpinner />
-      </div>
-    );
+  if (isLoading) return <Loading />;
   if (isError) return <p>Error: {error.message}</p>;
 
   const toggleEdit = (appointment) => {
@@ -473,7 +469,6 @@ export default function Appointments() {
           )}
         </DialogContent>
       </Dialog>
-
       <div className="mt-4 flex items-center justify-between">
         <div className="text-sm text-gray-500">
           Showing {(currentPage - 1) * itemsPerPage + 1}-

@@ -9,7 +9,7 @@ const UpdateCompany: FC = () => {
   const { id } = useParams<{ id: string }>();
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["comapnies", id],
+    queryKey: ["companies", id],
     queryFn: () => getCompanyById(id),
   });
 

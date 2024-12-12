@@ -9,7 +9,7 @@ const UpdateCustomer: FC = () => {
   const { id } = useParams<{ id: string }>();
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["job-ready-application", id],
+    queryKey: ["job-ready-program", id],
     queryFn: () => getJrpApplication(id),
   });
 

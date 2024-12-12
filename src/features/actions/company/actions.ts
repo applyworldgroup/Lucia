@@ -58,3 +58,20 @@ export async function getCompanyByEmail(email: string) {
   const company = await prisma.company.findFirst({ where: { email } });
   return { success: true, data: company };
 }
+
+export async function deleteCompany(id: string) {
+  await checkAuth();
+  try {
+    await prisma.company.delete({
+      where: { id },
+    });
+    revalidatePath("/companies");
+    return { success: true };
+  } catch (error) {
+    console.error("Error deleting skills assessment application:", error);
+    return {
+      success: false,
+      error: "Failed to delete skills assessment application",
+    };
+  }
+}

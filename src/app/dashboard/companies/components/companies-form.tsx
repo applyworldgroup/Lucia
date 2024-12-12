@@ -76,7 +76,7 @@ export default function CompanyForm({ initialData }: CompanyFormProps) {
   const createMutation = useMutation({
     mutationFn: createCompany,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["company"] });
+      queryClient.invalidateQueries({ queryKey: ["companies"] });
       toast({
         variant: "default",
         title: `Registered`,
@@ -102,11 +102,11 @@ export default function CompanyForm({ initialData }: CompanyFormProps) {
     mutationFn: (params: { id: string; data: Partial<Company> }) =>
       updateCompany(params.id, params.data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["customers"] });
+      queryClient.invalidateQueries({ queryKey: ["companies"] });
       toast({
         variant: "default",
         title: `Updated`,
-        description: "Customer Updated successfully",
+        description: "Company Updated successfully",
       });
       form.reset();
       router.push("/dashboard/companies");
@@ -124,7 +124,6 @@ export default function CompanyForm({ initialData }: CompanyFormProps) {
 
   const handleFormSubmit = useCallback(
     (data: Company) => {
-      console.log(data);
       try {
         if (isEditing && initialData?.id) {
           updateMutation.mutate({ id: initialData.id, data: data });

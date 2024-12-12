@@ -34,7 +34,6 @@ import {
   ChevronRightIcon,
   DownloadIcon,
   Edit,
-  MoreHorizontal,
   RefreshCwIcon,
   SearchIcon,
   User,
@@ -48,14 +47,19 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
-import { getAllCustomers } from "@/features/actions/customers/actions";
-import { useQuery } from "@tanstack/react-query";
-import LoadingSpinner from "@/app/components/loading-spinner";
+import {
+  deleteCustomer,
+  getAllCustomers,
+} from "@/features/actions/customers/actions";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { filterCustomersByRange } from "@/lib/date-calc";
-import { exportToCSV } from "@/lib/export-to-csv";
+import Loading from "@/app/components/loading";
+import { DeleteConfirmDialog } from "@/app/components/delete-confirm-dialog";
 import { toast } from "@/hooks/use-toast";
+import { exportToCSV } from "@/lib/export-to-csv";
 
 export default function Customers() {
+  const queryClient = useQueryClient();
   const [sortBy, setSortBy] = useState("visaAppliedDate");
   const [sortOrder, setSortOrder] = useState("asc");
   const [searchTerm, setSearchTerm] = useState("");
@@ -67,6 +71,36 @@ export default function Customers() {
     queryKey: ["customers"],
     queryFn: () => getAllCustomers(),
   });
+  //handle delete
+  const mutation = useMutation({
+    mutationFn: deleteCustomer,
+    onSuccess: ({ success, error }) => {
+      queryClient.invalidateQueries({ queryKey: ["customers"] });
+      if (success) {
+        toast({
+          title: "Success",
+          description: "Customer data successfully deleted.",
+        });
+      } else if (!success) {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: error || "Failed to delete customer data.",
+        });
+      }
+    },
+    onError: (error) => {
+      toast({
+        title: "Error",
+        description: error.message || "Unknown error occoured",
+      });
+    },
+  });
+
+  // Handle delete
+  const handleDelete = (id: string) => {
+    mutation.mutate(id);
+  };
   const handleExportToCSV = () => {
     console.log(data);
     if (data) {
@@ -81,12 +115,8 @@ export default function Customers() {
       }
     }
   };
-  if (isLoading)
-    return (
-      <div className="h-full flex items-center justify-center">
-        <LoadingSpinner />
-      </div>
-    );
+
+  if (isLoading) return <Loading />;
   if (isError) return <p>Error: {error.message}</p>;
 
   const customers = data || [];
@@ -316,26 +346,19 @@ export default function Customers() {
                 <TableCell>{item.passportNumber}</TableCell>
                 <TableCell>{item.currentVisa}</TableCell>
                 <TableCell>{item.visaExpiry?.toDateString()}</TableCell>
-                <TableCell className="text-right">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" className="h-8 w-8 p-0">
-                        <span className="sr-only">Open menu</span>
-                        <MoreHorizontal className="h-4 w-4" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuItem>
-                        <Link
-                          href={`customers/update/${item.id}`}
-                          className="flex items-center"
-                        >
-                          <Edit className="mr-2 h-4 w-4" />
-                          Edit
-                        </Link>
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                <TableCell className="flex gap-2">
+                  <Button variant={"ghost"} className="p-2">
+                    <Link
+                      href={`customers/update/${item.id}`}
+                      className="flex items-center"
+                    >
+                      <Edit className=" h-4 w-4" />
+                    </Link>
+                  </Button>
+                  <DeleteConfirmDialog
+                    onDelete={handleDelete}
+                    itemId={item.id}
+                  />
                 </TableCell>
               </TableRow>
             ))}
