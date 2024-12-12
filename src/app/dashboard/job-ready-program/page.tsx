@@ -36,10 +36,8 @@ import {
   ChevronRightIcon,
   DownloadIcon,
   Edit,
-  MoreHorizontal,
   RefreshCwIcon,
   SearchIcon,
-  Trash,
   User,
 } from "lucide-react";
 import {
@@ -56,8 +54,9 @@ import {
   deleteJrpApplication,
   getAllJrpApplication,
 } from "@/features/actions/job-ready-program/actions";
-import LoadingSpinner from "@/app/components/loading-spinner";
 import { toast } from "@/hooks/use-toast";
+import Loading from "@/app/components/loading";
+import { DeleteConfirmDialog } from "@/app/components/delete-confirm-dialog";
 
 export default function JobReadyProgram() {
   const queryClient = useQueryClient();
@@ -93,7 +92,7 @@ export default function JobReadyProgram() {
   const mutation = useMutation({
     mutationFn: deleteJrpApplication,
     onSuccess: ({ success, error }) => {
-      queryClient.invalidateQueries({ queryKey: ["jrpApplications"] });
+      queryClient.invalidateQueries({ queryKey: ["job-ready-program"] });
       if (success) {
         toast({
           title: "Success",
@@ -121,16 +120,11 @@ export default function JobReadyProgram() {
   };
 
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: ["jrpApplications"],
+    queryKey: ["job-ready-program"],
     queryFn: () => getAllJrpApplication(),
   });
 
-  if (isLoading)
-    return (
-      <div className="h-full flex items-center justify-center">
-        <LoadingSpinner />
-      </div>
-    );
+  if (isLoading) return <Loading />;
   if (isError) return <p>Error: {error.message}</p>;
 
   const jrpAppplications = data || [];
@@ -376,30 +370,19 @@ export default function JobReadyProgram() {
                 <TableCell>{item.completionDate?.toDateString()}</TableCell>
                 <TableCell>{item.jrpUserId}</TableCell>
                 <TableCell>{item.jrpPassword}</TableCell>
-                <TableCell className="text-right">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" className="h-8 w-8 p-0">
-                        <span className="sr-only">Open menu</span>
-                        <MoreHorizontal className="h-4 w-4" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuItem>
-                        <Link
-                          href={`job-ready-program/update/${item.id}`}
-                          className="flex items-center"
-                        >
-                          <Edit className="mr-2 h-4 w-4" />
-                          Edit
-                        </Link>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => handleDelete(item.id)}>
-                        <Trash className="mr-2 h-4 w-4" />
-                        Delete
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                <TableCell className="flex gap-2">
+                  <Button variant={"ghost"} className="p-2">
+                    <Link
+                      href={`job-ready-program/update/${item.id}`}
+                      className="flex items-center"
+                    >
+                      <Edit className=" h-4 w-4" />
+                    </Link>
+                  </Button>
+                  <DeleteConfirmDialog
+                    onDelete={handleDelete}
+                    itemId={item.id}
+                  />
                 </TableCell>
               </TableRow>
             ))}

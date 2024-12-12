@@ -125,7 +125,7 @@ export default function VisaApplicationForm({
     mutationFn: (params: { id: string; data: Partial<VisaApplication> }) =>
       updateVisaApplication(params.id, params.data),
     onSuccess: ({ success, error }) => {
-      queryClient.invalidateQueries({ queryKey: ["visaApplications"] });
+      queryClient.invalidateQueries({ queryKey: ["visa-applications"] });
       if (success) {
         toast({
           title: "Success",

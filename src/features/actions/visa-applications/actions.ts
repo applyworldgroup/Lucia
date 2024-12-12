@@ -88,7 +88,7 @@ export async function updateVisaApplication(
         },
       },
     });
-    revalidatePath("/job-ready-program");
+    revalidatePath("/visa-applications");
 
     return { success: true, data: updatedApplication };
   } catch (error) {

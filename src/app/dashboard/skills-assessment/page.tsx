@@ -36,7 +36,6 @@ import {
   ChevronRightIcon,
   DownloadIcon,
   Edit,
-  MoreHorizontal,
   RefreshCwIcon,
   SearchIcon,
 } from "lucide-react";
@@ -49,11 +48,17 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
-import { useQuery } from "@tanstack/react-query";
-import { getAllSkillsAssessment } from "@/features/actions/skills-assessment/actions";
-import LoadingSpinner from "@/app/components/loading-spinner";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  deleteSkillsAssessment,
+  getAllSkillsAssessment,
+} from "@/features/actions/skills-assessment/actions";
+import Loading from "@/app/components/loading";
+import { DeleteConfirmDialog } from "@/app/components/delete-confirm-dialog";
+import { toast } from "@/hooks/use-toast";
 
 export default function SkillsAssesment() {
+  const queryClient = useQueryClient();
   const [sort, setSort] = useState({ by: "applicationDate", order: "asc" });
   const [filters, setFilters] = useState({
     stage: "all",
@@ -67,12 +72,38 @@ export default function SkillsAssesment() {
     queryFn: () => getAllSkillsAssessment(),
   });
 
-  if (isLoading)
-    return (
-      <div className="h-full flex items-center justify-center">
-        <LoadingSpinner />
-      </div>
-    );
+  //handle delete
+  const mutation = useMutation({
+    mutationFn: deleteSkillsAssessment,
+    onSuccess: ({ success, error }) => {
+      queryClient.invalidateQueries({ queryKey: ["skills-assessment"] });
+      if (success) {
+        toast({
+          title: "Success",
+          description: "Customer data successfully deleted.",
+        });
+      } else if (!success) {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: error || "Failed to delete customer data.",
+        });
+      }
+    },
+    onError: (error) => {
+      toast({
+        title: "Error",
+        description: error.message || "Unknown error occoured",
+      });
+    },
+  });
+
+  // Handle delete
+  const handleDelete = (id: string) => {
+    mutation.mutate(id);
+  };
+
+  if (isLoading) return <Loading />;
   if (isError) return <p>Error: {error.message}</p>;
 
   const SkillsAssessment = data || [];
@@ -334,26 +365,19 @@ export default function SkillsAssesment() {
                 <TableCell>{item.rpl}</TableCell>
                 <TableCell>{item.outcomeResult}</TableCell>
                 <TableCell>{item.outcomeDate?.toDateString()}</TableCell>
-                <TableCell className="text-right">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" className="h-8 w-8 p-0">
-                        <span className="sr-only">Open menu</span>
-                        <MoreHorizontal className="h-4 w-4" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuItem>
-                        <Link
-                          href={`skills-assessment/update/${item.id}`}
-                          className="flex items-center"
-                        >
-                          <Edit className="mr-2 h-4 w-4" />
-                          Edit
-                        </Link>
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                <TableCell className="flex gap-2">
+                  <Button variant={"ghost"} className="p-2">
+                    <Link
+                      href={`skills-assessment/update/${item.id}`}
+                      className="flex items-center"
+                    >
+                      <Edit className=" h-4 w-4" />
+                    </Link>
+                  </Button>
+                  <DeleteConfirmDialog
+                    onDelete={handleDelete}
+                    itemId={item.id}
+                  />
                 </TableCell>
               </TableRow>
             ))}

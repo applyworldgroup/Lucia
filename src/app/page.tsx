@@ -19,7 +19,6 @@ export default function LandingPage() {
   const { session } = ValidateClientProtectedRoute();
   return (
     <div
-      // className="flex flex-col  min-h-screen bg-gradient-to-b from-background to-muted"
       className="flex flex-col min-h-screen bg-gradient-to-b from-background to-muted"
       ref={targetRef}
     >
@@ -29,7 +28,7 @@ export default function LandingPage() {
         transition={{ duration: 0.5 }}
         className="px-4 lg:px-6 h-16 flex items-center justify-center fixed w-full bg-background/80 backdrop-blur-sm z-50 "
       >
-        <div className="container flex gap-4 items-center justify-between ">
+        <div className="container flex gap-4 items-center justify-between">
           <Link className="flex items-center justify-center" href="#">
             <div className="flex items-center p-4 justify-center">
               <Image

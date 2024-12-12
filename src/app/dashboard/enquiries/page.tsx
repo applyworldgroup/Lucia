@@ -35,13 +35,13 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import LoadingSpinner from "@/app/components/loading-spinner";
 import {
   getAllEnquiries,
   updateEnquiry,
 } from "@/features/actions/enquiries/actions";
 import { useToast } from "@/hooks/use-toast";
 import { GeneralEnquiry } from "@prisma/client";
+import Loading from "@/app/components/loading";
 
 export default function Enquiries() {
   const { toast } = useToast();
@@ -97,11 +97,7 @@ export default function Enquiries() {
   });
 
   if (isPending) {
-    return (
-      <div className="h-full flex items-center justify-center">
-        <LoadingSpinner />
-      </div>
-    );
+    return <Loading />;
   }
 
   if (isError) {

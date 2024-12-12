@@ -143,7 +143,7 @@ export default function JRPFrom({ initialData }: JRPProps) {
     mutationFn: (params: { id: string; data: Partial<JobReadyProgramInput> }) =>
       updateJrpApplication(params.id, params.data),
     onSuccess: ({ success, error }) => {
-      queryClient.invalidateQueries({ queryKey: ["visaApplications"] });
+      queryClient.invalidateQueries({ queryKey: ["job-ready-program"] });
       if (success) {
         toast({
           title: "Success",

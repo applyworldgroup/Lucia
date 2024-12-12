@@ -72,7 +72,7 @@ const customerData = [
   { name: "Jun", total: 380 },
 ];
 
-const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8884d8"];
+const COLORS = ["#4e378a", "#4f18db", "#2b0a80", "#4b2c99", "#2c1f4d"];
 
 export default function DashboardContent() {
   ValidateClientProtectedRoute();
@@ -139,9 +139,8 @@ export default function DashboardContent() {
                 data={visaStatusData}
                 cx="50%"
                 cy="50%"
-                labelLine={false}
-                outerRadius={80}
-                fill="#8884d8"
+                labelLine={true}
+                outerRadius={100}
                 dataKey="value"
                 label={({ name, percent }) =>
                   `${name} ${(percent * 100).toFixed(0)}%`
@@ -170,17 +169,17 @@ export default function DashboardContent() {
                 dataKey="name"
                 stroke="#888888"
                 fontSize={12}
-                tickLine={false}
-                axisLine={false}
+                tickLine={true}
+                axisLine={true}
               />
               <YAxis
                 stroke="#888888"
                 fontSize={12}
-                tickLine={false}
-                axisLine={false}
+                tickLine={true}
+                axisLine={true}
               />
               <Tooltip />
-              <Bar dataKey="total" fill="#8884d8" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="total" fill="#0e0840" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </CardContent>
@@ -196,19 +195,19 @@ export default function DashboardContent() {
                 type="number"
                 stroke="#888888"
                 fontSize={12}
-                tickLine={false}
-                axisLine={false}
+                tickLine={true}
+                axisLine={true}
               />
               <YAxis
                 dataKey="name"
                 type="category"
                 stroke="#888888"
                 fontSize={12}
-                tickLine={false}
-                axisLine={false}
+                tickLine={true}
+                axisLine={true}
               />
               <Tooltip />
-              <Bar dataKey="students" fill="#82ca9d" radius={[0, 4, 4, 0]} />
+              <Bar dataKey="students" fill="#0e0840" radius={[0, 4, 4, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </CardContent>

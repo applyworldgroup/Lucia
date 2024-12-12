@@ -34,7 +34,6 @@ import {
   ChevronRightIcon,
   DownloadIcon,
   Edit,
-  MoreHorizontal,
   RefreshCwIcon,
   SearchIcon,
   User,
@@ -48,14 +47,18 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
-// import { useQuery } from "@tanstack/react-query";
-// import LoadingSpinner from "@/app/components/loading-spinner";
 import { filterCustomersByRange } from "@/lib/date-calc";
-import { getAllCompanies } from "@/features/actions/company/actions";
-import { useQuery } from "@tanstack/react-query";
-import LoadingSpinner from "@/app/components/loading-spinner";
+import {
+  deleteCompany,
+  getAllCompanies,
+} from "@/features/actions/company/actions";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import Loading from "@/app/components/loading";
+import { DeleteConfirmDialog } from "@/app/components/delete-confirm-dialog";
+import { toast } from "@/hooks/use-toast";
 
 export default function Customers() {
+  const queryClient = useQueryClient();
   const [sort, setSort] = useState({ by: "createdAt", order: "asc" });
   const [filters, setFilters] = useState({
     status: "all",
@@ -69,12 +72,38 @@ export default function Customers() {
     queryFn: () => getAllCompanies(),
   });
 
-  if (isLoading)
-    return (
-      <div className="h-full flex items-center justify-center">
-        <LoadingSpinner />
-      </div>
-    );
+  //handle delete
+  const mutation = useMutation({
+    mutationFn: deleteCompany,
+    onSuccess: ({ success, error }) => {
+      queryClient.invalidateQueries({ queryKey: ["companies"] });
+      if (success) {
+        toast({
+          title: "Success",
+          description: "Customer data successfully deleted.",
+        });
+      } else if (!success) {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: error || "Failed to delete customer data.",
+        });
+      }
+    },
+    onError: (error) => {
+      toast({
+        title: "Error",
+        description: error.message || "Unknown error occoured",
+      });
+    },
+  });
+
+  // Handle delete
+  const handleDelete = (id: string) => {
+    mutation.mutate(id);
+  };
+
+  if (isLoading) return <Loading />;
   if (isError) return <p>Error: {error.message}</p>;
 
   const companies = data || [];
@@ -329,26 +358,19 @@ export default function Customers() {
                 <TableCell>{item.website}</TableCell>
                 <TableCell>{item.sbsStatus}</TableCell>
                 <TableCell>{item.associatedClients}</TableCell>
-                <TableCell className="text-right">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" className="h-8 w-8 p-0">
-                        <span className="sr-only">Open menu</span>
-                        <MoreHorizontal className="h-4 w-4" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuItem>
-                        <Link
-                          href={`companies/update/${item.id}`}
-                          className="flex items-center"
-                        >
-                          <Edit className="mr-2 h-4 w-4" />
-                          Edit
-                        </Link>
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                <TableCell className="flex gap-2">
+                  <Button variant={"ghost"} className="p-2">
+                    <Link
+                      href={`companies/update/${item.id}`}
+                      className="flex items-center"
+                    >
+                      <Edit className=" h-4 w-4" />
+                    </Link>
+                  </Button>
+                  <DeleteConfirmDialog
+                    onDelete={handleDelete}
+                    itemId={item.id}
+                  />
                 </TableCell>
               </TableRow>
             ))}
