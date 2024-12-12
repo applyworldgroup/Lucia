@@ -162,7 +162,7 @@ export default function VisaApplicationForm({
   return (
     <div className="w-full">
       <CardHeader className="pt-0">
-        <Link href={"/dashboard/visa-applications"}>
+        <Link href={"/dashboard/visa-applications"} className="w-fit">
           <Button variant={"link"} className="self-start px-0 flex gap-2 py-8">
             <ArrowLeft size={"15"} /> Back
           </Button>

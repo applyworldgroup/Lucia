@@ -350,6 +350,7 @@ export default function Customers() {
         <Table>
           <TableHeader>
             <TableRow className="bg-secondary">
+              <TableHead className="px-4 py-4">#</TableHead>
               <TableHead className="px-4 py-4">Name</TableHead>
               <TableHead>Trading As</TableHead>
               <TableHead>Phone</TableHead>
@@ -363,8 +364,12 @@ export default function Customers() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {paginatedData.map((item) => (
+            {paginatedData.map((item, index) => (
               <TableRow key={item.id}>
+                <TableCell className="px-4 py-4">
+                  {" "}
+                  {(currentPage - 1) * itemsPerPage + 1 + index}
+                </TableCell>
                 <TableCell className="px-4 py-4">{item.name}</TableCell>
                 <TableCell>{item.tradingName}</TableCell>
                 <TableCell>{item.phone}</TableCell>

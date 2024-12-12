@@ -344,7 +344,7 @@ export default function SkillsAssesment() {
         <Table>
           <TableHeader>
             <TableRow className="bg-secondary">
-              <TableHead className="px-4 py-4">S.N</TableHead>
+              <TableHead className="px-4 py-4">#</TableHead>
               <TableHead className="px-4 py-4">Name</TableHead>
               <TableHead>Email</TableHead>
               <TableHead>Visa</TableHead>
