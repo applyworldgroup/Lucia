@@ -56,6 +56,7 @@ import { filterCustomersByRange } from "@/lib/date-calc";
 import Loading from "@/app/components/loading";
 import { DeleteConfirmDialog } from "@/app/components/delete-confirm-dialog";
 import { toast } from "@/hooks/use-toast";
+import { exportToCSV } from "@/lib/export-to-csv";
 
 export default function Customers() {
   const queryClient = useQueryClient();
@@ -70,7 +71,6 @@ export default function Customers() {
     queryKey: ["customers"],
     queryFn: () => getAllCustomers(),
   });
-
   //handle delete
   const mutation = useMutation({
     mutationFn: deleteCustomer,
@@ -100,6 +100,20 @@ export default function Customers() {
   // Handle delete
   const handleDelete = (id: string) => {
     mutation.mutate(id);
+  };
+  const handleExportToCSV = () => {
+    console.log(data);
+    if (data) {
+      if (data.length === 0) {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: "No data available to export.",
+        });
+      } else {
+        exportToCSV(data, "customers.csv");
+      }
+    }
   };
 
   if (isLoading) return <Loading />;
@@ -380,7 +394,7 @@ export default function Customers() {
             <ChevronRightIcon className="h-4 w-4" />
           </Button>
         </div>
-        <Button variant="outline">
+        <Button variant="outline" onClick={handleExportToCSV}>
           <DownloadIcon className="mr-2 h-4 w-4" />
           Export
         </Button>

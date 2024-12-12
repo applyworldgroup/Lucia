@@ -103,6 +103,21 @@ export default function Customers() {
     mutation.mutate(id);
   };
 
+  const handleExportToCSV = () => {
+    console.log(data);
+    if (data) {
+      if (data.length === 0) {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: "No data available to export.",
+        });
+      } else {
+        exportToCSV(data, "user_data.csv");
+      }
+    }
+  };
+
   if (isLoading) return <Loading />;
   if (isError) return <p>Error: {error.message}</p>;
 
@@ -406,7 +421,7 @@ export default function Customers() {
             <ChevronRightIcon className="h-4 w-4" />
           </Button>
         </div>
-        <Button variant="outline">
+        <Button variant="outline" onClick={handleExportToCSV}>
           <DownloadIcon className="mr-2 h-4 w-4" />
           Export
         </Button>
