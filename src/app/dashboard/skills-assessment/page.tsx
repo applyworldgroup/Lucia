@@ -52,6 +52,8 @@ import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 import { getAllSkillsAssessment } from "@/features/actions/skills-assessment/actions";
 import LoadingSpinner from "@/app/components/loading-spinner";
+import { toast } from "@/hooks/use-toast";
+import { exportToCSV } from "@/lib/export-to-csv";
 
 export default function SkillsAssesment() {
   const [sort, setSort] = useState({ by: "applicationDate", order: "asc" });
@@ -66,6 +68,21 @@ export default function SkillsAssesment() {
     queryKey: ["skills-assessment"],
     queryFn: () => getAllSkillsAssessment(),
   });
+
+  const handleExportToCSV = () => {
+    console.log(data);
+    if (data) {
+      if (data.length === 0) {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: "No data available to export.",
+        });
+      } else {
+        exportToCSV(data, "skills-assessment.csv");
+      }
+    }
+  };
 
   if (isLoading)
     return (
@@ -391,7 +408,7 @@ export default function SkillsAssesment() {
             <ChevronRightIcon className="h-4 w-4" />
           </Button>
         </div>
-        <Button variant="outline">
+        <Button variant="outline" onClick={handleExportToCSV}>
           <DownloadIcon className="mr-2 h-4 w-4" />
           Export
         </Button>

@@ -46,6 +46,9 @@ import {
   RefreshCwIcon,
   SearchIcon,
   Trash,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  DownloadIcon,
 } from "lucide-react";
 import AppointmentForm from "./components/appointment-form";
 import { Badge } from "@/components/ui/badge";
@@ -59,6 +62,8 @@ import {
 import { Appointment } from "@prisma/client";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import LoadingSpinner from "@/app/components/loading-spinner";
+import { exportToCSV } from "@/lib/export-to-csv";
+import { toast } from "@/hooks/use-toast";
 
 export default function Appointments() {
   const [sortBy, setSortBy] = useState("date");
@@ -72,6 +77,8 @@ export default function Appointments() {
   const [filters, setFilters] = React.useState({
     status: [] as string[],
   });
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
   const queryClient = useQueryClient();
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["appointments"],
@@ -113,6 +120,21 @@ export default function Appointments() {
   const handleCancel = () => {
     setIsBookDialogOpen(false);
     setIsEditDialogOpen(false);
+  };
+
+  const handleExportToCSV = () => {
+    console.log(data);
+    if (data) {
+      if (data.length === 0) {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: "No data available to export.",
+        });
+      } else {
+        exportToCSV(data, "appointments.csv");
+      }
+    }
   };
 
   const sortOptions = [
@@ -162,6 +184,13 @@ export default function Appointments() {
 
     return 0;
   });
+
+  // Pagination
+  const totalPages = Math.ceil(filteredAppointments.length / itemsPerPage);
+  const paginatedData = sortedAppointments.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage,
+  );
 
   const today = new Date();
   const thisWeekStart = new Date(
@@ -360,7 +389,7 @@ export default function Appointments() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {sortedAppointments.map((appointment) => (
+            {paginatedData.map((appointment) => (
               <TableRow key={appointment.id}>
                 <TableCell>{`${appointment.firstName} ${appointment.lastName}`}</TableCell>
                 <TableCell>{appointment.email}</TableCell>
@@ -444,6 +473,41 @@ export default function Appointments() {
           )}
         </DialogContent>
       </Dialog>
+
+      <div className="mt-4 flex items-center justify-between">
+        <div className="text-sm text-gray-500">
+          Showing {(currentPage - 1) * itemsPerPage + 1}-
+          {Math.min(currentPage * itemsPerPage, filteredAppointments.length)} of{" "}
+          {filteredAppointments.length} applications
+        </div>
+        <div className="flex items-center space-x-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+            disabled={currentPage === 1}
+          >
+            <ChevronLeftIcon className="h-4 w-4" />
+          </Button>
+          <div className="text-sm font-medium">
+            Page {currentPage} of {totalPages}
+          </div>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() =>
+              setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+            }
+            disabled={currentPage === totalPages}
+          >
+            <ChevronRightIcon className="h-4 w-4" />
+          </Button>
+        </div>
+        <Button variant="outline" onClick={handleExportToCSV}>
+          <DownloadIcon className="mr-2 h-4 w-4" />
+          Export
+        </Button>
+      </div>
     </div>
   );
 }

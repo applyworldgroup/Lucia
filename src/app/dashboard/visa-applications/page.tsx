@@ -52,6 +52,8 @@ import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 import { getAllVisaApplication } from "@/features/actions/visa-applications/actions";
 import LoadingSpinner from "@/app/components/loading-spinner";
+import { toast } from "@/hooks/use-toast";
+import { exportToCSV } from "@/lib/export-to-csv";
 
 interface Visa {
   id: number;
@@ -81,6 +83,21 @@ export default function Component() {
     queryKey: ["visa-applications"],
     queryFn: () => getAllVisaApplication(),
   });
+
+  const handleExportToCSV = () => {
+    console.log(data);
+    if (data) {
+      if (data.length === 0) {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: "No data available to export.",
+        });
+      } else {
+        exportToCSV(data, "user_data.csv");
+      }
+    }
+  };
 
   if (isLoading)
     return (
@@ -404,7 +421,7 @@ export default function Component() {
             <ChevronRightIcon className="h-4 w-4" />
           </Button>
         </div>
-        <Button variant="outline">
+        <Button variant="outline" onClick={handleExportToCSV}>
           <DownloadIcon className="mr-2 h-4 w-4" />
           Export
         </Button>

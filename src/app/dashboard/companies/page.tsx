@@ -54,6 +54,8 @@ import { filterCustomersByRange } from "@/lib/date-calc";
 import { getAllCompanies } from "@/features/actions/company/actions";
 import { useQuery } from "@tanstack/react-query";
 import LoadingSpinner from "@/app/components/loading-spinner";
+import { toast } from "@/hooks/use-toast";
+import { exportToCSV } from "@/lib/export-to-csv";
 
 export default function Customers() {
   const [sort, setSort] = useState({ by: "createdAt", order: "asc" });
@@ -68,6 +70,21 @@ export default function Customers() {
     queryKey: ["companies"],
     queryFn: () => getAllCompanies(),
   });
+
+  const handleExportToCSV = () => {
+    console.log(data);
+    if (data) {
+      if (data.length === 0) {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: "No data available to export.",
+        });
+      } else {
+        exportToCSV(data, "companies.csv");
+      }
+    }
+  };
 
   if (isLoading)
     return (
@@ -384,7 +401,7 @@ export default function Customers() {
             <ChevronRightIcon className="h-4 w-4" />
           </Button>
         </div>
-        <Button variant="outline">
+        <Button variant="outline" onClick={handleExportToCSV}>
           <DownloadIcon className="mr-2 h-4 w-4" />
           Export
         </Button>

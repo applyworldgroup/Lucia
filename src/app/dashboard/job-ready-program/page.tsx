@@ -53,6 +53,8 @@ import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 import { getAllJrpApplication } from "@/features/actions/job-ready-program/actions";
 import LoadingSpinner from "@/app/components/loading-spinner";
+import { exportToCSV } from "@/lib/export-to-csv";
+import { toast } from "@/hooks/use-toast";
 
 export default function JobReadyProgram() {
   const [sort, setSort] = useState({ by: "startDate", order: "asc" });
@@ -88,7 +90,20 @@ export default function JobReadyProgram() {
     queryKey: ["visa-applications"],
     queryFn: () => getAllJrpApplication(),
   });
-
+  const handleExportToCSV = () => {
+    console.log(data);
+    if (data) {
+      if (data.length === 0) {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: "No data available to export.",
+        });
+      } else {
+        exportToCSV(data, "jrp.csv");
+      }
+    }
+  };
   if (isLoading)
     return (
       <div className="h-full flex items-center justify-center">
@@ -393,7 +408,7 @@ export default function JobReadyProgram() {
             <ChevronRightIcon className="h-4 w-4" />
           </Button>
         </div>
-        <Button variant="outline">
+        <Button variant="outline" onClick={handleExportToCSV}>
           <DownloadIcon className="mr-2 h-4 w-4" />
           Export
         </Button>

@@ -52,6 +52,8 @@ import { getAllCustomers } from "@/features/actions/customers/actions";
 import { useQuery } from "@tanstack/react-query";
 import LoadingSpinner from "@/app/components/loading-spinner";
 import { filterCustomersByRange } from "@/lib/date-calc";
+import { exportToCSV } from "@/lib/export-to-csv";
+import { toast } from "@/hooks/use-toast";
 
 export default function Customers() {
   const [sortBy, setSortBy] = useState("visaAppliedDate");
@@ -65,7 +67,20 @@ export default function Customers() {
     queryKey: ["customers"],
     queryFn: () => getAllCustomers(),
   });
-
+  const handleExportToCSV = () => {
+    console.log(data);
+    if (data) {
+      if (data.length === 0) {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: "No data available to export.",
+        });
+      } else {
+        exportToCSV(data, "customers.csv");
+      }
+    }
+  };
   if (isLoading)
     return (
       <div className="h-full flex items-center justify-center">
@@ -356,7 +371,7 @@ export default function Customers() {
             <ChevronRightIcon className="h-4 w-4" />
           </Button>
         </div>
-        <Button variant="outline">
+        <Button variant="outline" onClick={handleExportToCSV}>
           <DownloadIcon className="mr-2 h-4 w-4" />
           Export
         </Button>
