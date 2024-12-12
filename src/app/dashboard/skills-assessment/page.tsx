@@ -340,7 +340,7 @@ export default function SkillsAssesment() {
           </Link>
         </div>
       </CardContent>
-      <div className="rounded-lg border  overflow-hidden">
+      <div className="rounded-lg  border dark:border-muted  overflow-hidden">
         <Table>
           <TableHeader>
             <TableRow className="bg-secondary">

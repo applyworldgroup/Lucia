@@ -77,7 +77,7 @@ export default function Loading() {
       </div>
 
       {/* Table */}
-      <div className="border rounded-sm">
+      <div className=" border dark:border-muted rounded-sm">
         <Table>
           <TableHeader>
             <TableRow>

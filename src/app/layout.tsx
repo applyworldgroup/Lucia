@@ -21,8 +21,8 @@ const geistMono = localFont({
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Harmony CRM Apply World Group",
-  description: "Customer Resource Managment of Apply world group ",
+  title: "Client Record managment Apply world group",
+  description: "Customer Record Managment of Apply world group ",
 };
 
 export default async function RootLayout({

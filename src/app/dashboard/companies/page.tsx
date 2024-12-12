@@ -346,7 +346,7 @@ export default function Customers() {
           </Link>
         </div>
       </CardContent>
-      <div className="rounded-lg border overflow-hidden">
+      <div className="rounded-sm border dark:border-muted overflow-hidden">
         <Table>
           <TableHeader>
             <TableRow className="bg-secondary">

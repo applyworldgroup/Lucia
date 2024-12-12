@@ -164,7 +164,7 @@ export default function Component() {
     currentPage * itemsPerPage,
   );
 
-  const appliedToday = filterCustomersByRange(sortedApplications, "today");
+  const appliedToday = filterCustomersByRange(visaApplications, "today");
   const appliedThisWeek = filterCustomersByRange(sortedApplications, "week");
   const appliedThisMonth = filterCustomersByRange(sortedApplications, "month");
 
@@ -187,15 +187,15 @@ export default function Component() {
           <Card>
             <CardHeader className="flex w-full flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">
-                Today&apos;s Appointments
+                Today&apos;s Visa Applicatioins
               </CardTitle>
               <Calendar className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{0}</div>
               <p className="text-xs text-muted-foreground">
-                {appliedToday === 1 ? "appointment" : "appointments "}
-                scheduled for today
+                {appliedToday === 1 ? "application" : "applications "}
+                applied today
               </p>
             </CardContent>
           </Card>
@@ -209,8 +209,8 @@ export default function Component() {
             <CardContent>
               <div className="text-2xl font-bold">{0}</div>
               <p className="text-xs text-muted-foreground">
-                {appliedThisWeek === 1 ? "appointment" : "appointments"}{" "}
-                scheduled this week
+                {appliedThisWeek === 1 ? "application" : "applications "}
+                applied this week
               </p>
             </CardContent>
           </Card>
@@ -345,7 +345,7 @@ export default function Component() {
             </Link>
           </div>
         </CardContent>
-        <div className="rounded-lg border overflow-hidden">
+        <div className="rounded-sm  border dark:border-muted overflow-hidden">
           <Table>
             <TableHeader>
               <TableRow className="bg-secondary">

@@ -181,7 +181,7 @@ export default function JobReadyProgram() {
       <CardHeader className="space-y-1 px-0 pt-0">
         <div className="flex items-center justify-between">
           <CardTitle className="text-2xl font-bold">
-            JobReadyProgram Applications
+            Job Ready Program
           </CardTitle>
           <Button onClick={() => setCurrentPage(1)}>
             <RefreshCwIcon className="mr-2 h-4 w-4" />
@@ -189,7 +189,7 @@ export default function JobReadyProgram() {
           </Button>
         </div>
         <CardDescription>
-          Manage and track JobReady Program applications
+          Manage and track Job Ready Program applications
         </CardDescription>
       </CardHeader>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
@@ -341,7 +341,7 @@ export default function JobReadyProgram() {
           </Link>
         </div>
       </CardContent>
-      <div className="rounded-lg border bg-white overflow-hidden">
+      <div className="rounded-sm border dark:border-muted overflow-hidden">
         <Table>
           <TableHeader>
             <TableRow className="bg-secondary">
