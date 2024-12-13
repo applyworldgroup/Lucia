@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowLeft, CalendarIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { CustomeCalendar } from "@/components/custome-calendar.tsx"
+import { CustomeCalendar } from "@/components/custome-calender.tsx"
 import {
   CardContent,
   CardDescription,
