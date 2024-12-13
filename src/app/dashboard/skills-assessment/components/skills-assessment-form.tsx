@@ -176,11 +176,14 @@ export default function SkillsAssessmentForm({
   return (
     <div className="w-full">
       <CardHeader className="pt-0">
-        <Link href={"/dashboard/skills-assessment"}>
-          <Button variant={"link"} className="self-start px-0 flex gap-2 py-8">
+        <Button variant={"link"} className="self-start px-0 flex gap-2 py-8">
+          <Link
+            href={"/dashboard/skills-assessment"}
+            className="flex items-center justify-center gap-2 "
+          >
             <ArrowLeft size={"15"} /> Back
-          </Button>
-        </Link>
+          </Link>
+        </Button>
         <CardTitle>
           {isEditing
             ? "Edit Skills Assessment Application"
@@ -188,7 +191,7 @@ export default function SkillsAssessmentForm({
         </CardTitle>
         <CardDescription>
           {isEditing
-            ? "Update the details of the JRP application."
+            ? "Update the details of skills assessment application."
             : "Fill in the details to create a new Skills Assessment application."}
         </CardDescription>
       </CardHeader>

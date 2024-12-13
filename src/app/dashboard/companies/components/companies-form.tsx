@@ -147,11 +147,14 @@ export default function CompanyForm({ initialData }: CompanyFormProps) {
   return (
     <div className="w-full">
       <CardHeader className="pt-0">
-        <Link href={"/dashboard/companies"}>
-          <Button variant={"link"} className="self-start px-0 flex gap-2 py-8">
+        <Button variant={"link"} className="self-start px-0 flex gap-2 py-8">
+          <Link
+            href={"/dashboard/companies"}
+            className="flex items-center justify-center gap-2 "
+          >
             <ArrowLeft size={"15"} /> Back
-          </Button>
-        </Link>
+          </Link>
+        </Button>
         <CardTitle>{isEditing ? "Edit Customer" : "Create Customer"}</CardTitle>
         <CardDescription>
           {isEditing

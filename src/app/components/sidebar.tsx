@@ -7,7 +7,6 @@ import {
   Book,
   Briefcase,
   Building2,
-  Calendar,
   ChevronLeft,
   ChevronRight,
   CircleHelp,
@@ -73,18 +72,12 @@ export function Sidebar() {
                   variant: "ghost",
                   url: "/dashboard/enquiries",
                 },
-                {
-                  title: "Calender",
-                  icon: Calendar,
-                  variant: "ghost",
-                  url: "/dashboard/calender",
-                },
-                {
-                  title: "Team",
-                  icon: Users,
-                  variant: "ghost",
-                  url: "/dashboard/team",
-                },
+                // {
+                //   title: "Calender",
+                //   icon: Calendar,
+                //   variant: "ghost",
+                //   url: "/dashboard/calender",
+                // },
                 {
                   title: "Customers",
                   icon: Users,
@@ -114,6 +107,12 @@ export function Sidebar() {
                   icon: Building2,
                   variant: "ghost",
                   url: "/dashboard/companies",
+                },
+                {
+                  title: "Team",
+                  icon: Users,
+                  variant: "ghost",
+                  url: "/dashboard/team",
                 },
               ]}
               isCollapsed={isCollapsed}
