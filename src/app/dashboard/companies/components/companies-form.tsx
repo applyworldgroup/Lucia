@@ -2,10 +2,9 @@
 import { useState, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ArrowLeft, CalendarIcon } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { CustomeCalendar } from "@/components/custome-calender.tsx"
 import {
   CardContent,
   CardDescription,
@@ -38,14 +37,7 @@ import {
   createCompany,
   updateCompany,
 } from "@/features/actions/company/actions";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { format } from "date-fns";
-import { Calendar } from "@/components/ui/calendar";
-import { cn } from "@/lib/utils";
+import { CustomCalendar } from "@/app/components/custom-calender";
 
 interface CompanyFormProps {
   initialData?: Company;
@@ -156,11 +148,11 @@ export default function CompanyForm({ initialData }: CompanyFormProps) {
             <ArrowLeft size={"15"} /> Back
           </Link>
         </Button>
-        <CardTitle>{isEditing ? "Edit Customer" : "Create Customer"}</CardTitle>
+        <CardTitle>{isEditing ? "Edit Company" : "Create Company"}</CardTitle>
         <CardDescription>
           {isEditing
-            ? "Update the details of the customer."
-            : "Fill in the details to create a new customer."}
+            ? "Update the details of the Company."
+            : "Fill in the details to create a new Company."}
         </CardDescription>
       </CardHeader>
       <Form {...form}>
@@ -223,12 +215,12 @@ export default function CompanyForm({ initialData }: CompanyFormProps) {
               />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-               <FormField
+              <FormField
                 control={form.control}
                 name="approvalDate"
                 render={({ field }) => (
                   <FormItem className="flex flex-col self-end">
-                    <FormLabel>New Visa Expiry Date</FormLabel>
+                    <FormLabel>SBS Approval Date</FormLabel>
                     <FormControl>
                       <CustomCalendar
                         date={field.value ?? new Date()}
@@ -239,12 +231,12 @@ export default function CompanyForm({ initialData }: CompanyFormProps) {
                   </FormItem>
                 )}
               />
-                 <FormField
+              <FormField
                 control={form.control}
                 name="expiryDate"
                 render={({ field }) => (
                   <FormItem className="flex flex-col self-end">
-                    <FormLabel>New Visa Expiry Date</FormLabel>
+                    <FormLabel>SBS Expiry Date</FormLabel>
                     <FormControl>
                       <CustomCalendar
                         date={field.value ?? new Date()}
