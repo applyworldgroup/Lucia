@@ -27,7 +27,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { PlusIcon, UserIcon, PhoneIcon, MailIcon, MapPin } from "lucide-react";
+import { UserIcon, PhoneIcon, MailIcon, MapPin } from "lucide-react";
 import { countPeopleByLocation } from "@/lib/address";
 
 // Mock data for team members
@@ -93,10 +93,20 @@ const initialTeamMembers = [
     department: "Front Desk",
   },
   {
+    id: 6,
+    name: "Swikriti Ban",
+    role: "Receptionist",
+    email: "swikriti@applyworldgroup.com.au",
+    phone: "+61 449 700 824",
+    address: "Level 5 Suite 55 104 Bathrust street, Sydney 2000 NSW ",
+    avatar: "/placeholder.svg?height=40&width=40",
+    department: "Front Desk",
+  },
+  {
     id: 7,
     name: "Pooja Amatya",
     role: "Administrative Officer (407 Training visa)",
-    email: "akemi@applyworldgroup.com.au",
+    email: "pooja@applyworldgroup.com.au",
     phone: "+977 9841248188",
     address: "Kathmandu, Nepal",
     avatar: "/placeholder.svg?height=40&width=40",
@@ -126,7 +136,7 @@ const initialTeamMembers = [
     id: 10,
     name: "Sandhya Koirala",
     role: "Administrative Representative - Skills Assessment",
-    email: "junu@applyworldgroup.com.au",
+    email: "sandhya@applyworldgroup.com.au",
     phone: "+977 9860673165",
     address: "Kathmandu, Nepal",
     avatar: "/placeholder.svg?height=40&width=40",
@@ -144,7 +154,7 @@ const initialTeamMembers = [
   },
   {
     id: 12,
-    name: "Leslie Leslie Anne Mahusay",
+    name: "Leslie Anne Mahusay",
     role: "Administrative Representative - Philippines",
     email: "leslie@applyworldgroup.com.au",
     phone: "+63 977 737 9503",
@@ -232,9 +242,9 @@ export default function TeamPage() {
         <h2 className="text-2xl font-semibold">Team Members</h2>
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
-            <Button>
+            {/* <Button>
               <PlusIcon className="mr-2 h-4 w-4" /> Add New Member
-            </Button>
+            </Button> */}
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>

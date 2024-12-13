@@ -5,6 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowLeft, CalendarIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { CustomeCalendar } from "@/components/custome-calender.tsx"
 import {
   CardContent,
   CardDescription,
@@ -76,7 +77,7 @@ export default function CompanyForm({ initialData }: CompanyFormProps) {
   const createMutation = useMutation({
     mutationFn: createCompany,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["company"] });
+      queryClient.invalidateQueries({ queryKey: ["companies"] });
       toast({
         variant: "default",
         title: `Registered`,
@@ -102,11 +103,11 @@ export default function CompanyForm({ initialData }: CompanyFormProps) {
     mutationFn: (params: { id: string; data: Partial<Company> }) =>
       updateCompany(params.id, params.data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["customers"] });
+      queryClient.invalidateQueries({ queryKey: ["companies"] });
       toast({
         variant: "default",
         title: `Updated`,
-        description: "Customer Updated successfully",
+        description: "Company Updated successfully",
       });
       form.reset();
       router.push("/dashboard/companies");
@@ -124,7 +125,6 @@ export default function CompanyForm({ initialData }: CompanyFormProps) {
 
   const handleFormSubmit = useCallback(
     (data: Company) => {
-      console.log(data);
       try {
         if (isEditing && initialData?.id) {
           updateMutation.mutate({ id: initialData.id, data: data });
@@ -148,11 +148,14 @@ export default function CompanyForm({ initialData }: CompanyFormProps) {
   return (
     <div className="w-full">
       <CardHeader className="pt-0">
-        <Link href={"/dashboard/companies"}>
-          <Button variant={"link"} className="self-start px-0 flex gap-2 py-8">
+        <Button variant={"link"} className="self-start px-0 flex gap-2 py-8">
+          <Link
+            href={"/dashboard/companies"}
+            className="flex items-center justify-center gap-2 "
+          >
             <ArrowLeft size={"15"} /> Back
-          </Button>
-        </Link>
+          </Link>
+        </Button>
         <CardTitle>{isEditing ? "Edit Customer" : "Create Customer"}</CardTitle>
         <CardDescription>
           {isEditing
@@ -220,76 +223,34 @@ export default function CompanyForm({ initialData }: CompanyFormProps) {
               />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <FormField
+               <FormField
                 control={form.control}
                 name="approvalDate"
                 render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Approved Date (SBS/TAS) </FormLabel>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <FormControl>
-                          <Button
-                            variant={"outline"}
-                            className={cn(
-                              "w-full pl-3 text-left font-normal",
-                              !field.value && "text-muted-foreground",
-                            )}
-                          >
-                            {field.value ? (
-                              format(field.value, "PPP")
-                            ) : (
-                              <span>Pick a date</span>
-                            )}
-                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                          </Button>
-                        </FormControl>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0" align="start">
-                        <Calendar
-                          mode="single"
-                          onSelect={field.onChange}
-                          initialFocus
-                        />
-                      </PopoverContent>
-                    </Popover>
+                  <FormItem className="flex flex-col self-end">
+                    <FormLabel>New Visa Expiry Date</FormLabel>
+                    <FormControl>
+                      <CustomCalendar
+                        date={field.value ?? new Date()}
+                        setDate={field.onChange}
+                      />
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              <FormField
+                 <FormField
                 control={form.control}
                 name="expiryDate"
                 render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Expiry Date (SBS/TAS) </FormLabel>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <FormControl>
-                          <Button
-                            variant={"outline"}
-                            className={cn(
-                              "w-full pl-3 text-left font-normal",
-                              !field.value && "text-muted-foreground",
-                            )}
-                          >
-                            {field.value ? (
-                              format(field.value, "PPP")
-                            ) : (
-                              <span>Pick a date</span>
-                            )}
-                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                          </Button>
-                        </FormControl>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0" align="start">
-                        <Calendar
-                          mode="single"
-                          onSelect={field.onChange}
-                          initialFocus
-                        />
-                      </PopoverContent>
-                    </Popover>
+                  <FormItem className="flex flex-col self-end">
+                    <FormLabel>New Visa Expiry Date</FormLabel>
+                    <FormControl>
+                      <CustomCalendar
+                        date={field.value ?? new Date()}
+                        setDate={field.onChange}
+                      />
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}

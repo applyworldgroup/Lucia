@@ -9,7 +9,7 @@ const UpdateCustomer: FC = () => {
   const { id } = useParams();
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["customer", id],
+    queryKey: ["customers", id],
     queryFn: () => getCustomerById(id as string),
   });
 

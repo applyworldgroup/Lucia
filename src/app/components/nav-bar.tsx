@@ -18,7 +18,7 @@ interface NavBarProps {}
 
 const NavBar: FC<NavBarProps> = ({}) => {
   return (
-    <header className="flex items-center justify-between p-4 border-b px-8 md:px-4 ">
+    <header className="flex items-center justify-between p-4 border-b dark:border-muted px-8 md:px-4 ">
       <div className=" w-full justify-end flex items-center space-x-4">
         <ModeToggle />
         <UserNav />

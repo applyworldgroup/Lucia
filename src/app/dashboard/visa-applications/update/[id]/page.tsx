@@ -5,11 +5,11 @@ import { useParams } from "next/navigation"; // Import useParams for dynamic rou
 import VisaApplicationForm from "../../components/visa-application-form";
 import { getVisaApplication } from "../../../../../features/actions/visa-applications/actions";
 
-const UpdateCustomer: FC = () => {
+const UpdateVisaApplication: FC = () => {
   const { id } = useParams<{ id: string }>();
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["customer", id],
+    queryKey: ["visa-applications", id],
     queryFn: () => getVisaApplication(id),
   });
 
@@ -24,4 +24,4 @@ const UpdateCustomer: FC = () => {
   );
 };
 
-export default UpdateCustomer;
+export default UpdateVisaApplication;

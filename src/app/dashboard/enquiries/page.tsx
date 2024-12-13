@@ -35,13 +35,14 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import LoadingSpinner from "@/app/components/loading-spinner";
 import {
   getAllEnquiries,
   updateEnquiry,
 } from "@/features/actions/enquiries/actions";
 import { useToast } from "@/hooks/use-toast";
 import { GeneralEnquiry } from "@prisma/client";
+import Loading from "@/app/components/loading";
+import { exportToCSV } from "@/lib/export-to-csv";
 
 export default function Enquiries() {
   const { toast } = useToast();
@@ -66,6 +67,20 @@ export default function Enquiries() {
     queryKey: ["enquiries"],
     queryFn: () => getAllEnquiries(),
   });
+
+  const handleExportToCSV = () => {
+    if (enquiries) {
+      if (enquiries.length === 0) {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: "No data available to export.",
+        });
+      } else {
+        exportToCSV(enquiries, "enquiries.csv");
+      }
+    }
+  };
 
   const updateEnquiryMutation = useMutation({
     mutationFn: (params: {
@@ -97,11 +112,7 @@ export default function Enquiries() {
   });
 
   if (isPending) {
-    return (
-      <div className="h-full flex items-center justify-center">
-        <LoadingSpinner />
-      </div>
-    );
+    return <Loading />;
   }
 
   if (isError) {
@@ -374,7 +385,7 @@ export default function Enquiries() {
             <ChevronRightIcon className="h-4 w-4" />
           </Button>
         </div>
-        <Button variant="outline">
+        <Button variant="outline" onClick={handleExportToCSV}>
           <DownloadIcon className="mr-2 h-4 w-4" />
           Export
         </Button>
