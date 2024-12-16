@@ -1,5 +1,5 @@
-import { Rocket, Code, Server, Star } from "lucide-react";
-import { Timeline } from "../components/timeline";
+//import { Rocket, Code, Server, Star } from "lucide-react";
+//import { Timeline } from "../components/timeline";
 
 export default function ProjectTimelinePage() {
   /**
