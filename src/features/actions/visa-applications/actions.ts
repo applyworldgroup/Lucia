@@ -19,21 +19,28 @@ export async function createVisaApplication(data: VisaApplicationInput) {
       currentVisa,
       ...visaData
     } = data;
-    // create customer record
-    const customer = await prisma.customer.create({
-      data: {
-        firstName,
-        middleName,
-        lastName,
-        email,
-        address,
-        phone,
-        passportNumber,
-        visaExpiry,
-        currentVisa,
+
+    let customer = await prisma.customer.findFirst({
+      where: {
+        OR: [{ email }, { passportNumber }, { phone }],
       },
     });
-    // create application record
+
+    if (!customer) {
+      customer = await prisma.customer.create({
+        data: {
+          firstName,
+          middleName,
+          lastName,
+          email,
+          address,
+          phone,
+          passportNumber,
+          visaExpiry,
+          currentVisa,
+        },
+      });
+    }
     const application = await prisma.visaApplication.create({
       data: {
         ...visaData,
