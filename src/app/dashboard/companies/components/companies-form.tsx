@@ -2,7 +2,7 @@
 import { useState, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ArrowLeft, CalendarIcon } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -37,14 +37,7 @@ import {
   createCompany,
   updateCompany,
 } from "@/features/actions/company/actions";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { format } from "date-fns";
-import { Calendar } from "@/components/ui/calendar";
-import { cn } from "@/lib/utils";
+import { CustomCalendar } from "@/app/components/custom-calender";
 
 interface CompanyFormProps {
   initialData?: Company;
@@ -155,11 +148,11 @@ export default function CompanyForm({ initialData }: CompanyFormProps) {
             <ArrowLeft size={"15"} /> Back
           </Link>
         </Button>
-        <CardTitle>{isEditing ? "Edit Customer" : "Create Customer"}</CardTitle>
+        <CardTitle>{isEditing ? "Edit Company" : "Create Company"}</CardTitle>
         <CardDescription>
           {isEditing
-            ? "Update the details of the customer."
-            : "Fill in the details to create a new customer."}
+            ? "Update the details of the Company."
+            : "Fill in the details to create a new Company."}
         </CardDescription>
       </CardHeader>
       <Form {...form}>
@@ -226,35 +219,14 @@ export default function CompanyForm({ initialData }: CompanyFormProps) {
                 control={form.control}
                 name="approvalDate"
                 render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Approved Date (SBS/TAS) </FormLabel>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <FormControl>
-                          <Button
-                            variant={"outline"}
-                            className={cn(
-                              "w-full pl-3 text-left font-normal",
-                              !field.value && "text-muted-foreground",
-                            )}
-                          >
-                            {field.value ? (
-                              format(field.value, "PPP")
-                            ) : (
-                              <span>Pick a date</span>
-                            )}
-                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                          </Button>
-                        </FormControl>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0" align="start">
-                        <Calendar
-                          mode="single"
-                          onSelect={field.onChange}
-                          initialFocus
-                        />
-                      </PopoverContent>
-                    </Popover>
+                  <FormItem className="flex flex-col self-end">
+                    <FormLabel>SBS Approval Date</FormLabel>
+                    <FormControl>
+                      <CustomCalendar
+                        date={field.value ?? new Date()}
+                        setDate={field.onChange}
+                      />
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -263,35 +235,14 @@ export default function CompanyForm({ initialData }: CompanyFormProps) {
                 control={form.control}
                 name="expiryDate"
                 render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Expiry Date (SBS/TAS) </FormLabel>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <FormControl>
-                          <Button
-                            variant={"outline"}
-                            className={cn(
-                              "w-full pl-3 text-left font-normal",
-                              !field.value && "text-muted-foreground",
-                            )}
-                          >
-                            {field.value ? (
-                              format(field.value, "PPP")
-                            ) : (
-                              <span>Pick a date</span>
-                            )}
-                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                          </Button>
-                        </FormControl>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0" align="start">
-                        <Calendar
-                          mode="single"
-                          onSelect={field.onChange}
-                          initialFocus
-                        />
-                      </PopoverContent>
-                    </Popover>
+                  <FormItem className="flex flex-col self-end">
+                    <FormLabel>SBS Expiry Date</FormLabel>
+                    <FormControl>
+                      <CustomCalendar
+                        date={field.value ?? new Date()}
+                        setDate={field.onChange}
+                      />
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
