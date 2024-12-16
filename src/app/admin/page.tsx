@@ -37,7 +37,6 @@ const timelineData = [
   return (
     <div className="container mx-auto">
       <h1 className="text-2xl font-bold mb-6">This is not a route</h1>
-     // <Timeline items={timelineData} />
     </div>
   );
 }
