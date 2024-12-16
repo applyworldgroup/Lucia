@@ -41,7 +41,7 @@ import Link from "next/link";
 import { toast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { Customer, JobReadyProgram } from "@prisma/client";
-import { CustomCalendar } from "@/app/components/custom-calender";
+// import { CustomCalendar } from "@/app/components/custom-calender";
 
 interface JRPProps {
   initialData?: JobReadyProgram & { customer: Customer };
@@ -334,9 +334,20 @@ export default function JRPFrom({ initialData }: JRPProps) {
                   <FormItem className="flex flex-col self-end">
                     <FormLabel>JRP Start Date</FormLabel>
                     <FormControl>
-                      <CustomCalendar
+                      {/* <CustomCalendar
                         date={field.value ?? new Date()}
                         setDate={field.onChange}
+                      /> */}
+
+                      <Input
+                        type="date"
+                        placeholder="Data de nascimento"
+                        {...field}
+                        value={
+                          field.value instanceof Date
+                            ? field.value.toISOString().split("T")[0]
+                            : field.value
+                        }
                       />
                     </FormControl>
                     <FormMessage />
@@ -352,9 +363,19 @@ export default function JRPFrom({ initialData }: JRPProps) {
                   <FormItem className="flex flex-col self-end">
                     <FormLabel>End Date</FormLabel>
                     <FormControl>
-                      <CustomCalendar
+                      {/* <CustomCalendar
                         date={field.value ?? new Date()}
                         setDate={field.onChange}
+                      /> */}
+                      <Input
+                        type="date"
+                        placeholder="Data de nascimento"
+                        {...field}
+                        value={
+                          field.value instanceof Date
+                            ? field.value.toISOString().split("T")[0]
+                            : field.value
+                        }
                       />
                     </FormControl>
                     <FormMessage />

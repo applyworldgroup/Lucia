@@ -37,7 +37,7 @@ import Link from "next/link";
 import { Customer } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
-import { CustomCalendar } from "@/app/components/custom-calender";
+// import { CustomCalendar } from "@/app/components/custom-calender";
 interface CustomerFormProps {
   initialData?: Customer;
 }
@@ -310,9 +310,21 @@ export default function CustomerForm({ initialData }: CustomerFormProps) {
                   <FormItem className="flex flex-col self-end">
                     <FormLabel>Visa Expiry Date</FormLabel>
                     <FormControl>
-                      <CustomCalendar
+                      {/* <CustomCalendar
                         date={field.value ?? new Date()}
                         setDate={field.onChange}
+                      /> */}
+                      <Input
+                        type="date"
+                        {...field}
+                        value={
+                          field.value instanceof Date
+                            ? field.value.toISOString().split("T")[0]
+                            : (field.value ?? "")
+                        }
+                        onChange={(e) =>
+                          field.onChange(new Date(e.target.value))
+                        }
                       />
                     </FormControl>
                     <FormMessage />

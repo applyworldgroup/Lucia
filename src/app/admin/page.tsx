@@ -1,17 +1,42 @@
-import { Button } from "@/components/ui/button";
-import { signOut } from "@/features/actions/auth/signout";
-import { validateServerProtectedRoute } from "@/lib/validate-server-protected-route";
-import React from "react";
+import { Rocket, Code, Server, Star } from "lucide-react";
+import { Timeline } from "../components/timeline";
 
-export default async function Dashboard() {
-  const {user} = await validateServerProtectedRoute();
+export default function ProjectTimelinePage() {
+  const timelineData = [
+    {
+      title: "Project Initiated",
+      description: "Project kickoff and initial planning phase",
+      timestamp: "Jan 15, 2024",
+      status: "completed",
+      icon: <Rocket className="h-5 w-5" />, // Custom icon
+    },
+    {
+      title: "Design Phase",
+      description: "UI/UX design and wireframing completed",
+      timestamp: "Feb 1, 2024",
+      status: "completed",
+      icon: <Star className="h-5 w-5 text-yellow-500" />, // Custom icon with extra styling
+    },
+    {
+      title: "Development Started",
+      description: "Backend and frontend development in progress",
+      timestamp: "Feb 15, 2024",
+      status: "pending",
+      icon: <Code className="h-5 w-5" />, // Custom icon
+    },
+    {
+      title: "Deployment Preparation",
+      description: "Server setup and configuration",
+      timestamp: "Mar 15, 2024",
+      status: "info",
+      icon: <Server className="h-5 w-5" />, // Custom icon
+    },
+  ];
+
   return (
-    <div>
-      <b>Admin Page</b>
-      <p>{JSON.stringify(user, null, 2)}</p>
-      <form action={signOut}>
-        <Button type="submit">Sign out</Button>
-      </form>
+    <div className="container mx-auto">
+      <h1 className="text-2xl font-bold mb-6">Project Timeline</h1>
+      <Timeline items={timelineData} />
     </div>
   );
 }
