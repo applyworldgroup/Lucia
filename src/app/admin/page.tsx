@@ -2,7 +2,8 @@ import { Rocket, Code, Server, Star } from "lucide-react";
 import { Timeline } from "../components/timeline";
 
 export default function ProjectTimelinePage() {
-  const timelineData = [
+  /**
+const timelineData = [
     {
       title: "Project Initiated",
       description: "Project kickoff and initial planning phase",
@@ -32,11 +33,11 @@ export default function ProjectTimelinePage() {
       icon: <Server className="h-5 w-5" />, // Custom icon
     },
   ];
-
+**/
   return (
     <div className="container mx-auto">
-      <h1 className="text-2xl font-bold mb-6">Project Timeline</h1>
-      <Timeline items={timelineData} />
+      <h1 className="text-2xl font-bold mb-6">This is not a route</h1>
+     // <Timeline items={timelineData} />
     </div>
   );
 }
