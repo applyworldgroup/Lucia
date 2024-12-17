@@ -20,21 +20,30 @@ export async function createJrpApplication(data: JobReadyProgramInput) {
       currentVisa,
       ...jrpData
     } = data;
-    // create customer record
-    const customer = await prisma.customer.create({
-      data: {
-        firstName,
-        middleName,
-        lastName,
-        email,
-        address,
-        phone,
-        passportNumber,
-        visaExpiry,
-        currentVisa,
+
+    let customer = await prisma.customer.findFirst({
+      where: {
+        OR: [{ email }, { passportNumber }, { phone }],
       },
     });
-    // create application record
+
+    if (!customer) {
+      customer = await prisma.customer.create({
+        data: {
+          firstName,
+          middleName,
+          lastName,
+          email,
+          address,
+          phone,
+          passportNumber,
+          visaExpiry,
+          currentVisa,
+        },
+      });
+    }
+
+    // Create application record linked to the customer
     const application = await prisma.jobReadyProgram.create({
       data: {
         ...jrpData,

@@ -40,7 +40,7 @@ import Link from "next/link";
 import { toast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { Customer, SkillsAssessment } from "@prisma/client";
-import { CustomCalendar } from "@/app/components/custom-calender";
+// import { CustomCalendar } from "@/app/components/custom-calender";
 
 interface SkillsAssessmentProps {
   initialData?: SkillsAssessment & { customer: Customer };
@@ -335,9 +335,21 @@ export default function SkillsAssessmentForm({
                   <FormItem className="flex flex-col self-end">
                     <FormLabel>Current Visa Expiry</FormLabel>
                     <FormControl>
-                      <CustomCalendar
+                      {/* <CustomCalendar
                         date={field.value ?? new Date()}
                         setDate={field.onChange}
+                      /> */}
+                      <Input
+                        type="date"
+                        {...field}
+                        value={
+                          field.value instanceof Date
+                            ? field.value.toISOString().split("T")[0]
+                            : (field.value ?? "")
+                        }
+                        onChange={(e) =>
+                          field.onChange(new Date(e.target.value))
+                        }
                       />
                     </FormControl>
                     <FormMessage />
@@ -406,9 +418,21 @@ export default function SkillsAssessmentForm({
                   <FormItem className="flex flex-col self-end">
                     <FormLabel>Applied Date</FormLabel>
                     <FormControl>
-                      <CustomCalendar
+                      {/* <CustomCalendar
                         date={field.value ?? undefined}
                         setDate={field.onChange}
+                      /> */}
+                      <Input
+                        type="date"
+                        {...field}
+                        value={
+                          field.value instanceof Date
+                            ? field.value.toISOString().split("T")[0]
+                            : (field.value ?? "")
+                        }
+                        onChange={(e) =>
+                          field.onChange(new Date(e.target.value))
+                        }
                       />
                     </FormControl>
                     <FormMessage />
@@ -437,9 +461,21 @@ export default function SkillsAssessmentForm({
                   <FormItem className="flex flex-col self-end">
                     <FormLabel>Outcome Date</FormLabel>
                     <FormControl>
-                      <CustomCalendar
+                      {/* <CustomCalendar
                         date={field.value ?? undefined}
                         setDate={field.onChange}
+                      /> */}
+                      <Input
+                        type="date"
+                        {...field}
+                        value={
+                          field.value instanceof Date
+                            ? field.value.toISOString().split("T")[0]
+                            : (field.value ?? "")
+                        }
+                        onChange={(e) =>
+                          field.onChange(new Date(e.target.value))
+                        }
                       />
                     </FormControl>
                     <FormMessage />

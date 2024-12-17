@@ -20,20 +20,28 @@ export async function createSkillsAssessment(data: SkillsAssessmentInput) {
       currentVisa,
       ...skillsAssessmentData
     } = data;
-    // create customer record
-    const customer = await prisma.customer.create({
-      data: {
-        firstName,
-        middleName,
-        lastName,
-        email,
-        address,
-        phone,
-        passportNumber,
-        visaExpiry,
-        currentVisa,
+
+    let customer = await prisma.customer.findFirst({
+      where: {
+        OR: [{ email }, { passportNumber }, { phone }],
       },
     });
+
+    if (!customer) {
+      customer = await prisma.customer.create({
+        data: {
+          firstName,
+          middleName,
+          lastName,
+          email,
+          address,
+          phone,
+          passportNumber,
+          visaExpiry,
+          currentVisa,
+        },
+      });
+    }
     // create application record
     const application = await prisma.skillsAssessment.create({
       data: {

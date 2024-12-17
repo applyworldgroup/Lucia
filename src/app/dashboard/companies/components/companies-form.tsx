@@ -37,7 +37,7 @@ import {
   createCompany,
   updateCompany,
 } from "@/features/actions/company/actions";
-import { CustomCalendar } from "@/app/components/custom-calender";
+// import { CustomCalendar } from "@/app/components/custom-calender";
 
 interface CompanyFormProps {
   initialData?: Company;
@@ -222,9 +222,21 @@ export default function CompanyForm({ initialData }: CompanyFormProps) {
                   <FormItem className="flex flex-col self-end">
                     <FormLabel>SBS Approval Date</FormLabel>
                     <FormControl>
-                      <CustomCalendar
+                      {/* <CustomCalendar
                         date={field.value ?? new Date()}
                         setDate={field.onChange}
+                      /> */}
+                      <Input
+                        type="date"
+                        {...field}
+                        value={
+                          field.value instanceof Date
+                            ? field.value.toISOString().split("T")[0]
+                            : (field.value ?? "")
+                        }
+                        onChange={(e) =>
+                          field.onChange(new Date(e.target.value))
+                        }
                       />
                     </FormControl>
                     <FormMessage />
@@ -238,9 +250,21 @@ export default function CompanyForm({ initialData }: CompanyFormProps) {
                   <FormItem className="flex flex-col self-end">
                     <FormLabel>SBS Expiry Date</FormLabel>
                     <FormControl>
-                      <CustomCalendar
+                      {/* <CustomCalendar
                         date={field.value ?? new Date()}
                         setDate={field.onChange}
+                      /> */}
+                      <Input
+                        type="date"
+                        {...field}
+                        value={
+                          field.value instanceof Date
+                            ? field.value.toISOString().split("T")[0]
+                            : (field.value ?? "")
+                        }
+                        onChange={(e) =>
+                          field.onChange(new Date(e.target.value))
+                        }
                       />
                     </FormControl>
                     <FormMessage />
