@@ -338,15 +338,16 @@ export default function JRPFrom({ initialData }: JRPProps) {
                         date={field.value ?? new Date()}
                         setDate={field.onChange}
                       /> */}
-
                       <Input
                         type="date"
-                        placeholder="Data de nascimento"
                         {...field}
                         value={
                           field.value instanceof Date
                             ? field.value.toISOString().split("T")[0]
-                            : field.value
+                            : (field.value ?? "")
+                        }
+                        onChange={(e) =>
+                          field.onChange(new Date(e.target.value))
                         }
                       />
                     </FormControl>
@@ -369,12 +370,14 @@ export default function JRPFrom({ initialData }: JRPProps) {
                       /> */}
                       <Input
                         type="date"
-                        placeholder="Data de nascimento"
                         {...field}
                         value={
                           field.value instanceof Date
                             ? field.value.toISOString().split("T")[0]
-                            : field.value
+                            : (field.value ?? "")
+                        }
+                        onChange={(e) =>
+                          field.onChange(new Date(e.target.value))
                         }
                       />
                     </FormControl>
