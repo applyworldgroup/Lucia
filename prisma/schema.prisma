@@ -53,7 +53,7 @@ model Customer {
   middleName        String?
   lastName          String
   email             String             @unique
-  address           String
+  address           String?
   passportNumber    String?            @unique
   currentVisa       VisaType?
   visaExpiry        DateTime?
@@ -97,7 +97,7 @@ model VisaApplication {
 model JobReadyProgram {
   id                String    @id @default(uuid())
   customerId        String
-  startDate         DateTime
+  startDate         DateTime?
   workplacement     String?
   employerName      String?
   employerABN       String?

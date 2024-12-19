@@ -15,10 +15,12 @@ const signUpUser = async (
 
   try {
     const allowedDomain = "@applyworldgroup.com.au";
-    const specialEmails = ["sisir.phca@gmail.com", "banswikriti123@gmail.com"]; 
+    const specialEmails = ["sisir.phca@gmail.com", "banswikriti123@gmail.com"];
 
     if (!email.endsWith(allowedDomain) && !specialEmails.includes(email)) {
-      throw new Error(`Sign-up is restricted to specific company domains or special emails.`);
+      throw new Error(
+        `Sign-up is restricted to specific company domains or special emails.`,
+      );
     }
     const emailInUse = await prisma.user.findFirst({
       where: {
@@ -51,9 +53,9 @@ const signUpUser = async (
     const expiresAt = new Date(Date.now() + 5 * 60 * 1000);
 
     await sendEmail({
-      html: `<a href="${url}">Verify your email</a>`,
-      subject: "Email Verification link (Hamro Khata)",
       to: data.email,
+      subject: "Email Verification link",
+      html: `<a href="${url}">Verify your email</a>`,
     });
 
     await prisma.emailVerificationCode.create({
