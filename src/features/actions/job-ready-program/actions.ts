@@ -23,7 +23,7 @@ export async function createJrpApplication(data: JobReadyProgramInput) {
 
     let customer = await prisma.customer.findFirst({
       where: {
-        OR: [{ email }, { passportNumber }, { phone }],
+        email,
       },
     });
 

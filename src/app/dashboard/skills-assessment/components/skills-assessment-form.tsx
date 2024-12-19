@@ -61,7 +61,7 @@ export default function SkillsAssessmentForm({
           middleName: initialData.customer.middleName,
           lastName: initialData.customer.lastName,
           email: initialData.customer.email,
-          address: initialData.customer.address,
+          address: initialData.customer.address ?? undefined,
           phone: initialData.customer.phone,
           currentVisa: initialData.customer.currentVisa,
           visaExpiry: initialData.customer.visaExpiry
@@ -90,7 +90,7 @@ export default function SkillsAssessmentForm({
           address: "",
           phone: "",
           currentVisa: null,
-          passportNumber: "",
+          passportNumber: undefined,
           totalAmount: 0,
           totalPaid: 0,
           occupation: "",

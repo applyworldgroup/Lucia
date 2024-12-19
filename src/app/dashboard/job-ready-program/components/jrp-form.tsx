@@ -87,7 +87,7 @@ export default function JRPFrom({ initialData }: JRPProps) {
           lastName: "",
           email: "",
           address: "",
-          passportNumber: "",
+          passportNumber: undefined,
           currentVisa: undefined,
           visaExpiry: undefined,
           phone: "",

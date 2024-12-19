@@ -7,7 +7,7 @@ const CustomerBaseSchema = z.object({
   middleName: z.string().nullable().optional(),
   lastName: z.string().min(1, { message: "Last name is required" }),
   email: z.string().email({ message: "Invalid email address" }),
-  address: z.string().min(1, { message: "Address is required" }),
+  address: z.string().optional(),
   passportNumber: z.string().nullable().optional(),
   currentVisa: z
     .enum([
@@ -44,7 +44,7 @@ const VisaApplicationBaseSchema = z.object({
   middleName: z.string().nullable().optional(),
   lastName: z.string().min(1, { message: "Last name is required" }),
   email: z.string().email({ message: "Invalid email address" }),
-  address: z.string().min(1, { message: "Address is required" }),
+  address: z.string().optional(),
   passportNumber: z.string().nullable().optional(),
   currentVisa: z
     .enum([
@@ -101,7 +101,7 @@ const JobReadyProgramBaseSchema = z.object({
   middleName: z.string().nullable().optional(),
   lastName: z.string().min(1, { message: "Last name is required" }),
   email: z.string().email({ message: "Invalid email address" }),
-  address: z.string().min(1, { message: "Address is required" }),
+  address: z.string().optional(),
   passportNumber: z.string().nullable().optional(),
   currentVisa: z
     .enum([
@@ -120,7 +120,7 @@ const JobReadyProgramBaseSchema = z.object({
     .optional(),
   visaExpiry: z.date().nullable().optional(),
   phone: z.string().min(1, { message: "Phone number is required" }),
-  startDate: z.date(),
+  startDate: z.date().optional(),
   stage: z.enum(["PSA", "JRFA", "JRWA", "JRE"]),
   workplacement: z.string().optional(),
   employerName: z.string().optional(),
@@ -158,7 +158,7 @@ const SkillsAssessmentBaseSchema = z.object({
   middleName: z.string().nullable().optional(),
   lastName: z.string().min(1, { message: "Last name is required" }),
   email: z.string().email({ message: "Invalid email address" }),
-  address: z.string().min(1, { message: "Address is required" }),
+  address: z.string().optional(),
   passportNumber: z.string().nullable().optional(),
   currentVisa: z
     .enum([

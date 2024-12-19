@@ -22,7 +22,7 @@ export async function createVisaApplication(data: VisaApplicationInput) {
 
     let customer = await prisma.customer.findFirst({
       where: {
-        OR: [{ email }, { passportNumber }, { phone }],
+        email,
       },
     });
 

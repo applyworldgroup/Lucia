@@ -8,7 +8,6 @@ import { checkAuth } from "@/lib/checkAuth";
 
 export async function createCustomer(data: Customer) {
   await checkAuth();
-
   try {
     const newCustomer = await prisma.customer.create({
       data,

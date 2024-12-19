@@ -168,7 +168,7 @@ export default function CustomerForm({ initialData }: CustomerFormProps) {
                       </span>
                     </FormLabel>
                     <FormControl>
-                      <Input {...field} />
+                      <Input {...field} value={field.value ?? ""} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -181,7 +181,7 @@ export default function CustomerForm({ initialData }: CustomerFormProps) {
                   <FormItem>
                     <FormLabel>Middle Name</FormLabel>
                     <FormControl>
-                      <Input {...field} value={field.value ?? undefined} />
+                      <Input {...field} value={field.value ?? ""} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -199,7 +199,7 @@ export default function CustomerForm({ initialData }: CustomerFormProps) {
                       </span>
                     </FormLabel>
                     <FormControl>
-                      <Input {...field} />
+                      <Input {...field} value={field.value ?? ""} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -229,14 +229,9 @@ export default function CustomerForm({ initialData }: CustomerFormProps) {
               name="address"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
-                    Address{" "}
-                    <span className="text-red-500" title="Required">
-                      *
-                    </span>
-                  </FormLabel>
+                  <FormLabel>Address</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input {...field} value={field.value ?? ""} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -248,9 +243,7 @@ export default function CustomerForm({ initialData }: CustomerFormProps) {
                 name="phone"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>
-                      Phone <span className="text-red-500">*</span>
-                    </FormLabel>
+                    <FormLabel>Phone</FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>

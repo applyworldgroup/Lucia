@@ -61,7 +61,7 @@ export default function VisaApplicationForm({
           middleName: initialData.customer.middleName,
           lastName: initialData.customer.lastName,
           email: initialData.customer.email,
-          address: initialData.customer.address,
+          address: initialData.customer.address ?? undefined,
           phone: initialData.customer.phone,
           currentVisa: initialData.customer.currentVisa,
           visaExpiry: initialData.customer.visaExpiry
